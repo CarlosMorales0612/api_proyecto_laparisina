@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const PedidoController = require('../controllers/PedidoController');
 
-// Ruta para obtener todos los usuarios
+// Ruta para obtener todos los pedidos
 router.get('/pedidos', PedidoController.getAllPedido);
 
 // Ruta para obtener un usuario por ID
