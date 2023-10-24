@@ -1,28 +1,90 @@
 const mongoose = require('mongoose');
 
-const detallePedidoSchema = new mongoose.Schema({
-  fecha_pedido_tomado: String,
-  nombre_categoria_producto: String,
-  nombre_producto: String,
-  cantidad_producto: Number,
-  precio_producto_unitario: Number,
-  iva_producto: Number,
-  precio_producto_subtotal: Number,
-  metodo_pago: String, // Puede ser 'Efectivo' o 'Transferencia'
-});
-
 const pedidoSchema = new mongoose.Schema({
-  codigo_cliente: String,
-  nombre_cliente: String,
-  telefono_cliente: String,
-  quien_recibe: String,
-  direccion_entrega: String,
-  edificio_apto_barrio: String,
-  ciudad: String,
-  precio_producto_total: Number,
-  fecha_entrega_pedido: String,
-  estado_pedido: String, // Puede ser uno de los estados que mencionaste
-  detalle_pedido: [detallePedidoSchema], // Un array de objetos de detalle de pedido
+
+  codigo_cliente: {
+    type: String,
+    required: [true, 'El campo código_cliente es requerido.'],
+    unique: [true, 'El código del cliente ya está en uso.']
+  },
+  nombre_cliente: {
+    type: String,
+    required: [true, 'El campo nombre cliente es requerido.']
+  },
+  telefono_cliente: {
+    type: String,
+    required: [true, 'El campo telefono cliente es requerido.']
+  },
+  quien_recibe: {
+    type: String,
+    required: [true, 'El campo quien recibe es requerido.']
+  },
+  direccion_entrega: {
+    type: String,
+    required: [true, 'El campo direccion entrega es requerido.']
+  },
+  edificio_apto_barrio: {
+    type: String,
+    required: [true, 'El campo edificio apto barrio es requerido.']
+  },
+  ciudad: {
+    type: String,
+    required: [true, 'El campo ciudad es requerido.']
+  },
+  fecha_entrega_pedido: {
+    type: String,
+    required: [true, 'El campo fecha entrega pedido es requerido.']
+  },
+  estado_pedido: {
+    type: String,
+    required: [true, 'El campo estado pedido es requerido.']
+  },
+  subtotal_venta: {
+    type: Number,
+    required: [true, 'El campo subtotal venta es requerido.']
+  },
+  precio_total_venta: {
+    type: Number,
+    required: [true, 'El campo precio total venta es requerido.']
+  },
+  iva_pedido: {
+    type: Number,
+    required: [true, 'El campo iva pedido es requerido.']
+  },
+  detalle_pedido: [
+    {
+      nombre_producto: {
+        type: String,
+        required: [true, 'El campo nombre producto es requerido.']
+      },
+      nombre_categoria_producto: {
+        type: String,
+        required: [true, 'El campo nombre categoria producto es requerido.']
+      },
+      fecha_pedido_tomado: {
+        type: String,
+        required: [true, 'El campo fecha pedido tomado es requerido.']
+      },
+      cantidad_producto: {
+        type: Number,
+        required: [true, 'El campo cantidad producto es requerido.'],
+
+      },
+      precio_ico: {
+        type: Number,
+        required: [true, 'El campo precio ico es requerido.']
+      },
+      precio_total_producto: {
+        type: Number,
+        required: [true, 'El campo precio total_producto es requerido.']
+      },
+      metodo_pago: {
+        type: String,
+        enum: ['Efectivo', 'Transferencia'],
+        required: [true, 'El campo metodo pago es requerido.']
+      }
+    }
+  ]
 });
 
 const Pedido = mongoose.model('Pedido', pedidoSchema);

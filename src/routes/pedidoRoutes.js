@@ -5,16 +5,16 @@ const PedidoController = require('../controllers/PedidoController');
 // Ruta para obtener todos los pedidos
 router.get('/pedidos', PedidoController.getAllPedido);
 
-// Ruta para obtener un usuario por ID
+// Ruta para obtener un pedido por ID
 router.get('/pedidos/:id', PedidoController.getPedidoById);
 
-// Ruta para crear un nuevo usuario
+// Ruta para crear un nuevo pedido
 router.post('/pedidos', PedidoController.createPedido);
 
-// Ruta para actualizar un usuario por ID
+// Ruta para actualizar un pedido por ID
 router.put('/pedidos/:id', PedidoController.updatePedido);
 
-// Ruta para eliminar un usuario por ID
+// Ruta para eliminar un pedido por ID
 router.delete('/pedidos/:id', PedidoController.deletePedido);
 
 
