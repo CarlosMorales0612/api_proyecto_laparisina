@@ -67,7 +67,7 @@ async function createPedido(req, res) {
   }
 
     // Validar que el nuevo estado sea válido (debe estar en la lista de estados permitidos)
-    const estadosPermitidos = ['iniciado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
+    const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
     if (!estadosPermitidos.includes(pedidoData.estado_pedido)) {
       return res.status(400).json({
         error: 'Estado no permitido. Los estados permitidos son: ' + estadosPermitidos.join(', ')
@@ -118,7 +118,7 @@ async function updatePedido(req, res) {
     }
 
     // Validar que el nuevo estado sea válido (debe estar en la lista de estados permitidos)
-    const estadosPermitidos = ['iniciado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
+    const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
 
     // Verificar que el usuario tenga permiso para cambiar el estado del pedido
     if (
