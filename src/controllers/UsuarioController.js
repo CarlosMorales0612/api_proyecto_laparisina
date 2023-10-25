@@ -1,5 +1,6 @@
 const Usuario = require('../models/Usuario');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 // Obtener todos los usuarios
 async function getAllUsuarios(req, res) {
@@ -29,7 +30,9 @@ async function getUsuarioById(req, res) {
 async function createUsuario(req, res) {
   const { correo_electronico, contaseña_usuario, rol_usuario, estado_usuario } = req.body;
   try {
-    const usuario = new Usuario({ correo_electronico, contaseña_usuario, rol_usuario, estado_usuario });
+    // Encripta la contraseña antes de guardarse en la base de datos
+    const hashedPassword = await bcrypt.hash(contaseña_usuario, 10); // 10 es el costo de hashing, puedes ajustarlo según las necesidades
+    const usuario = new Usuario({ correo_electronico, contaseña_usuario: hashedPassword, rol_usuario, estado_usuario });
 
     // Expresión regular para validar la contraseña
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -52,20 +55,39 @@ async function createUsuario(req, res) {
   }
 }
 
-// Actualizar un usuario por ID
+
 async function updateUsuario(req, res) {
   const { id } = req.params;
   const { correo_electronico, contaseña_usuario, rol_usuario, estado_usuario } = req.body;
   try {
-    const usuario = await Usuario.findByIdAndUpdate(id, { correo_electronico, contaseña_usuario, rol_usuario, estado_usuario }, { new: true });
+    const usuario = await Usuario.findById(id);
+
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado.' });
     }
+
+    // Validar la contraseña actual (opcional)
+    
+
+    // Encriptar la nueva contraseña (si se proporciona)
+    let newHashedPassword = usuario.contaseña_usuario;
+    if (contaseña_usuario) {
+      newHashedPassword = await bcrypt.hash(contaseña_usuario, 10);
+    }
+
+    // Actualizar el usuario en la base de datos
+    usuario.contaseña_usuario = newHashedPassword;
+    usuario.rol_usuario = rol_usuario;
+    usuario.estado_usuario = estado_usuario;
+
+    await usuario.save();
+
     res.json(usuario);
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar el usuario.' });
   }
 }
+
 
 // Eliminar un usuario por ID
 async function deleteUsuario(req, res) {
