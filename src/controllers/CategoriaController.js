@@ -4,7 +4,7 @@ const multerConfig = require('../../utils/multerConfig')
 
 const upload = multer(multerConfig).single('image');//Cuando llave y valor es igual se puede dejar solo un nombre ej: storage
 
-//funcion para subir imagen
+//funcion para subir imagen ----------------------------------------------------------------------------------------------------------------
 async function subirImagen(req, res, next) {
   upload(req,res, function(error) {
     if (error) {
@@ -14,9 +14,7 @@ async function subirImagen(req, res, next) {
   })
 }
 
-
-
-// Obtener todas las categorias
+// Obtener todas las categorias -------------------------------------------------------------------------------------------------------------
 async function obtenerTodasLasCategorias(req, res) {
   try {
     const categorias = await CategoriaProducto.find();
@@ -26,7 +24,7 @@ async function obtenerTodasLasCategorias(req, res) {
   }
 }
 
-// Obtener una categoria por ID
+// Obtener una categoria por ID --------------------------------------------------------------------------------------------------------------
 async function obtenerCategoriasPorId(req, res) {
   const { id } = req.params;
   try {
@@ -40,38 +38,32 @@ async function obtenerCategoriasPorId(req, res) {
   }
 }
 
-// // Configuración de multer para guardar imágenes en la carpeta "uploads"
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//       cb(null, 'uploads/')//null para que no muestre errores y el segundo parametro es donde se guarda la imagen tal cual
-//   },
-//   filename:(req,file,cb) => {
-//       const ext = file.originalname.split('.').pop()//TODO: si imagen.png --retorna--> png
-//       cb(null,`${Date.now()}.${ext}`)
-//   }
-// })
-
-
-
-// //funcion para subir imagen
-// async function subirImagen(req, res) {
-//   return new Promise((resolve, reject) => {
-//       upload(req, res, (err) => {
-//           if (err) {
-//               // Elimina la imagen si ocurre un error
-//               if (req.file) {
-//                   fs.unlinkSync(req.file.path);
-//               }
-//               reject(err);
-//           } else {
-//               resolve(req.file.path);
-//           }
-//       });
-//   });
-// }
-
-// Crear una nueva categoria
+// Crear una nueva categoria -----------------------------------------------------------------------------------------------------------------
 async function crearCategoria(req, res) {
+  const { nombre_categoria_producto, descripcion_categoria_producto} = req.body
+
+  //Expresión regular para validar el nombre de la categoría
+  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
+  const longitudMaximaNombre = 20;
+
+  // Expresión regular para validar la descripcion de la categoría
+  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.-]+$/;
+  const longitudMaximaDescripcion = 100;
+  
+  if (!nombreExpReg.test(nombre_categoria_producto)){
+    return res.status(400).json({ error: 'El nombre solo permite letras.' });
+  }
+  if (nombre_categoria_producto.length > longitudMaximaNombre) {
+    return res.status(400).json({ error: 'El nombre debe tener máximo 20 caracteres.' });
+  }
+
+  if (!descripcionExpReg.test(descripcion_categoria_producto)) {
+    return res.status(400).json({ error: 'La descripción solo permite letras y los signos ",." ' });
+  }
+  if (descripcion_categoria_producto.length > longitudMaximaDescripcion) {
+    return res.status(400).json({ error: 'La descripción debe tener máximo 100 caracteres.' });
+  }
+
   const categoria = new CategoriaProducto(req.body);
   try {
       if (req.file && req.file.filename) {
@@ -84,9 +76,9 @@ async function crearCategoria(req, res) {
           message: 'Categoría creada exitosamente.',
       });
   } catch (error) {
-    // Captura el error de Mongoose si es debido a la restricción única
+    // Captura el error de Mongoose si es debido a la restricción unique
     if (error.code === 11000 && error.keyPattern.nombre_categoria_producto) {
-      // Código 11000 indica un error de clave duplicada (duplicado único)
+      // Código 11000 indica un error de nombre duplicado
       res.status(400).json({ error: `La categoría ${req.body.nombre_categoria_producto} ya existe.` });
     } else {
       // Otro tipo de error, envía una respuesta de error genérica
@@ -95,33 +87,33 @@ async function crearCategoria(req, res) {
   }
 }
 
-// // Crear una nueva categoria
-// async function crearCategoria(req, res) {
-//   const { nombre_categoria_producto, descripcion_categoria_producto,imagen_categoria_producto,estado_categoria_producto } = req.body;
-//   const imagen = req.file.path; // El nombre del archivo subido por multer
-//   let mensaje = ''
-//   console.log('Img: '+imagen)
-//   try {
-//     //Lógica para crear categoria
-//     const categoria = new CategoriaProducto({ nombre_categoria_producto, descripcion_categoria_producto,imagen_categoria_producto: imagen,estado_categoria_producto });
-//     await categoria.save();
-//     mensaje = 'La categoría se creó correctamente.'
-//   } catch (error) {
-//     if (error.name === 'ValidationError') {
-//         mensaje = 'Los datos de la categoría son inválidos.'+ error.message;
-//     } else if (error.name === 'MongoError' && error.code === 11000) {
-//         mensaje = 'El nombre de la categoría ya existe.';
-//     } else {
-//         console.error('Ocurrió un error al crear la categoría:', error.message);
-//     }
-//   }
-//   res.json({msg: mensaje})
-// }
-
-// Actualizar una categoria por ID
+// Actualizar una categoria por ID -----------------------------------------------------------------------------------------------------------
 async function actualizarCategoria(req, res) {
   const { id } = req.params;
-  const { nombre_categoria_producto, descripcion_categoria_producto, imagen_categoria_producto, estado_categoria_producto } = req.body;
+  const { nombre_categoria_producto, descripcion_categoria_producto } = req.body;
+
+  // Expresión regular para validar el nombre de la categoría
+  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
+  const longitudMaximaNombre = 20;
+
+  // Expresión regular para validar la descripcion de la categoría
+  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.-]+$/;
+  const longitudMaximaDescripcion = 100;
+
+  if (!nombreExpReg.test(nombre_categoria_producto)) {
+    return res.status(400).json({ error: 'El nombre solo permite letras.' });
+  }
+  if (nombre_categoria_producto.length > longitudMaximaNombre) {
+    return res.status(400).json({ error: 'El nombre debe tener máximo 20 caracteres.' });
+  }
+
+  if (!descripcionExpReg.test(descripcion_categoria_producto)) {
+    return res.status(400).json({ error: 'La descripción solo permite letras y los signos ",." ' });
+  }
+  if (descripcion_categoria_producto.length > longitudMaximaDescripcion) {
+    return res.status(400).json({ error: 'La descripción debe tener máximo 100 caracteres.' });
+  }
+
   try {
     let actualizarCategoria = req.body;
 
@@ -148,7 +140,7 @@ async function actualizarCategoria(req, res) {
   }
 }
 
-// Eliminar una categoria por ID
+// Eliminar una categoria por ID -------------------------------------------------------------------------------------------------------------
 async function eliminarCategoria(req, res) {
   const { id } = req.params;
   try {
@@ -162,9 +154,7 @@ async function eliminarCategoria(req, res) {
   }
 }
 
-
-
-
+//Exportar funciones -------------------------------------------------------------------------------------------------------------------------
 module.exports = {
   obtenerTodasLasCategorias,
   obtenerCategoriasPorId,
