@@ -25,12 +25,28 @@ const usuarioSchema = new mongoose.Schema({
     // default: 'Usuario',
   },
 
+  permisos_usuario: [
+    {
+      nombre_producto: {
+        type: String,
+        required: [true, 'El campo nombre producto es requerido.']
+      },
+
+      permisos: [{
+        type: String,
+        required: [true, 'El campo nombre categoria producto es requerido.']
+      }],
+      
+    },
+  ],
+
   estado_usuario: {
     type: Boolean,
     required: [true, 'El estado es obligatorio'],
     default: true,
-  }
+  },
 
+  
 });
 
 const Usuario = mongoose.model('Usuario', usuarioSchema);
