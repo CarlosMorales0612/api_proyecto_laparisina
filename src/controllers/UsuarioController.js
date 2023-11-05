@@ -26,27 +26,40 @@ async function getUsuarioById(req, res) {
   }
 }
 
-// Crear un nuevo usuario
 async function createUsuario(req, res) {
-  const { correo_electronico, contaseña_usuario, rol_usuario, estado_usuario } = req.body;
+  const { correo_electronico, contrasena_usuario, estado_usuario } = req.body;
+
   try {
-    // Encripta la contraseña antes de guardarse en la base de datos
-    const hashedPassword = await bcrypt.hash(contaseña_usuario, 10); // 10 es el costo de hashing, puedes ajustarlo según las necesidades
-    const usuario = new Usuario({ correo_electronico, contaseña_usuario: hashedPassword, rol_usuario, estado_usuario });
-
-    // Expresión regular para validar la contraseña
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    //^(?=.*[a-zñáéíóú])(?=.*[A-ZÑÁÉÍÓÚ])(?=.*\d)(?=.*[@$!%*?&])[A-Za-zñÑáéíóúÁÉÍÓÚ\d@$!%*?&]{8,}$ EXPRESIÓN regular que permite la letra ñ y aquellas vocales con tilde."
-
-    if (!passwordRegex.test(contaseña_usuario)) {
-      return res.status(400).json({ error: 'La contraseña no cumple con los requisitos.' });
+    // Verificar si el correo electrónico ya está registrado
+    const existeEmail = await Usuario.findOne({ correo_electronico });
+    if (existeEmail) {
+      return res.status(400).json({ msg: 'El correo ya se encuentra registrado' });
     }
+
+    // Validar la contraseña con una expresión regular
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (!passwordRegex.test(contrasena_usuario)) {
+      return res.status(400).json({
+        error: 'La contraseña no cumple con los requisitos.',
+        details: 'La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y tener al menos 6 caracteres.'
+      });
+    }
+
+    // Encriptar la contraseña antes de guardarla en la base de datos
+    const hashedPassword = await bcrypt.hash(contrasena_usuario, 10); // 10 es el costo de hashing, puedes ajustarlo según tus necesidades
+
+    // Crear un nuevo usuario
+    const usuario = new Usuario({
+      correo_electronico,
+      contrasena_usuario: hashedPassword,
+      estado_usuario
+    });
+
     await usuario.save();
     res.status(201).json(usuario);
-
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      // Si se produce un error de validación (por ejemplo, datos faltantes o incorrectos), se proporciona detalles específicos.
+      // Si se produce un error de validación (por ejemplo, datos faltantes o incorrectos), se proporcionan detalles específicos.
       res.status(400).json({ error: 'Error al crear el usuario', details: error.errors });
     } else {
       // En caso de otros errores, se proporciona un mensaje de error genérico.
@@ -56,9 +69,12 @@ async function createUsuario(req, res) {
 }
 
 
+
+
+
 async function updateUsuario(req, res) {
   const { id } = req.params;
-  const { correo_electronico, contaseña_usuario, rol_usuario, estado_usuario } = req.body;
+  const { correo_electronico, contasena_usuario,  estado_usuario } = req.body;
   try {
     const usuario = await Usuario.findById(id);
 
@@ -77,7 +93,7 @@ async function updateUsuario(req, res) {
 
     // Actualizar el usuario en la base de datos
     usuario.contaseña_usuario = newHashedPassword;
-    usuario.rol_usuario = rol_usuario;
+    
     usuario.estado_usuario = estado_usuario;
 
     await usuario.save();

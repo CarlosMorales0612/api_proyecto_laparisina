@@ -4,7 +4,7 @@ export default {
     verifyClient: async(req, res, next) => {
         if(!req.headers.token){
             res.status(404).send({
-                message: 'No se envio el token correctamente'
+                message: 'No se envió el token correctamente'
             });
         }
         const response = await token.decode(req.headers.token);
