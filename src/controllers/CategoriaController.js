@@ -24,7 +24,7 @@ async function obtenerTodasLasCategorias(req, res) {
   }
 }
 
-// Obtener una categoria por ID --------------------------------------------------------------------------------------------------------------
+// Obtener una categoria por ID ------------------------------------------------------------------------------------------------------------
 async function obtenerCategoriasPorId(req, res) {
   const { id } = req.params;
   try {
@@ -38,7 +38,7 @@ async function obtenerCategoriasPorId(req, res) {
   }
 }
 
-// Crear una nueva categoria -----------------------------------------------------------------------------------------------------------------
+// Crear una nueva categoria ---------------------------------------------------------------------------------------------------------------
 async function crearCategoria(req, res) {
   const { nombre_categoria_producto, descripcion_categoria_producto} = req.body
 
@@ -87,7 +87,7 @@ async function crearCategoria(req, res) {
   }
 }
 
-// Actualizar una categoria por ID -----------------------------------------------------------------------------------------------------------
+// Actualizar una categoria por ID ---------------------------------------------------------------------------------------------------------
 async function actualizarCategoria(req, res) {
   const { id } = req.params;
   const { nombre_categoria_producto, descripcion_categoria_producto } = req.body;
@@ -140,7 +140,7 @@ async function actualizarCategoria(req, res) {
   }
 }
 
-// Eliminar una categoria por ID -------------------------------------------------------------------------------------------------------------
+// Eliminar una categoria por ID ------------------------------------------------------------------------------------------------------------
 async function eliminarCategoria(req, res) {
   const { id } = req.params;
   try {
@@ -154,7 +154,7 @@ async function eliminarCategoria(req, res) {
   }
 }
 
-//Exportar funciones -------------------------------------------------------------------------------------------------------------------------
+//Exportar funciones ------------------------------------------------------------------------------------------------------------------------
 module.exports = {
   obtenerTodasLasCategorias,
   obtenerCategoriasPorId,
