@@ -15,7 +15,7 @@ router.post('/productos', ProductoController.subirImagen, ProductoController.cre
 router.put('/productos/:id', ProductoController.subirImagen,ProductoController.actualizarProducto);
 
 // Ruta para eliminar una categoria por ID
-router.delete('/productos/:id', ProductoController.eliminarProducto);
+router.put('/producto-estado/:id', ProductoController.cambiarEstadoProducto);
 
 
 module.exports = router;

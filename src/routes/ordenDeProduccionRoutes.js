@@ -5,8 +5,8 @@ const OrdenDeProduccionController = require('../controllers/OrdenDeProduccionCon
 // Ruta para obtener todas las ordenes de producción
 router.get('/consultar-produccion', OrdenDeProduccionController.obtenerTodasLasOrdenesDeProduccion);
 
-// // Ruta para obtener una orden de producción por ID
-// router.get('/consultar-produccion/:id', OrdenDeProduccionController.obtenerOrdenPorId);
+// Ruta para obtener una orden de producción por ID
+router.get('/consultar-produccion/:id', OrdenDeProduccionController.obtenerOrdenDeProduccionPorId);
 
 // Ruta para generar nuevas ordenes de producción
 router.post('/crear-produccion', OrdenDeProduccionController.crearOrdenDeProduccion);
