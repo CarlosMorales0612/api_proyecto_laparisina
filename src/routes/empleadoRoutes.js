@@ -1,19 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const empledoController = require('../controllers/empledoController');
+const empledosController = require('../controllers/empleadoController');
 
 // Ruta para obtener todos los usuarios
-router.get('/empleado', empledoController.empleadoGet);
+router.get('/empleados', empledosController.obtenerTodosLosEmpleados);
+
+//Ruta Obtener empleado por id
+router.get('/empleados/:id', empledosController.obtenerEmpleadoPorId);
 
 
 // Ruta para crear un nuevo usuario
-router.post('/empleado', empledoController.empleadoPost);
+router.post('/empleados', empledosController.crearEmpleado);
 
 // Ruta para actualizar un usuario por ID
-router.put('/empleado/:id', empledoController.empleadoPut);
+router.put('/empleados/:id', empledosController.actualizarEmpleado);
 
 // Ruta para eliminar un usuario por ID
-router.delete('/empleado/:id', empledoController.empleadoDelete);
+router.delete('/empleados/:id', empledosController.eliminarEmpleado);
 
 
 module.exports = router;

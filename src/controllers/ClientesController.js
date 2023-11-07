@@ -122,12 +122,12 @@ async function obtenerClientePorId(req, res) {
 
   //Validación campo correo
   if (!correoExpReg.test(correo_cliente)){
-    return res.status(400).json({ error: 'Opción de correo invalida.' });
+    return res.status(400).json({ error: 'Formato de correo invalida.' });
   }
 
   //Validación campo dirección 
   if (!direccionExpReg.test(direccion_cliente)){
-    return res.status(400).json({ error: 'Opción de correo invalida.' });
+    return res.status(400).json({ error: 'Formato de dirección invalida.' });
   }
 
   const body = req.body //Captura de atributos
@@ -251,12 +251,12 @@ async function actualizarCliente(req, res) {
  
    //Validación campo correo
    if (!correoExpReg.test(correo_cliente)){
-     return res.status(400).json({ error: 'Opción de correo invalida.' });
+     return res.status(400).json({ error: 'Formato de correo invalido.' });
    }
  
    //Validación campo dirección 
    if (!direccionExpReg.test(direccion_cliente)){
-     return res.status(400).json({ error: 'Opción de correo invalida.' });
+     return res.status(400).json({ error: 'Formato de dirección invalida.' });
    }
 
 
@@ -265,12 +265,12 @@ async function actualizarCliente(req, res) {
     // Realiza la actualización en la base de datos
     const clienteActualizado = await Clientes.findByIdAndUpdate(id, actualizarCliente, { new: true });
 
-    // Verifica si la categoría fue encontrada y actualizada correctamente
+    // Verifica si el cliente fue encontrada y actualizada correctamente
     if (!clienteActualizado) {
-      return res.status(404).json({ error: 'Ccliente no encontrado.' });
+      return res.status(404).json({ error: 'Cliente no encontrado.' });
     }
     
-    // Si la categoría se actualiza exitosamente, envía un mensaje de éxito en la respuesta
+    // Si el cliente se actualiza exitosamente, envía un mensaje de éxito en la respuesta
     res.status(200).json({ message: 'Cliente actualizado exitosamente.', clientes: clienteActualizado });
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar la cliente.' });
