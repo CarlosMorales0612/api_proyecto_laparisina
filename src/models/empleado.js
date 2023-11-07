@@ -5,151 +5,110 @@ const empleadoSchema = new mongoose.Schema({
 codigo_rotulacion_empleado: {
     type: String,
     required: true,
-    unique: true,
-    match: /^[0-9]+$/, 
+    unique:[true, 'El codigo rotulacion empleado:{VALUE} ya existe'],
+    required: [true,'El codigo rotulacion empleado es requerido']
   },
   
   nombre_empleado: {
     type: String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/, 
+    required: [true,'El nombre empleado es requerido'],
   },
   tipo_contrato_empleado: {
     type: String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/,
+    required: [true,'El tipo contrato empleado es requerido'],
     
   },
   fecha_inicio_empleado: {
     type: Date,
-    required: true,
-    validate: {
-      validator: function(value) {
-        
-        return value < this.fecha_vencimiento_contrato_empleado;
-        
-      },
-      message: 'La fecha de inicio del contrato debe ser anterior a la fecha de vencimiento del contrato.'
-    }
+    required: true
   },
       
   fecha_vencimiento_contrato_empleado:{
     type: Date,
-    required: true,
-    validate: {
-      validator: function(value) {
-        
-        return value > this.fecha_inicio_empleado;
-        
-      },
-      message: 'La fecha de vencimiento del contrato debe ser superior a la fecha de inicio del contrato.'
-    }
+    required: true
   },
   
   tipo_documento_empleado:{
     type: String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/,
+    required: [true,'El tipo documento empleado es requerido'],
   },
   identificacion_empleado:{
     type: String,
-    required: true,
-    match: /^\d{10}$/,
+    unique:[true, 'La identicicacion empleado:{VALUE} ya existe'],
+    required: [true,'La identificacion empleado es requerido'],
   },
   fecha_nacimiento_empleado:{
     type: Date,
-    required: true,
-    validate: {
-      validator: function (value) {
-        return value < new Date();
-      },
-      message: 'La fecha de nacimiento debe ser anterior a la fecha actual',
-    },
+    required: [true,'La fecha nacimiento empleado es requerido'],
   },
   
   edad_empleado: {
     type: Number,
-    required: true,
-    validate: {
-      validator: Number.isInteger, 
-      message: 'La edad debe ser un número entero positivo.',
-    },
+    required: [true,'La edad empleado es requerido'],
   },
   lugar_nacimiento_empleado:{
     type: String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/, 
+    required: [true,'El lugar nacimiento empleado es requerido'],
   },
   direccion_empleado:{
     type: String,
-    required: true,
+    required: [true,'La direccion empleado es requerido'],
 
   },
   municipio_domicilio_empleado:{
     type:String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/,
+    required: [true,'El municipio domicilio es requerido'],
   },
   estado_civil_empleado:{
     type:String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/,
+    required: [true,'El estado civil empleado es requerido'],
   },
   celular_empleado:{
     type:String,
-    required: true,
-    match: /^\d{10}$/,
+    required: [true,'El celular empleado es requerido'],
   },
   correo_empleado:{
     type:String,
-    required: true,
-    match: /^\S+@\S+\.\S+$/,
+    unique:[true, 'El correo empleado:{VALUE} ya existe'],
+    required: [true,'El correo empleado es requerido'],
   },
   alergia_empleado:{
     type:String,
-    required: true,
+    required: [true,'El campo alergia es requerido'],
   },
   grupo_sanguineo_emeplado:{
     type:String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/,
   },
   contacto_emergencia:[{
     nombre_contacto_emergencia:{
         type:String,
-        required: true,
         match: /^[a-zA-Z\s]*$/,
     },
     parentesco_empleado:{
         type:String,
-        required: true,
         match: /^[a-zA-Z\s]*$/,
     },
     telefono_contacto_emergencia:{
         type:String,
-        required: true,
         match: /^\d{10}$/,
     },
   }],
   eps_empleado:{
     type:String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/,
+    required: [true,'La eps empleado es requerido'],
   },
   pension_empleado:{
     type:String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/,
+    required: [true,'El fondo pension empleado es requerido'],
   },
   cuenta_bancaria_empleado:{
     type:String,
-    required: true,
-    match: /^[0-9]+$/, 
+    unique:[true, 'la cuenta bancaria del empleado:{VALUE} ya existe'],
+    required: [true,'La cuenta bancaria es requerido'], 
   },
   area_empleado:{
     type:String,
-    required: true,
-    match: /^[a-zA-Z\s]*$/,
+    required: [true,'El area empleado es requerido'],
   }
 
 
