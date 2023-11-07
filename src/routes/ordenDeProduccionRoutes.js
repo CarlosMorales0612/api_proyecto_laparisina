@@ -2,20 +2,17 @@ const express = require('express');
 const router = express.Router();
 const OrdenDeProduccionController = require('../controllers/OrdenDeProduccionController');
 
-// Ruta para obtener todos las ordenes de producción
-router.get('/ordenDeProduccion', OrdenDeProduccionController.obtenerOrdenesDeProduccion);
+// Ruta para obtener todas las ordenes de producción
+router.get('/consultar-produccion', OrdenDeProduccionController.obtenerTodasLasOrdenesDeProduccion);
 
-// // Ruta para obtener una categoria por ID
-// router.get('/categorias/:id', OrdenDeProduccionController.obtenerCategoriasPorId);
+// // Ruta para obtener una orden de producción por ID
+// router.get('/consultar-produccion/:id', OrdenDeProduccionController.obtenerOrdenPorId);
 
-// // Ruta para crear una nueva categoria
-// router.post('/categorias', OrdenDeProduccionController.subirImagen, OrdenDeProduccionController.crearCategoria);
+// Ruta para generar nuevas ordenes de producción
+router.post('/crear-produccion', OrdenDeProduccionController.crearOrdenDeProduccion);
 
-// // Ruta para actualizar una categoria por ID
-// router.put('/categorias/:id', OrdenDeProduccionController.subirImagen,OrdenDeProduccionController.actualizarCategoria);
-
-// // Ruta para eliminar una categoria por ID
-// router.delete('/categorias/:id', OrdenDeProduccionController.eliminarCategoria);
+// Ruta para actualizar una orden de producción por ID
+router.put('/actualizar-produccion/:id', OrdenDeProduccionController.actualizarOrdenDeProduccion);
 
 
 module.exports = router;

@@ -2,7 +2,7 @@ const Producto = require('../models/ProductoModel');
 const multer = require('multer')
 const multerConfig = require('../../utils/multerConfig')
 
-//---------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------------
 const upload = multer(multerConfig).single('image');//nombre que debe tener el campo file al subir la imagen 'image'
 
 //funcion para subir imagen
@@ -15,7 +15,7 @@ async function subirImagen(req, res, next) {
   })
 }
 
-// Obtener todos los productos ----------------------------------------------------------------------------------------------------------
+// Obtener todos los productos ------------------------------------------------------------------------------------------------------------
 async function obtenerTodosLosProductos(req, res) {
   try {
     const productos = await Producto.find();
@@ -25,7 +25,7 @@ async function obtenerTodosLosProductos(req, res) {
   }
 }
 
-// Obtener un producto por ID -----------------------------------------------------------------------------------------------------------
+// Obtener un producto por ID --------------------------------------------------------------------------------------------------------------
 async function obtenerProductoPorId(req, res) {
   const { id } = req.params;
   try {
@@ -139,7 +139,7 @@ async function crearProducto(req, res) {
   }
 }
 
-// Actualizar un producto por ID --------------------------------------------------------------------------------------------------------------
+// Actualizar un producto por ID ------------------------------------------------------------------------------------------------------------
 async function actualizarProducto(req, res) {
   const { id } = req.params;
   const { codigo_producto, nombre_producto, nombre_categoria_producto, descripcion_producto, precio_ico, precio_por_mayor_ico, durabilidad_producto, ingredientes_producto, imagen_producto, estado_producto } = req.body;
@@ -192,7 +192,7 @@ async function eliminarProducto(req, res) {
   }
 }
 
-//Exportar funciones -------------------------------------------------------------------------------------------------------------------------
+//Exportar funciones ------------------------------------------------------------------------------------------------------------------------
 module.exports = {
   obtenerTodosLosProductos,
   obtenerProductoPorId,

@@ -5,7 +5,6 @@ const OrdenDeProduccionSchema = new mongoose.Schema({
     nombre_area: {
         type: String,
         required: [true],
-        unique: [true]
     },
 
     nombre_producto: {
@@ -31,7 +30,16 @@ const OrdenDeProduccionSchema = new mongoose.Schema({
     estado_orden: {
         type: String,
         required: true,
-    }
+    },
+
+    pedidos_orden: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Pedido', // Aquí debes poner el nombre del modelo de Pedido
+        required: true
+      }
+    ]
+    
 
 });
 
