@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-//const Roles = require('./roles'); 
+const { Schema, model } = require('mongoose');
 
 const usuarioSchema = new mongoose.Schema({
   correo_electronico: {
@@ -17,7 +17,11 @@ const usuarioSchema = new mongoose.Schema({
     // La longitud de la contraseña debe ser de al menos 8 caracteres.
   },
 
-  //rol_usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'Roles' }, // Campo de referencia al esquema de Rol
+  rol_usuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Roles',
+    required: [true, 'El rol es obligatorio']
+  }, // Campo de referencia al esquema de Rol
 
   estado_usuario: {
     type: Boolean,
@@ -25,9 +29,14 @@ const usuarioSchema = new mongoose.Schema({
     default: true,
   },
 
-  
+
 });
 
-const Usuario = mongoose.model('Usuario', usuarioSchema);
+usuarioSchema.methods.toJSON = function() {
+  const { __v, contrasena_usuario, _id, ...usuario } = this.toObject(); 
+  usuario.uid = _id;
+  return usuario;
+}
 
-module.exports = Usuario;
+
+module.exports = model('Usuario', usuarioSchema);

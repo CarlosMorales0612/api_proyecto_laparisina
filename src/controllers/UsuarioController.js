@@ -1,12 +1,25 @@
 const Usuario = require('../models/Usuario');
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 
 // Obtener todos los usuarios
 async function getAllUsuarios(req, res) {
   try {
-    const usuarios = await Usuario.find();
-    res.json(usuarios);
+    const { limite = 5, desde = 0 } = req.query;
+    const query = { estado_usuario: true};
+
+    const [ usuarios, total] = await Promise.all([
+      Usuario.countDocuments( query),      
+      Usuario.find(query)
+      .skip(Number(desde))
+      .limit(Number(limite))
+    ])
+
+    res.json({
+      usuarios,
+      total
+    });
+
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los usuarios.' });
   }
@@ -27,14 +40,8 @@ async function getUsuarioById(req, res) {
 }
 
 async function createUsuario(req, res) {
-  const { correo_electronico, contrasena_usuario, estado_usuario } = req.body;
-
+  const { correo_electronico, contrasena_usuario, rol_usuario, estado_usuario } = req.body;
   try {
-    // Verificar si el correo electrónico ya está registrado
-    const existeEmail = await Usuario.findOne({ correo_electronico });
-    if (existeEmail) {
-      return res.status(400).json({ msg: 'El correo ya se encuentra registrado' });
-    }
 
     // Validar la contraseña con una expresión regular
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
@@ -46,12 +53,16 @@ async function createUsuario(req, res) {
     }
 
     // Encriptar la contraseña antes de guardarla en la base de datos
-    const hashedPassword = await bcrypt.hash(contrasena_usuario, 10); // 10 es el costo de hashing, puedes ajustarlo según tus necesidades
+    const salt = bcrypt.genSaltSync();
+    Usuario.contrasena_usuario = bcrypt.hashSync(contrasena_usuario, salt);
+
+    //const hashedPassword = await bcrypt.hash(contrasena_usuario, 10); // 10 es el costo de hashing, puedes ajustarlo según tus necesidades
 
     // Crear un nuevo usuario
     const usuario = new Usuario({
       correo_electronico,
-      contrasena_usuario: hashedPassword,
+      contrasena_usuario,
+      rol_usuario,
       estado_usuario
     });
 
@@ -67,40 +78,26 @@ async function createUsuario(req, res) {
     }
   }
 }
+//Crear usuario
 
 
-
-
-
-async function updateUsuario(req, res) {
+//Actualizar usuario
+const updateUsuario = async (req, res = response) => {
   const { id } = req.params;
-  const { correo_electronico, contasena_usuario,  estado_usuario } = req.body;
+  const { _id, contrasena_usuario, correo_electronico, ...resto } = req.body;
   try {
-    const usuario = await Usuario.findById(id);
-
-    if (!usuario) {
-      return res.status(404).json({ error: 'Usuario no encontrado.' });
-    }
-
     // Validar la contraseña actual (opcional)
-    
-
-    // Encriptar la nueva contraseña (si se proporciona)
-    let newHashedPassword = usuario.contaseña_usuario;
-    if (contaseña_usuario) {
-      newHashedPassword = await bcrypt.hash(contaseña_usuario, 10);
+    if (contrasena_usuario) {
+      // Encriptar la contraseña antes de guardarla en la base de datos
+      const salt = bcrypt.genSaltSync();
+      resto.contrasena_usuario = bcrypt.hashSync(contrasena_usuario, salt);
     }
 
-    // Actualizar el usuario en la base de datos
-    usuario.contaseña_usuario = newHashedPassword;
-    
-    usuario.estado_usuario = estado_usuario;
-
-    await usuario.save();
+    const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
     res.json(usuario);
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar el usuario.' });
+    res.status(500).json({ error: 'Error al actualizar el usuario.' + error });
   }
 }
 
@@ -109,15 +106,15 @@ async function updateUsuario(req, res) {
 async function deleteUsuario(req, res) {
   const { id } = req.params;
   try {
-    const usuario = await User.findByIdAndDelete(id);
-    if (!usuario) {
-      return res.status(404).json({ error: 'Usuario no encontrado.' });
-    }
-    res.status(204).send();
+    const usuario = await Usuario.findByIdAndUpdate(id, { estado_usuario: false });
+
+    res.json({ usuario});
+
   } catch (error) {
     res.status(500).json({ error: 'Error al eliminar el usuario.' });
   }
 }
+
 
 
 
