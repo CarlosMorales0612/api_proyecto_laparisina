@@ -290,6 +290,30 @@ async function eliminarCliente(req, res) {
     res.status(500).json({ error: 'Error al eliminar la cliente.' });
   }
 }
+// Cambiar el estado de un cliente por ID ------------------------------------------------------------------------------------------------------------
+async function cambiarEstadoCliente(req, res) {
+  const { id } = req.params;
+  try {
+    const verificarEstado = await Clientes.findById(id)
+
+    if (!verificarEstado) {
+      return res.status(404).json({ error: 'Cliente no encontrado.' });
+    } else {
+      const estado = verificarEstado.estado_cliente
+
+      const clientes = await Clientes.findByIdAndUpdate(
+        id,
+        { $set: { estado_cliente: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
+        { new: true }
+      );
+    }
+
+    res.status(200).json({ message: 'Estado del cliente ha cambiado exitosamente.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al cambiar el estado del cliente.' });
+  }
+}
+
 
 //Exportar funciones -------------------------------------------------------------------------------------------------------------------------
 module.exports = {
@@ -297,5 +321,6 @@ module.exports = {
   obtenerClientePorId,
   crearCliente,
   actualizarCliente,
+  cambiarEstadoCliente,
   eliminarCliente
 };

@@ -113,11 +113,36 @@ async function eliminarRol(req, res) {
   }
 }
 
+// Cambiar el estado de un rol por ID ------------------------------------------------------------------------------------------------------------
+async function cambiarEstadoRol(req, res) {
+  const { id } = req.params;
+  try {
+    const verificarEstado = await Roles.findById(id)
+
+    if (!verificarEstado) {
+      return res.status(404).json({ error: 'Rol no encontrado.' });
+    } else {
+      const estado = verificarEstado.estado_rol
+
+      const roles = await Roles.findByIdAndUpdate(
+        id,
+        { $set: { estado_rol: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
+        { new: true }
+      );
+    }
+
+    res.status(200).json({ message: 'Estado del rol ha cambiado exitosamente.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al cambiar el estado del rol.' });
+  }
+}
+
 
 module.exports={
    obtenerTodosLosRoles,
    obtenerRolPorId,
    crearRol,
    actualizarRol,
+   cambiarEstadoRol,
    eliminarRol
 }
