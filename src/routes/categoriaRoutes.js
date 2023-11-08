@@ -17,7 +17,7 @@ router.post('/categorias', CategoriaController.subirImagen, CategoriaController.
 router.put('/categorias/:id', CategoriaController.subirImagen,CategoriaController.actualizarCategoria);
 
 // Ruta para eliminar una categoria por ID
-router.delete('/categorias/:id', CategoriaController.eliminarCategoria);
+router.put('/categoria-estado/:id', CategoriaController.cambiarEstadoCategoria);
 
 
 module.exports = router;

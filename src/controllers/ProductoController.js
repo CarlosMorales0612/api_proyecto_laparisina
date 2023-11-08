@@ -178,17 +178,25 @@ async function actualizarProducto(req, res) {
   }
 }
 
-// Eliminar un producto por ID --------------------------------------------------------------------------------------------------------------
-async function eliminarProducto(req, res) {
+// Cambiar el estado de un producto por ID ------------------------------------------------------------------------------------------------------------
+async function cambiarEstadoProducto(req, res) {
   const { id } = req.params;
   try {
-    const producto = await Producto.findByIdAndDelete(id);
-    if (!producto) {
+    const verificarEstado = await Producto.findById(id)
+    if (!verificarEstado) {
       return res.status(404).json({ error: 'Producto no encontrado.' });
+    } else {
+      const estado = verificarEstado.estado_producto
+
+      const producto = await Producto.findByIdAndUpdate(
+        id,
+        { $set: { estado_producto: !estado } }, // Cambia a estado diferebte que tiene
+        { new: true }
+      );
     }
-    res.status(200).json({ message: 'Producto eliminado exitosamente.' });
+    res.status(200).json({ message: 'Estado del producto cambiado exitosamente.' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el producto.' });
+    res.status(500).json({ error: 'Error al cambiar el estado del producto.' });
   }
 }
 
@@ -198,6 +206,6 @@ module.exports = {
   obtenerProductoPorId,
   crearProducto,
   actualizarProducto,
-  eliminarProducto,
+  cambiarEstadoProducto,
   subirImagen
 };
