@@ -34,6 +34,20 @@ async function obtenerTodasLasOrdenesDeProduccion(req, res) {
   }
 }
 
+// Obtener una orden de producción por ID ------------------------------------------------------------------------------------------------------------
+async function obtenerOrdenDeProduccionPorId(req, res) {
+  const { id } = req.params;
+  try {
+    const orden = await OrdenDeProduccion.findById(id);
+    if (!orden) {
+      return res.status(404).json({ error: 'Orden de producción no encontrada.' });
+    }
+    res.json(orden);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener la orden de producción.' });
+  }
+}
+
 // Consultar todas las ordenes de producción  basada en pedidos ----------------------------------------------------------------------------
 // async function consultarOrdenesDeProduccion(req, res) {
 //   try {
@@ -295,6 +309,7 @@ async function actualizarEstadoPedido(idPedido) {
 //Exportar funciones -------------------------------------------------------------------------------------------------------------------------
 module.exports = {
   obtenerTodasLasOrdenesDeProduccion,
+  obtenerOrdenDeProduccionPorId,
   crearOrdenDeProduccion,
   actualizarOrdenDeProduccion
 };
