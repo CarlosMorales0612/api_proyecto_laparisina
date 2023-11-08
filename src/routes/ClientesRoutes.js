@@ -15,6 +15,9 @@ router.post('/clientes',  ClientesController.crearCliente);
 // Ruta para actualizar un cliente por ID
 router.put('/clientes/:id',ClientesController.actualizarCliente);
 
+// Ruta para actualizar un cliente por ID
+router.put('/clientes_estado/:id',ClientesController.cambiarEstadoCliente);
+
 // Ruta para eliminar un cliente por ID
 router.delete('/clientes/:id', ClientesController.eliminarCliente);
 

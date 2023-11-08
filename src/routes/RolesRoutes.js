@@ -16,7 +16,7 @@ router.post('/roles',  RolesController.crearRol);
 router.put('/roles/:id', RolesController.actualizarRol);
 
 // Ruta para actualizar el estado de un rol por ID
-router.put('/roles/:id', RolesController.cambiarEstadoRol);
+router.put('/roles_estado/:id', RolesController.cambiarEstadoRol);
 
 // Ruta para eliminar un rol por ID
 router.delete('/roles/:id', RolesController.eliminarRol);
