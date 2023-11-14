@@ -88,7 +88,7 @@ const pedidoSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'El campo precio total_producto es requerido.']
       }
-    
+
     }
   ]
 });

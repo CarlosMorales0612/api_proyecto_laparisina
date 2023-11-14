@@ -67,12 +67,12 @@ async function createPedido(req, res) {
   }
 
     // Validar que el nuevo estado sea válido (debe estar en la lista de estados permitidos)
-    const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
-    if (!estadosPermitidos.includes(pedidoData.estado_pedido)) {
-      return res.status(400).json({
-        error: 'Estado no permitido. Los estados permitidos son: ' + estadosPermitidos.join(', ')
-      });
-    }
+    // const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
+    // if (!estadosPermitidos.includes(pedidoData.estado_pedido)) {
+    //   return res.status(400).json({
+    //     error: 'Estado no permitido. Los estados permitidos son: ' + estadosPermitidos.join(', ')
+    //   });
+    // }
       // Validar que el campo 'subtotal_venta' contenga solo números
     if (!/^\d+$/.test(pedidoData.subtotal_venta)) {
       return res.status(400).json({ error: 'El campo de subtotal debe contener solo números.' });

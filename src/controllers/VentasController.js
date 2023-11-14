@@ -4,9 +4,9 @@ const Pedido = require('../models/Pedido'); // Asegúramos de proporcionar la ru
 async function getVentas(req, res) {
   try {
     const { limite = 5, desde = 0 } = req.query;
-    const query = { estado_pedido: 'Entregado' };
+    const query = { estado_pedido: 'tomado' };
 
-    const [ventas, total] = await Promise.all([
+    const [total, ventas] = await Promise.all([
       Pedido.countDocuments(query),
       Pedido.find(query)
         .skip(Number(desde))
@@ -14,8 +14,8 @@ async function getVentas(req, res) {
 
     ])
     res.json({
-      ventas,
-      total
+      total,
+      ventas
     });
 
   } catch (error) {
@@ -27,7 +27,7 @@ async function getVentas(req, res) {
 async function getVentaById(req, res) {
   const { id } = req.params;
   try {
-    const venta = await Pedido.findOne({ _id: id, estado_pedido: 'Entregado' });
+    const venta = await Pedido.findOne({ _id: id, estado_pedido: 'entregado' });
 
     if (!venta) {
       return res.status(404).json({ error: 'Pedido no encontrado o no está "Entregado".' });
