@@ -4,7 +4,7 @@ const Pedido = require('../models/Pedido'); // Asegúramos de proporcionar la ru
 async function getVentas(req, res) {
   try {
     const { limite = 5, desde = 0 } = req.query;
-    const query = { estado_pedido: 'tomado' };
+    const query = { estado_pedido: 'Tomado' };
 
     const [total, ventas] = await Promise.all([
       Pedido.countDocuments(query),
@@ -27,7 +27,7 @@ async function getVentas(req, res) {
 async function getVentaById(req, res) {
   const { id } = req.params;
   try {
-    const venta = await Pedido.findOne({ _id: id, estado_pedido: 'entregado' });
+    const venta = await Pedido.findOne({ _id: id, estado_pedido: 'Tomado' });
 
     if (!venta) {
       return res.status(404).json({ error: 'Pedido no encontrado o no está "Entregado".' });
