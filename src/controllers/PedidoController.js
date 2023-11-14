@@ -73,20 +73,7 @@ async function createPedido(req, res) {
     //     error: 'Estado no permitido. Los estados permitidos son: ' + estadosPermitidos.join(', ')
     //   });
     // }
-      // Validar que el campo 'subtotal_venta' contenga solo números
-    // if (!/^\d+$/.test(pedidoData.subtotal_venta)) {
-    //   return res.status(400).json({ error: 'El campo de subtotal debe contener solo números.' });
-    // }
-
-    // // Validar que el campo 'iva_pedido' contenga solo números
-    // if (!/^\d+$/.test(pedidoData.iva_pedido)) {
-    //   return res.status(400).json({ error: 'El campo de IVA debe contener solo números.' });
-    // }
-    
-    // // Validar que el campo 'precio_total_venta' contenga solo números
-    // if (!/^\d+$/.test(pedidoData.precio_total_venta)) {
-    //   return res.status(400).json({ error: 'El campo de precio total debe contener solo números.' });
-    // }
+   
     
     const nuevoPedido = new Pedido(pedidoData);
 
