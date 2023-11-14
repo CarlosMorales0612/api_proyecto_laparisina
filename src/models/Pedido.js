@@ -33,7 +33,7 @@ const pedidoSchema = new mongoose.Schema({
   },
   fecha_entrega_pedido: {
     type: String,
-    required: [true, 'El campo fecha entrega pedido es requerido.']
+    //required: [true, 'El campo fecha entrega pedido es requerido.']
   },
   estado_pedido: {
     type: String,

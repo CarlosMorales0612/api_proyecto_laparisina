@@ -11,8 +11,9 @@ async function getAllUsuarios(req, res) {
     const [usuarios, total] = await Promise.all([
       Usuario.countDocuments(query),
       Usuario.find(query)
+      
         .skip(Number(desde))
-        .limit(Number(limite))
+        .limit(Number(limite)) //Instrucciones para aplicar paginado desde la misma api.
         .populate('rol_usuario') // Utiliza populate para obtener los datos del rol
     ]);
 
@@ -40,11 +41,10 @@ async function getUsuarioById(req, res) {
   }
 }
 
-
-//Crear usuario
 async function createUsuario(req, res) {
   const { correo_electronico, contrasena_usuario, rol_usuario, estado_usuario } = req.body;
   try {
+
     // Validar la contraseña con una expresión regular
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!passwordRegex.test(contrasena_usuario)) {
@@ -56,22 +56,19 @@ async function createUsuario(req, res) {
 
     // Encriptar la contraseña antes de guardarla en la base de datos
     const salt = bcrypt.genSaltSync();
-    const hashedPassword = bcrypt.hashSync(contrasena_usuario, salt);
+    Usuario.contrasena_usuario = bcrypt.hashSync(contrasena_usuario, salt);
+
+    //const hashedPassword = await bcrypt.hash(contrasena_usuario, 10); // 10 es el costo de hashing, puedes ajustarlo según tus necesidades
 
     // Crear un nuevo usuario
     const usuario = new Usuario({
       correo_electronico,
-      contrasena_usuario: hashedPassword,
+      contrasena_usuario,
       rol_usuario,
       estado_usuario
     });
 
-    // Guardar el usuario en la base de datos
     await usuario.save();
-
-    // Utiliza populate para obtener los datos del rol
-    await usuario.populate('rol_usuario').execPopulate();
-
     res.status(201).json(usuario);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
@@ -83,14 +80,13 @@ async function createUsuario(req, res) {
     }
   }
 }
-
+//Crear usuario
 
 
 //Actualizar usuario
 const updateUsuario = async (req, res = response) => {
   const { id } = req.params;
-  const { _id, contrasena_usuario, correo_electronico, rol_usuario, ...resto } = req.body;
-
+  const { _id, contrasena_usuario, correo_electronico, ...resto } = req.body;
   try {
     // Validar la contraseña actual (opcional)
     if (contrasena_usuario) {
@@ -101,15 +97,11 @@ const updateUsuario = async (req, res = response) => {
 
     const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
-    // Utiliza populate para obtener los datos del rol
-    await usuario.populate('rol_usuario').execPopulate();
-
     res.json(usuario);
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar el usuario.' + error });
   }
 }
-
 
 
 // Eliminar un usuario por ID

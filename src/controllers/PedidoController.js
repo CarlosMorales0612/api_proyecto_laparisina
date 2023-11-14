@@ -43,10 +43,10 @@ async function createPedido(req, res) {
       return res.status(400).json({ error: 'El teléfono solo debe contener números.' });
     }
     
-    // Validar que el campo 'fecha_entrega_pedido' tiene el formato 'día/mes/año'
-    if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(pedidoData.fecha_entrega_pedido)) {
-      return res.status(400).json({ error: 'El formato de la fecha de entrega no es válido. Debe ser en formato día/mes/año.' });
-    }
+    // // Validar que el campo 'fecha_entrega_pedido' tiene el formato 'día/mes/año'
+    // if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(pedidoData.fecha_entrega_pedido)) {
+    //   return res.status(400).json({ error: 'El formato de la fecha de entrega no es válido. Debe ser en formato día/mes/año.' });
+    // }
 
     // Validar que el pedido tenga al menos un producto en el detalle_pedido
     if (!pedidoData.detalle_pedido || pedidoData.detalle_pedido.length === 0) {
