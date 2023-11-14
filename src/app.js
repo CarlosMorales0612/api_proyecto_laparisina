@@ -10,7 +10,7 @@ app.use(cors())
 
 app.use(bodyParser.json());
 
-app.use(express.static('uploads'))
+app.use('/uploads', express.static('uploads'))
 // Conectar las rutas
 app.use('/api', categoriaRoutes,productoRoutes,ordenDeProduccionRoutes);
 
