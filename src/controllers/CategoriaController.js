@@ -47,7 +47,7 @@ async function crearCategoria(req, res) {
   const longitudMaximaNombre = 20;
 
   // Expresión regular para validar la descripcion de la categoría
-  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.-]+$/;
+  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
   const longitudMaximaDescripcion = 100;
   
   if (!nombreExpReg.test(nombre_categoria_producto)){
@@ -97,7 +97,7 @@ async function actualizarCategoria(req, res) {
   const longitudMaximaNombre = 20;
 
   // Expresión regular para validar la descripcion de la categoría
-  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.-]+$/;
+  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
   const longitudMaximaDescripcion = 100;
 
   if (!nombreExpReg.test(nombre_categoria_producto)) {
