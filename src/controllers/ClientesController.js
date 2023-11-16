@@ -3,7 +3,7 @@ const Clientes = require('../models/ClientesModel');
 
 // Obtener todas los clientes -------------------------------------------------------------------------------------------------------------
 async function obtenerTodosLosClientes(req, res) {
-  const{codigo_cliente}= req.query 
+  const{numero_documento_cliente}= req.query 
   try {
     const clientes = await Clientes.find();
     res.json(clientes);
@@ -25,22 +25,30 @@ async function obtenerClientePorId(req, res) {
     res.status(500).json({ error: 'Error al obtener el cliente.' });
   }
 }
+// Obtener un cliente por documento --------------------------------------------------------------------------------------------------------------
+async function obtenerClientePorDocumento(req, res) {
+  const { numero_documento_cliente } = req.params;
+  try {
+    const clientes = await Clientes.findOne({ numero_documento_cliente: numero_documento_cliente });
+    if (!clientes) {
+      return res.status(404).json({ error: 'Cliente no encontrada.' });
+    }
+    res.json(clientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el cliente.' });
+  }
+}
 
 // Crear un nuevo cliente-----------------------------------------------------------------------------------------------------------------
  async function crearCliente(req, res) {
-  const {codigo_cliente,tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,celular_cliente,direccion_cliente,barrio_cliente,ciudad_cliente, estado_cliente} = req.body
-
-  //Expresión regular para validar el código del cliente
-  const codigoExpReg = /^\d{1,6}$/;
-  const longitudMaximaCodigo = 6;
+  const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,edificio_apto_barrio,ciudad_cliente, estado_cliente} = req.body
 
   //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
   const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
   const longitudMaximaLetras = 20;
 
-  // Expresión regular para validar el nit de la empresa
-  const nitExpReg = /^[0-9,.-]+$/;
-  const longitudMaximaNit = 11;
+
 
   // Expresión regular para validar documento, celular
   const numerosExpReg = /^[0-9]{7,10}$/;
@@ -52,13 +60,7 @@ async function obtenerClientePorId(req, res) {
   //Expresión regular para validar la dirección 
   const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/;
 
-  //Validación campo codigo
-  if (!codigoExpReg.test(codigo_cliente)){
-    return res.status(400).json({ error: 'El campo código del cliente solo   permite numeros.' });
-  }
-  if (codigo_cliente.length > longitudMaximaCodigo) {
-    return res.status(400).json({ error: 'El campo código del cliente debe tener máximo 6 caracteres.' });
-  }
+
  //Validación de los campos validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
   if (!letrasExpReg.test(tipo_cliente)){
     return res.status(400).json({ error: 'El campo tipo de cliente solo   permite letras.' });
@@ -72,16 +74,11 @@ async function obtenerClientePorId(req, res) {
   if (nombre_contacto.length > longitudMaximaLetras) {
     return res.status(400).json({ error: 'El campo nombre de contacto debe tener máximo 20 caracteres.' });
   }
+
   if (!letrasExpReg.test(nombre_juridico)){
     return res.status(400).json({ error: 'El campo nombre jurídico solo   permite letras.' });
   }
   if (nombre_juridico.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo nombre jurídico debe tener máximo 20 caracteres.' });
-  }
-  if (!letrasExpReg.test(barrio_cliente)){
-    return res.status(400).json({ error: 'El campo nombre jurídico solo   permite letras.' });
-  }
-  if (barrio_cliente.length > longitudMaximaLetras) {
     return res.status(400).json({ error: 'El campo nombre jurídico debe tener máximo 20 caracteres.' });
   }
   if (!letrasExpReg.test(barrio_cliente)){
@@ -90,19 +87,17 @@ async function obtenerClientePorId(req, res) {
   if (barrio_cliente.length > longitudMaximaLetras) {
     return res.status(400).json({ error: 'El campo barrio debe tener máximo 20 caracteres.' });
   }
+  if (!letrasExpReg.test(edificio_apto_barrio)){
+    return res.status(400).json({ error: 'El campo tipo de vivienda solo   permite letras.' });
+  }
+  if (edificio_apto_barrio.length > longitudMaximaLetras) {
+    return res.status(400).json({ error: 'El campo tipo de vivienda debe tener máximo 20 caracteres.' });
+  }
   if (!letrasExpReg.test(ciudad_cliente)){
     return res.status(400).json({ error: 'El campo ciudad solo   permite letras.' });
   }
   if (ciudad_cliente.length > longitudMaximaLetras) {
     return res.status(400).json({ error: 'El campo ciudad debe tener máximo 20 caracteres.' });
-  }
-  //Validación campo nit de la empresa
-
-  if (!nitExpReg.test(nit_empresa_cliente)){
-    return res.status(400).json({ error: 'El campo nit de empresa solo   permite numeros.' });
-  }
-  if (nit_empresa_cliente.length > longitudMaximaNit) {
-    return res.status(400).json({ error: 'El campo nit de empresa debe tener máximo 11 caracteres.' });
   }
 
   //Validación campo documento, celular
@@ -113,10 +108,10 @@ async function obtenerClientePorId(req, res) {
     return res.status(400).json({ error: 'El campo número de documento debe tener máximo 10 caracteres.' });
   }
 
-  if (!numerosExpReg.test(celular_cliente)){
+  if (!numerosExpReg.test(telefono_cliente)){
     return res.status(400).json({ error: 'El campo celular solo   permite números.' });
   }
-  if (celular_cliente.length > longitudMaximaNumeros) {
+  if (telefono_cliente.length > longitudMaximaNumeros) {
     return res.status(400).json({ error: 'El campo celular debe tener máximo 10 caracteres.' });
   }
 
@@ -157,20 +152,12 @@ async function obtenerClientePorId(req, res) {
 // Actualizar una cliente por ID -----------------------------------------------------------------------------------------------------------
 async function actualizarCliente(req, res) {
   const { id } = req.params;
-  const {codigo_cliente,tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,celular_cliente,direccion_cliente,barrio_cliente,ciudad_cliente, estado_cliente} = req.body;
-
-   //Expresión regular para validar el código del cliente
-   const codigoExpReg = /^\d{1,6}$/;
-   const longitudMaximaCodigo = 6;
- 
+  const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,edificio_apto_barrio,ciudad_cliente, estado_cliente} = req.body;
+   
    //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
    const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
    const longitudMaximaLetras = 20;
- 
-   // Expresión regular para validar el nit de la empresa
-   const nitExpReg = /^[0-9,.-]+$/;
-   const longitudMaximaNit = 11;
- 
+
    // Expresión regular para validar documento, celular
    const numerosExpReg = /^[0-9]{7,10}$/;
    const longitudMaximaNumeros = 10;
@@ -181,13 +168,7 @@ async function actualizarCliente(req, res) {
    //Expresión regular para validar la dirección 
    const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/;
  
-   //Validación campo codigo del cliente
-   if (!codigoExpReg.test(codigo_cliente)){
-     return res.status(400).json({ error: 'El campo código del cliente solo   permite numeros.' });
-   }
-   if (codigo_cliente.length > longitudMaximaCodigo) {
-     return res.status(400).json({ error: 'El campo código del cliente debe tener máximo 6 caracteres.' });
-   }
+  
   //Validación de los campos validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
    if (!letrasExpReg.test(tipo_cliente)){
      return res.status(400).json({ error: 'El campo tipo de cliente solo   permite letras.' });
@@ -208,30 +189,22 @@ async function actualizarCliente(req, res) {
      return res.status(400).json({ error: 'El campo nombre jurídico debe tener máximo 20 caracteres.' });
    }
    if (!letrasExpReg.test(barrio_cliente)){
-     return res.status(400).json({ error: 'El campo nombre jurídico solo   permite letras.' });
-   }
-   if (barrio_cliente.length > longitudMaximaLetras) {
-     return res.status(400).json({ error: 'El campo nombre jurídico debe tener máximo 20 caracteres.' });
-   }
-   if (!letrasExpReg.test(barrio_cliente)){
      return res.status(400).json({ error: 'El campo barrio solo   permite letras.' });
    }
    if (barrio_cliente.length > longitudMaximaLetras) {
      return res.status(400).json({ error: 'El campo barrio debe tener máximo 20 caracteres.' });
    }
+   if (!letrasExpReg.test(edificio_apto_barrio)){
+    return res.status(400).json({ error: 'El campo tipo de vivienda solo   permite letras.' });
+  }
+  if (edificio_apto_barrio.length > longitudMaximaLetras) {
+    return res.status(400).json({ error: 'El campo tipo de vivienda debe tener máximo 20 caracteres.' });
+  }
    if (!letrasExpReg.test(ciudad_cliente)){
      return res.status(400).json({ error: 'El campo ciudad solo   permite letras.' });
    }
    if (ciudad_cliente.length > longitudMaximaLetras) {
      return res.status(400).json({ error: 'El campo ciudad debe tener máximo 20 caracteres.' });
-   }
-   //Validación campo nit de la empresa
- 
-   if (!nitExpReg.test(nit_empresa_cliente)){
-     return res.status(400).json({ error: 'El campo nit de empresa solo   permite numeros.' });
-   }
-   if (nit_empresa_cliente.length > longitudMaximaNit) {
-     return res.status(400).json({ error: 'El campo nit de empresa debe tener máximo 11 caracteres.' });
    }
  
    //Validación campo documento, celular
@@ -242,10 +215,10 @@ async function actualizarCliente(req, res) {
      return res.status(400).json({ error: 'El campo número de documento debe tener máximo 10 caracteres.' });
    }
  
-   if (!numerosExpReg.test(celular_cliente)){
+   if (!numerosExpReg.test(telefono_cliente)){
      return res.status(400).json({ error: 'El campo celular solo   permite números.' });
    }
-   if (celular_cliente.length > longitudMaximaNumeros) {
+   if (telefono_cliente.length > longitudMaximaNumeros) {
      return res.status(400).json({ error: 'El campo celular debe tener máximo 10 caracteres.' });
    }
  
@@ -319,6 +292,7 @@ async function cambiarEstadoCliente(req, res) {
 module.exports = {
   obtenerTodosLosClientes,
   obtenerClientePorId,
+  obtenerClientePorDocumento,
   crearCliente,
   actualizarCliente,
   cambiarEstadoCliente,

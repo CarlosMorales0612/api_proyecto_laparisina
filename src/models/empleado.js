@@ -108,7 +108,7 @@ codigo_rotulacion_empleado: {
   },
   area_empleado:{
     type:String,
-    required: [true,'El area empleado es requerido'],
+    // required: [true,'El area empleado es requerido'],
   }
 
 
