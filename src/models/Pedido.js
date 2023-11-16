@@ -2,15 +2,16 @@ const mongoose = require('mongoose');
 
 const pedidoSchema = new mongoose.Schema({
 
-  codigo_cliente: {
+  documento_cliente: {
     type: String,
     required: [true, 'El campo código_cliente es requerido.'],
-    unique: [true, 'El código del cliente ya está en uso.']
   },
-  nombre_cliente: {
+  
+   nombre_contacto: {
     type: String,
     required: [true, 'El campo nombre cliente es requerido.']
   },
+
   telefono_cliente: {
     type: String,
     required: [true, 'El campo telefono cliente es requerido.']
@@ -27,7 +28,11 @@ const pedidoSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El campo edificio apto barrio es requerido.']
   },
-  ciudad: {
+  ciudad_cliente: {
+    type: String,
+    required: [true, 'El campo ciudad es requerido.']
+  },
+  ciudad_barrio: {
     type: String,
     required: [true, 'El campo ciudad es requerido.']
   },
@@ -38,20 +43,12 @@ const pedidoSchema = new mongoose.Schema({
   estado_pedido: {
     type: String,
     required: true,
-    enum: ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'],
-  },
-
-  subtotal_venta: {
-    type: Number,
-    required: [true, 'El campo subtotal venta es requerido.']
+    enum: ['Pendiente', 'Tomado', 'Preparacion', 'Terminado', 'Asignado', 'Enviado', 'Entregado', 'Anulado'],
+    default: ['Pendiente']
   },
   precio_total_venta: {
     type: Number,
     required: [true, 'El campo precio total venta es requerido.']
-  },
-  iva_pedido: {
-    type: Number,
-    required: [true, 'El campo iva pedido es requerido.']
   },
   metodo_pago: {
     type: String,
@@ -78,7 +75,7 @@ const pedidoSchema = new mongoose.Schema({
       },
       estado_producto: {
         type: String,
-        default: 'tomado', // Establecer "tomado" como valor por defecto
+        default: 'Tomado', // Establecer "tomado" como valor por defecto
       },
       precio_ico: {
         type: Number,
