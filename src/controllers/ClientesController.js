@@ -195,10 +195,10 @@ async function actualizarCliente(req, res) {
      return res.status(400).json({ error: 'El campo barrio debe tener máximo 20 caracteres.' });
    }
    if (!letrasExpReg.test(edificio_apto_barrio)){
-    return res.status(400).json({ error: 'El campo barrio solo   permite letras.' });
+    return res.status(400).json({ error: 'El campo tipo de vivienda solo   permite letras.' });
   }
   if (edificio_apto_barrio.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo barrio debe tener máximo 20 caracteres.' });
+    return res.status(400).json({ error: 'El campo tipo de vivienda debe tener máximo 20 caracteres.' });
   }
    if (!letrasExpReg.test(ciudad_cliente)){
      return res.status(400).json({ error: 'El campo ciudad solo   permite letras.' });
