@@ -118,12 +118,12 @@ if (!letrasExpReg.test(tipo_documento_empleado)){
   if (pension_empleado.length > longitudMaximaLetras) {
     return res.status(400).json({ error: 'El campo pension empleado debe tener máximo 20 caracteres.' });
   } 
-  if (!letrasExpReg.test(area_empleado)){
-    return res.status(400).json({ error: 'El campo area empleado solo   permite letras.' });
-  }
-  if (area_empleado.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo area empleado debe tener máximo 20 caracteres.' });
-  } 
+  // if (!letrasExpReg.test(area_empleado)){
+  //   return res.status(400).json({ error: 'El campo area empleado solo   permite letras.' });
+  // }
+  // if (area_empleado.length > longitudMaximaLetras) {
+  //   return res.status(400).json({ error: 'El campo area empleado debe tener máximo 20 caracteres.' });
+  // } 
 
   if (!cuentaExpReg.test(cuenta_bancaria_empleado)){
     return res.status(400).json({ error: 'El campo area empleado solo   permite letras.' });

@@ -2,13 +2,8 @@ const mongoose = require('mongoose');
 const {Schema, model}= mongoose
 
 const ClientesSchema = Schema({
-
-    codigo_cliente:{
-        type:String,
-        unique:[true, 'El codigo de cliente:{VALUE} ya existe'],
-        required: [true,'El campo codigo de cliente es requerido']
-    },
     
+
     tipo_cliente:{
         type:String,
         required: [true,'El tipo de cliente es requerido'],
@@ -40,7 +35,7 @@ const ClientesSchema = Schema({
         required: [true,'El campo correo es requerido']
     },
     
-    celular_cliente:{
+    telefono_cliente:{
         type: String,
         required: [true,'El campo celular es requerido']
     },
@@ -53,6 +48,11 @@ const ClientesSchema = Schema({
     barrio_cliente:{
         type: String,
         required: [true,'El barrio es requerido']
+    },
+
+    edificio_apto_barrio:{
+        type: String,
+        required: [true,'Tipo de vivienda es requerida']
     },
 
     ciudad_cliente:{
