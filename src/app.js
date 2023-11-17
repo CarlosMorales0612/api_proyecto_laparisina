@@ -13,10 +13,7 @@ const EmpleadoRoutes = require('./routes/empleadoRoutes');
 const ventasRoutes = require('./routes/ventasRoutes');
 const cors = require('cors');
 
-app.use(cors({
-    origin: 'http://localhost:4200',
-    optionsSuccessStatus: 200, // Algunos navegadores antiguos (IE11) pueden tener problemas con 204
-}));
+app.use(cors());
 
 app.use(bodyParser.json());
 
