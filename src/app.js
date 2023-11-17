@@ -3,25 +3,26 @@ const app = express();
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const categoriaRoutes = require('./routes/categoriaRoutes');
-const productoRoutes = require('./routes/productoRoutes')
-const ordenDeProduccionRoutes = require('./routes/ordenDeProduccionRoutes')
+const productoRoutes = require('./routes/productoRoutes');
+const ordenDeProduccionRoutes = require('./routes/ordenDeProduccionRoutes');
 const pedidoRoutes = require('./routes/pedidoRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
-const ClientesRoutes= require('./routes/ClientesRoutes');
+const ClientesRoutes = require('./routes/ClientesRoutes');
 const RolesRoutes = require('./routes/RolesRoutes');
 const EmpleadoRoutes = require('./routes/empleadoRoutes');
 const ventasRoutes = require('./routes/ventasRoutes');
-const cors = require('cors')
+const cors = require('cors');
 
-app.use(cors())
-
+app.use(cors({
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200, // Algunos navegadores antiguos (IE11) pueden tener problemas con 204
+}));
 
 app.use(bodyParser.json());
 
-app.use('/uploads', express.static('uploads'))
+app.use('/uploads', express.static('uploads'));
 
 // Conectar las rutas
-
-app.use('/api', authRoutes,EmpleadoRoutes,ClientesRoutes,RolesRoutes, categoriaRoutes,productoRoutes,ordenDeProduccionRoutes,pedidoRoutes,usuarioRoutes, ventasRoutes);
+app.use('/api', authRoutes, EmpleadoRoutes, ClientesRoutes, RolesRoutes, categoriaRoutes, productoRoutes, ordenDeProduccionRoutes, pedidoRoutes, usuarioRoutes, ventasRoutes);
 
 module.exports = app;
