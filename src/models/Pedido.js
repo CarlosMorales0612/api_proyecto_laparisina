@@ -24,10 +24,6 @@ const pedidoSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El campo direccion entrega es requerido.']
   },
-  edificio_apto_barrio: {
-    type: String,
-    required: [true, 'El campo edificio apto barrio es requerido.']
-  },
   ciudad_cliente: {
     type: String,
     required: [true, 'El campo ciudad es requerido.']
@@ -38,7 +34,7 @@ const pedidoSchema = new mongoose.Schema({
   },
   fecha_entrega_pedido: {
     type: String,
-    //required: [true, 'El campo fecha entrega pedido es requerido.']
+    required: [true, 'El campo fecha entrega pedido es requerido.']
   },
   estado_pedido: {
     type: String,
@@ -50,11 +46,19 @@ const pedidoSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'El campo precio total venta es requerido.']
   },
+  subtotal_venta: {
+    type: Number,
+    required: [true, 'El campo subtotal es requerido.']
+  },
   metodo_pago: {
     type: String,
     enum: ['Efectivo', 'Transferencia'],
     required: [true, 'El campo metodo pago es requerido.']
   },
+  valor_domicilio: {
+    type: Number
+  },
+
   detalle_pedido: [
     {
       nombre_producto: {
