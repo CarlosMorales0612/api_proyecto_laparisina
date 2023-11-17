@@ -42,7 +42,7 @@ async function obtenerClientePorDocumento(req, res) {
 
 // Crear un nuevo cliente-----------------------------------------------------------------------------------------------------------------
  async function crearCliente(req, res) {
-  const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,edificio_apto_barrio,ciudad_cliente, estado_cliente} = req.body
+  const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,ciudad_cliente, estado_cliente} = req.body
 
   //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
   const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
@@ -75,23 +75,11 @@ async function obtenerClientePorDocumento(req, res) {
     return res.status(400).json({ error: 'El campo nombre de contacto debe tener máximo 20 caracteres.' });
   }
 
-  if (!letrasExpReg.test(nombre_juridico)){
-    return res.status(400).json({ error: 'El campo nombre jurídico solo   permite letras.' });
-  }
-  if (nombre_juridico.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo nombre jurídico debe tener máximo 20 caracteres.' });
-  }
   if (!letrasExpReg.test(barrio_cliente)){
     return res.status(400).json({ error: 'El campo barrio solo   permite letras.' });
   }
   if (barrio_cliente.length > longitudMaximaLetras) {
     return res.status(400).json({ error: 'El campo barrio debe tener máximo 20 caracteres.' });
-  }
-  if (!letrasExpReg.test(edificio_apto_barrio)){
-    return res.status(400).json({ error: 'El campo tipo de vivienda solo   permite letras.' });
-  }
-  if (edificio_apto_barrio.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo tipo de vivienda debe tener máximo 20 caracteres.' });
   }
   if (!letrasExpReg.test(ciudad_cliente)){
     return res.status(400).json({ error: 'El campo ciudad solo   permite letras.' });
@@ -152,7 +140,7 @@ async function obtenerClientePorDocumento(req, res) {
 // Actualizar una cliente por ID -----------------------------------------------------------------------------------------------------------
 async function actualizarCliente(req, res) {
   const { id } = req.params;
-  const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,edificio_apto_barrio,ciudad_cliente, estado_cliente} = req.body;
+  const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente, estado_cliente} = req.body;
    
    //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
    const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
@@ -182,24 +170,12 @@ async function actualizarCliente(req, res) {
    if (nombre_contacto.length > longitudMaximaLetras) {
      return res.status(400).json({ error: 'El campo nombre de contacto debe tener máximo 20 caracteres.' });
    }
-   if (!letrasExpReg.test(nombre_juridico)){
-     return res.status(400).json({ error: 'El campo nombre jurídico solo   permite letras.' });
-   }
-   if (nombre_juridico.length > longitudMaximaLetras) {
-     return res.status(400).json({ error: 'El campo nombre jurídico debe tener máximo 20 caracteres.' });
-   }
    if (!letrasExpReg.test(barrio_cliente)){
      return res.status(400).json({ error: 'El campo barrio solo   permite letras.' });
    }
    if (barrio_cliente.length > longitudMaximaLetras) {
      return res.status(400).json({ error: 'El campo barrio debe tener máximo 20 caracteres.' });
    }
-   if (!letrasExpReg.test(edificio_apto_barrio)){
-    return res.status(400).json({ error: 'El campo tipo de vivienda solo   permite letras.' });
-  }
-  if (edificio_apto_barrio.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo tipo de vivienda debe tener máximo 20 caracteres.' });
-  }
    if (!letrasExpReg.test(ciudad_cliente)){
      return res.status(400).json({ error: 'El campo ciudad solo   permite letras.' });
    }
