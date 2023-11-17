@@ -1,4 +1,5 @@
 const Pedido = require('../models/Pedido');
+const Cliente = require('../models/ClientesModel');
 
 // Obtener todos los pedidos
 async function getAllPedido(req, res) {
@@ -23,7 +24,9 @@ async function getPedidoById(req, res) {
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener el pedido.' });
   }
+  
 }
+
 
 // Crear un nuevo pedido
 async function createPedido(req, res) {
@@ -61,10 +64,10 @@ async function createPedido(req, res) {
         }
       }
     }
-      // Validar que el estado del pedido solo contenga letras
-   if (!/^[a-zA-Z]+$/.test(pedidoData.estado_pedido)) {
-    return res.status(400).json({ error: 'El estado del pedido solo debe contener letras.' });
-  }
+  //     // Validar que el estado del pedido solo contenga letras
+  //  if (!/^[a-zA-Z]+$/.test(pedidoData.estado_pedido)) {
+  //   return res.status(400).json({ error: 'El estado del pedido solo debe contener letras.' });
+  // }
 
     // Validar que el nuevo estado sea válido (debe estar en la lista de estados permitidos)
     // const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
@@ -148,6 +151,7 @@ async function deletePedido(req, res) {
     res.status(500).json({ error: 'Error al eliminar el pedido.' });
   }
 }
+
 
 
 module.exports = {
