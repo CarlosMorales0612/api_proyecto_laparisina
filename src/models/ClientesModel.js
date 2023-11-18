@@ -50,11 +50,6 @@ const ClientesSchema = Schema({
         required: [true,'El barrio es requerido']
     },
 
-    edificio_apto_barrio:{
-        type: String,
-        required: [true,'Tipo de vivienda es requerida']
-    },
-
     ciudad_cliente:{
         type: String,
         required: [true,'La ciudad es requerida']
