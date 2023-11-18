@@ -6,15 +6,14 @@ const mongoose = require('mongoose');
 async function getAllUsuarios(req, res) {
   try {
     const { limite = 5, desde = 0 } = req.query;
-    const query = { estado_usuario: true };
+    const query = {};
 
     const [total, usuarios] = await Promise.all([
       Usuario.countDocuments(query),
       Usuario.find(query)
-      
         .skip(Number(desde))
-        .limit(Number(limite)) //Instrucciones para aplicar paginado desde la misma api.
-        .populate('rol_usuario') // Utiliza populate para obtener los datos del rol
+        .limit(Number(limite))
+        .populate('rol_usuario')
     ]);
 
     res.json({
@@ -25,6 +24,7 @@ async function getAllUsuarios(req, res) {
     res.status(500).json({ error: 'Error al obtener los usuarios.' });
   }
 }
+
 
 
 // Obtener un usuario por ID con el objeto de rol
