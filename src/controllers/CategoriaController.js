@@ -115,6 +115,21 @@ async function actualizarCategoria(req, res) {
   }
 
   try {
+    // Obtén la categoría existente antes de la actualización
+    const categoriaExistente = await CategoriaProducto.findById(id);
+
+    // Verifica si el nombre ha cambiado
+    const nombreCambiado = nombre_categoria_producto !== categoriaExistente.nombre_categoria_producto;
+
+    // Realiza la validación de duplicados solo si el nombre ha cambiado
+    if (nombreCambiado) {
+      const categoriaDuplicada = await CategoriaProducto.findOne({ nombre_categoria_producto });
+
+      if (categoriaDuplicada) {
+        return res.status(400).json({ error: `La categoría ${nombre_categoria_producto} ya existe.` });
+      }
+    }
+    
     let actualizarCategoria = req.body;
 
     // Si se proporciona una nueva imagen, actualiza el campo imagen_categoria_producto

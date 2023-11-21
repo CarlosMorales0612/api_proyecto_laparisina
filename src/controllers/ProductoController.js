@@ -51,7 +51,7 @@ async function crearProducto(req, res) {
   const longitudMaximaNombre = 20;
 
   // Expresión regular para validar la descripcion del producto
-  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
+  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s:-]+$/;
   const longitudMaximaDescripcion = 500;
 
   // Expresión regular para validar el precio_ico y precio_por_mayor_ico del producto
@@ -61,7 +61,7 @@ async function crearProducto(req, res) {
   const valorMinimoPrecio = 0;
 
   //Expresión regular para validar los ingredientes
-  const ingredientesExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9,.]+$/;
+  const ingredientesExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9\s,.:'-]+$/;
   const longitudMaximaIngredientes = 500
 
   //Validación campo codigo_producto
@@ -165,7 +165,7 @@ async function actualizarProducto(req, res) {
   const valorMinimoPrecio = 0;
 
   //Expresión regular para validar los ingredientes
-  const ingredientesExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9,.]+$/;
+  const ingredientesExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9\s,.:'-]+$/;
   const longitudMaximaIngredientes = 500
 
   //Validación campo codigo_producto

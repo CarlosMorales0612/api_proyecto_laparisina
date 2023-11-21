@@ -5,11 +5,14 @@ const Pedido = require('../models/Pedido');
 // Función para obtener la fecha actual en el formato "dia/mes/año" sin hora y con hora ----------------------------------------------------
 function obtenerFechaActualString() {
   const fecha = new Date();
+  const fechaFormateada = new Date(fecha).toISOString().split('T')[0];
   const dia = fecha.getDate();
   const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0
   const año = fecha.getFullYear();
 
-  return `${dia}/${mes}/${año}`;
+  return fechaFormateada
+
+  //return `${dia}/${mes}/${año}`;
 }
 
 function obtenerFechaActualConHoraString() {
@@ -27,6 +30,7 @@ function obtenerFechaActualConHoraString() {
 // Obtener todas las ordenes de producción -------------------------------------------------------------------------------------------------
 async function obtenerTodasLasOrdenesDeProduccion(req, res) {
   try {
+    console.log(obtenerFechaActualString())
     const ordenes = await OrdenDeProduccion.find();
     res.json(ordenes);
   } catch (error) {
