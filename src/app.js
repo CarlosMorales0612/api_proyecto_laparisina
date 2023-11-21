@@ -20,6 +20,6 @@ app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
 
 // Conectar las rutas
-app.use('/api', authRoutes, EmpleadoRoutes, ClientesRoutes, RolesRoutes, categoriaRoutes, productoRoutes, ordenDeProduccionRoutes, pedidoRoutes, usuarioRoutes, ventasRoutes);
+app.use('/api', authRoutes, usuarioRoutes, EmpleadoRoutes, ClientesRoutes, RolesRoutes, categoriaRoutes, productoRoutes, ordenDeProduccionRoutes, pedidoRoutes, ventasRoutes);
 
 module.exports = app;
