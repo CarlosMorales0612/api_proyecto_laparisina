@@ -43,10 +43,10 @@ async function createPedido(req, res) {
       return res.status(400).json({ error: 'El teléfono solo debe contener números.' });
     }
     
-    // Validar que el campo 'fecha_entrega_pedido' tiene el formato 'día/mes/año'
-    if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(pedidoData.fecha_entrega_pedido)) {
-      return res.status(400).json({ error: 'El formato de la fecha de entrega no es válido. Debe ser en formato día/mes/año.' });
-    }
+    // // Validar que el campo 'fecha_entrega_pedido' tiene el formato 'día/mes/año'
+    // if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(pedidoData.fecha_entrega_pedido)) {
+    //   return res.status(400).json({ error: 'El formato de la fecha de entrega no es válido. Debe ser en formato día/mes/año.' });
+    // }
 
     // Validar que el pedido tenga al menos un producto en el detalle_pedido
     if (!pedidoData.detalle_pedido || pedidoData.detalle_pedido.length === 0) {
@@ -67,12 +67,12 @@ async function createPedido(req, res) {
   }
 
     // Validar que el nuevo estado sea válido (debe estar en la lista de estados permitidos)
-    const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
-    if (!estadosPermitidos.includes(pedidoData.estado_pedido)) {
-      return res.status(400).json({
-        error: 'Estado no permitido. Los estados permitidos son: ' + estadosPermitidos.join(', ')
-      });
-    }
+    // const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
+    // if (!estadosPermitidos.includes(pedidoData.estado_pedido)) {
+    //   return res.status(400).json({
+    //     error: 'Estado no permitido. Los estados permitidos son: ' + estadosPermitidos.join(', ')
+    //   });
+    // }
       // Validar que el campo 'subtotal_venta' contenga solo números
     if (!/^\d+$/.test(pedidoData.subtotal_venta)) {
       return res.status(400).json({ error: 'El campo de subtotal debe contener solo números.' });

@@ -10,7 +10,7 @@ const multerConfig = {
       // obtener la extensión del archivo
       const extension = file.mimetype.split('/')[1];
       // generar ID para ponerlo como nombre de imagen
-      cb(null, `${shortid.generate()}.${extension}`);
+      cb(null,`${shortid.generate()}.${extension}`);
     }
   }),
   fileFilter(req, file, cb) {

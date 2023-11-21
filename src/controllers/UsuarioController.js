@@ -2,34 +2,36 @@ const Usuario = require('../models/Usuario');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
-// Obtener todos los usuarios
+// Obtener todos los usuarios con sus roles
 async function getAllUsuarios(req, res) {
   try {
     const { limite = 5, desde = 0 } = req.query;
-    const query = { estado_usuario: true};
+    const query = { estado_usuario: true };
 
-    const [ usuarios, total] = await Promise.all([
-      Usuario.countDocuments( query),      
+    const [total, usuarios] = await Promise.all([
+      Usuario.countDocuments(query),
       Usuario.find(query)
-      .skip(Number(desde))
-      .limit(Number(limite))
-    ])
+      
+        .skip(Number(desde))
+        .limit(Number(limite)) //Instrucciones para aplicar paginado desde la misma api.
+        .populate('rol_usuario') // Utiliza populate para obtener los datos del rol
+    ]);
 
     res.json({
-      usuarios,
-      total
+      total,
+      usuarios
     });
-
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los usuarios.' });
   }
 }
 
-// Obtener un usuario por ID
+
+// Obtener un usuario por ID con el objeto de rol
 async function getUsuarioById(req, res) {
   const { id } = req.params;
   try {
-    const usuario = await Usuario.findById(id);
+    const usuario = await Usuario.findById(id).populate('rol_usuario');
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado.' });
     }

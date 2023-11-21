@@ -44,16 +44,15 @@ async function crearProducto(req, res) {
   const { codigo_producto, nombre_producto, nombre_categoria_producto, descripcion_producto, precio_ico, precio_por_mayor_ico, durabilidad_producto, ingredientes_producto } = req.body
   
   //Expresión regular para validar el código del producto
-  const codigoExpReg = /^\d{4}$/;
-  const longitudMaximaCodigo = 4;
+  const codigoExpReg = /^[0-9]{3,4}$/;
 
   //Expresión regular para validar el nombre del producto
   const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
   const longitudMaximaNombre = 20;
 
   // Expresión regular para validar la descripcion del producto
-  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.-]+$/;
-  const longitudMaximaDescripcion = 100;
+  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s:-]+$/;
+  const longitudMaximaDescripcion = 500;
 
   // Expresión regular para validar el precio_ico y precio_por_mayor_ico del producto
   const precioExpReg = /^[0-9]{4,6}$/;
@@ -62,9 +61,13 @@ async function crearProducto(req, res) {
   const valorMinimoPrecio = 0;
 
   //Expresión regular para validar los ingredientes
-  const ingredientesExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9,.]+$/;
-  const longitudMaximaIngredientes = 100
+  const ingredientesExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9\s,.:'-]+$/;
+  const longitudMaximaIngredientes = 500
 
+  //Validación campo codigo_producto
+  if (!codigoExpReg.test(codigo_producto)){
+    return res.status(400).json({ error: 'El campo código producto solo permite números de 3 y 4 dígitos.' });
+  }
   //Validación campo nombre_producto
   if (!nombreExpReg.test(nombre_producto)){
     return res.status(400).json({ error: 'El campo nombre producto solo permite letras.' });
@@ -84,7 +87,7 @@ async function crearProducto(req, res) {
     return res.status(400).json({ error: 'El campo descripción solo permite letras y los signos ",." ' });
   }
   if (descripcion_producto.length > longitudMaximaDescripcion) {
-    return res.status(400).json({ error: 'El campo descripción debe tener máximo 100 caracteres.' });
+    return res.status(400).json({ error: 'El campo descripción debe tener máximo 500 caracteres.' });
   }
   //Validación campo precio_ico
   if (!precioExpReg.test(precio_ico)) {
@@ -111,7 +114,7 @@ async function crearProducto(req, res) {
     return res.status(400).json({ error: 'Caracteres incorrectos en el campo ingredientes' });
   }
   if (ingredientes_producto.length > longitudMaximaIngredientes) {
-    return res.status(400).json({ error: 'El campo ingredientes debe tener máximo 100 caracteres.' });
+    return res.status(400).json({ error: 'El campo ingredientes debe tener máximo 500 caracteres.' });
   }
   
   const producto = new Producto(req.body);
@@ -143,6 +146,81 @@ async function crearProducto(req, res) {
 async function actualizarProducto(req, res) {
   const { id } = req.params;
   const { codigo_producto, nombre_producto, nombre_categoria_producto, descripcion_producto, precio_ico, precio_por_mayor_ico, durabilidad_producto, ingredientes_producto, imagen_producto, estado_producto } = req.body;
+  
+  //Expresión regular para validar el código del producto
+  const codigoExpReg = /^[0-9]{3,4}$/;
+
+  //Expresión regular para validar el nombre del producto
+  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
+  const longitudMaximaNombre = 20;
+
+  // Expresión regular para validar la descripcion del producto
+  const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
+  const longitudMaximaDescripcion = 500;
+
+  // Expresión regular para validar el precio_ico y precio_por_mayor_ico del producto
+  const precioExpReg = /^[0-9]{4,6}$/;
+  const longitudMinimaPrecio = 4;
+  const longitudMaximaPrecio = 6;
+  const valorMinimoPrecio = 0;
+
+  //Expresión regular para validar los ingredientes
+  const ingredientesExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9\s,.:'-]+$/;
+  const longitudMaximaIngredientes = 500
+
+  //Validación campo codigo_producto
+  if (!codigoExpReg.test(codigo_producto)){
+    return res.status(400).json({ error: 'El campo código producto solo permite números de 3 y 4 dígitos.' });
+  }
+  //Validación campo nombre_producto
+  if (!nombreExpReg.test(nombre_producto)){
+    return res.status(400).json({ error: 'El campo nombre producto solo permite letras.' });
+  }
+  if (nombre_producto.length > longitudMaximaNombre) {
+    return res.status(400).json({ error: 'El campo nombre producto debe tener máximo 20 caracteres.' });
+  }
+  //Validación campo nombre_categoria_producto
+  if (!nombreExpReg.test(nombre_categoria_producto)){
+    return res.status(400).json({ error: 'El campo nombre categoría solo permite letras.' });
+  }
+  if (nombre_categoria_producto.length > longitudMaximaNombre) {
+    return res.status(400).json({ error: 'El campo nombre categoría debe tener máximo 20 caracteres.' });
+  }
+  //Validación campo descripcion_producto
+  if (!descripcionExpReg.test(descripcion_producto)) {
+    return res.status(400).json({ error: 'El campo descripción solo permite letras y los signos ",." ' });
+  }
+  if (descripcion_producto.length > longitudMaximaDescripcion) {
+    return res.status(400).json({ error: 'El campo descripción debe tener máximo 500 caracteres.' });
+  }
+  //Validación campo precio_ico
+  if (!precioExpReg.test(precio_ico)) {
+    return res.status(400).json({ error: 'El campo precio solo permite números.' });
+  }
+  if (precio_ico.length < longitudMinimaPrecio || precio_ico < valorMinimoPrecio) {
+    return res.status(400).json({ error: 'El precio es demasiado bajo' });
+  }
+  if (precio_ico.length > longitudMaximaPrecio) {
+    return res.status(400).json({ error: 'El precio es demasiado alto' });
+  }
+  //Validación campo precio_por_mayor_ico
+  if (!precioExpReg.test(precio_por_mayor_ico)) {
+    return res.status(400).json({ error: 'El campo precio solo permite números.' });
+  }
+  if (precio_por_mayor_ico.length < longitudMinimaPrecio || precio_por_mayor_ico < valorMinimoPrecio) {
+    return res.status(400).json({ error: 'El precio es demasiado bajo' });
+  }
+  if (precio_por_mayor_ico.length > longitudMaximaPrecio) {
+    return res.status(400).json({ error: 'El precio es demasiado alto' });
+  }
+  //Validación campo ingredientes_producto
+  if (!ingredientesExpReg.test(ingredientes_producto)) {
+    return res.status(400).json({ error: 'Caracteres incorrectos en el campo ingredientes' });
+  }
+  if (ingredientes_producto.length > longitudMaximaIngredientes) {
+    return res.status(400).json({ error: 'El campo ingredientes debe tener máximo 500 caracteres.' });
+  }
+
   try {
     let actualizarProducto = req.body;
 
