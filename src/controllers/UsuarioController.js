@@ -44,7 +44,8 @@ async function getUsuarioById(req, res) {
 async function createUsuario(req, res) {
   const { correo_electronico, contrasena_usuario, rol_usuario, estado_usuario } = req.body;
   try {
-
+    
+    const usuario = new Usuario({correo_electronico, contrasena_usuario, rol_usuario, estado_usuario});
     // Validar la contraseña con una expresión regular
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!passwordRegex.test(contrasena_usuario)) {
@@ -56,17 +57,17 @@ async function createUsuario(req, res) {
 
     // Encriptar la contraseña antes de guardarla en la base de datos
     const salt = bcrypt.genSaltSync();
-    Usuario.contrasena_usuario = bcrypt.hashSync(contrasena_usuario, salt);
+    usuario.contrasena_usuario = bcrypt.hashSync(contrasena_usuario, salt);
 
     //const hashedPassword = await bcrypt.hash(contrasena_usuario, 10); // 10 es el costo de hashing, puedes ajustarlo según tus necesidades
 
     // Crear un nuevo usuario
-    const usuario = new Usuario({
-      correo_electronico,
-      contrasena_usuario,
-      rol_usuario,
-      estado_usuario
-    });
+    // const usuario = new Usuario({
+    //   correo_electronico,
+    //   contrasena_usuario,
+    //   rol_usuario,
+    //   estado_usuario
+    // });
 
     await usuario.save();
     res.status(201).json(usuario);
