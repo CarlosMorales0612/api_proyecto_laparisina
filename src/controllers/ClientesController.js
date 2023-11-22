@@ -140,7 +140,7 @@ async function obtenerClientePorDocumento(req, res) {
 // Actualizar una cliente por ID -----------------------------------------------------------------------------------------------------------
 async function actualizarCliente(req, res) {
   const { id } = req.params;
-  const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente, estado_cliente} = req.body;
+  const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,ciudad_cliente, estado_cliente} = req.body;
    
    //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
    const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
