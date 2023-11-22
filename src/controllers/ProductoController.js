@@ -1,6 +1,8 @@
 const Producto = require('../models/ProductoModel');
 const multer = require('multer')
 const multerConfig = require('../../utils/multerConfig')
+const fs = require('fs');
+const path = require('path');
 
 //----------------------------------------------------------------------------------------------------------------------------------------
 const upload = multer(multerConfig).single('image');//nombre que debe tener el campo file al subir la imagen 'image'
@@ -13,6 +15,24 @@ async function subirImagen(req, res, next) {
     }
     return next();
   })
+}
+
+// Función para eliminar una imagen por su nombre ----------------------------------------------------------------------------------------
+async function eliminarImagen(nombreArchivo) {
+  const rutaImagen = path.join(__dirname, '../../uploads/', nombreArchivo);
+
+  try {
+    // Verifica si el archivo existe antes de intentar eliminarlo
+    await fs.promises.access(rutaImagen, fs.constants.F_OK);
+    
+    // Elimina el archivo
+    await fs.promises.unlink(rutaImagen);
+
+    console.log(`Imagen ${nombreArchivo} eliminada exitosamente.`);
+  } catch (error) {
+    console.error(`Error al intentar eliminar la imagen ${nombreArchivo}: ${error.message}`);
+    throw error; // Puedes decidir manejar el error de otra manera según tus necesidades
+  }
 }
 
 // Obtener todos los productos ------------------------------------------------------------------------------------------------------------
@@ -222,10 +242,31 @@ async function actualizarProducto(req, res) {
   }
 
   try {
+    // Obtener el producto existente antes de la actualización
+    const productoExistente = await Producto.findById(id);
+
+    // Verifica si el nombre ha cambiado
+    const nombreCambiado = nombre_producto !== productoExistente.nombre_producto;
+
+    // Realiza la validación de duplicados solo si el nombre ha cambiado
+    if (nombreCambiado) {
+      const productoDuplicado = await Producto.findOne({ nombre_producto });
+
+      if (productoDuplicado) {
+        return res.status(400).json({ error: `El producto ${nombre_producto} ya existe.` });
+      }
+    }
+
     let actualizarProducto = req.body;
 
     // Si se proporciona una nueva imagen, actualiza el campo imagen_producto
     if (req.file && req.file.filename) {
+      // Elimina la imagen existente antes de asignar la nueva
+      if (productoExistente.imagen_producto) {
+        await eliminarImagen(productoExistente.imagen_producto);
+      }
+
+      // Asigna la nueva imagen al objeto de actualización
       actualizarProducto.imagen_producto = req.file.filename;
     } else {
       const producto = await Producto.findById(req.params.id);
