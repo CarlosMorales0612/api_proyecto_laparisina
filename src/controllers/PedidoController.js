@@ -73,43 +73,63 @@ async function createPedido(req, res) {
 }
  
 // Modificar el estado de un pedido por su ID
+// async function updatePedido(req, res) {
+//   const { id } = req.params;
+//   const { nuevoEstado } = req.body; // El nuevo estado se espera en el cuerpo de la solicitud
+
+//   // información sobre el rol del usuario autenticado
+//   const usuarioAutenticado = req.user;
+
+//   try {
+//     const pedido = await Pedido.findById(id);
+//     if (!pedido) {
+//       return res.status(404).json({ error: 'Pedido no encontrado.' });
+//     }
+
+//     // Validar que el nuevo estado sea válido (debe estar en la lista de estados permitidos)
+//     const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
+
+//     // Verificar que el usuario tenga permiso para cambiar el estado del pedido
+//     if (
+//       usuarioAutenticado.rol === 'empleado' || usuarioAutenticado.rol === 'administrador' ||
+//       (usuarioAutenticado.rol === 'domiciliario' && pedido.estado_pedido === 'Asignado' && nuevoEstado === 'Cancelado')
+//     ) {
+//       if (!estadosPermitidos.includes(nuevoEstado)) {
+//         return res.status(400).json({ error: 'Estado no válido.' });
+//       }
+
+//       pedido.estado_pedido = nuevoEstado; // Actualizar el estado del pedido
+//       await pedido.save();
+
+//       res.json({ message: 'El estado del pedido se actualizó exitosamente.', pedido });
+//     } else {
+//       return res.status(403).json({ error: 'No tienes permiso para cambiar el estado del pedido.' });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error al modificar el estado del pedido.' });
+//   }
+// }
+// Modificar el estado de un pedido por su ID
 async function updatePedido(req, res) {
   const { id } = req.params;
-  const { nuevoEstado } = req.body; // El nuevo estado se espera en el cuerpo de la solicitud
-
-  // información sobre el rol del usuario autenticado
-  const usuarioAutenticado = req.user;
+  const { estado_pedido } = req.body;
 
   try {
     const pedido = await Pedido.findById(id);
+
     if (!pedido) {
       return res.status(404).json({ error: 'Pedido no encontrado.' });
     }
 
-    // Validar que el nuevo estado sea válido (debe estar en la lista de estados permitidos)
-    const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
+    pedido.estado_pedido = estado_pedido;
+    await pedido.save();
 
-    // Verificar que el usuario tenga permiso para cambiar el estado del pedido
-    if (
-      usuarioAutenticado.rol === 'empleado' || usuarioAutenticado.rol === 'administrador' ||
-      (usuarioAutenticado.rol === 'domiciliario' && pedido.estado_pedido === 'Asignado' && nuevoEstado === 'Cancelado')
-    ) {
-      if (!estadosPermitidos.includes(nuevoEstado)) {
-        return res.status(400).json({ error: 'Estado no válido.' });
-      }
-
-      pedido.estado_pedido = nuevoEstado; // Actualizar el estado del pedido
-      await pedido.save();
-
-      res.json({ message: 'El estado del pedido se actualizó exitosamente.', pedido });
-    } else {
-      return res.status(403).json({ error: 'No tienes permiso para cambiar el estado del pedido.' });
-    }
+    res.json({ message: 'El estado del pedido se actualizó exitosamente.', pedido });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Error al modificar el estado del pedido.' });
   }
 }
-
 
 
 // Eliminar un pedido por su ID
