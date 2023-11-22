@@ -4,7 +4,7 @@ const Pedido = require('../models/Pedido'); // Asegúramos de proporcionar la ru
 async function getVentas(req, res) {
   try {
     const { limite = 5, desde = 0 } = req.query;
-    const query = { estado_pedido: 'Tomado' };
+    const query = { estado_pedido: 'Terminado' };
 
     const [total, ventas] = await Promise.all([
       Pedido.countDocuments(query),
