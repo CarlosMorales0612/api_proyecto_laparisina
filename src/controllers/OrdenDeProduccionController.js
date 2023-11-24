@@ -1,10 +1,12 @@
 // const OrdenProduccion = require('../models/Pedido');
 const OrdenDeProduccion = require('../models/OrdenDeProduccionModel');
 const Pedido = require('../models/Pedido');
+const Producto = require('../models/ProductoModel');
 
 // Función para obtener la fecha actual en el formato "dia/mes/año" sin hora y con hora ----------------------------------------------------
-function obtenerFechaActualString() {
+function obtenerFechaActual() {
   const fecha = new Date();
+  fecha.setDate(fecha.getDate() - 1);
   const fechaFormateada = new Date(fecha).toISOString().split('T')[0];
   const dia = fecha.getDate();
   const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0
@@ -13,6 +15,14 @@ function obtenerFechaActualString() {
   return fechaFormateada
 
   //return `${dia}/${mes}/${año}`;
+}
+
+function convertirFecha(fechaDate) {
+  const dia = fechaDate.getDate();
+  const mes = fechaDate.getMonth(); // Los meses comienzan desde 0
+  const año = fechaDate.getFullYear();
+
+  return `${dia}/${mes}/${año}`;
 }
 
 function obtenerFechaActualConHoraString() {
@@ -30,7 +40,8 @@ function obtenerFechaActualConHoraString() {
 // Obtener todas las ordenes de producción -------------------------------------------------------------------------------------------------
 async function obtenerTodasLasOrdenesDeProduccion(req, res) {
   try {
-    console.log(obtenerFechaActualString())
+    console.log(obtenerFechaActual());
+    console.log(convertirFecha(new Date()))
     const ordenes = await OrdenDeProduccion.find();
     res.json(ordenes);
   } catch (error) {
@@ -108,9 +119,14 @@ async function crearOrdenDeProduccion(req, res) {
       
       // Obtener los pedidos para hoy en estado 'Tomado'
       const pedidosParaHoy = await Pedido.find({
-          fecha_entrega_pedido: obtenerFechaActualString(),
+          fecha_entrega_pedido: obtenerFechaActual(),
           estado_pedido: 'Tomado'
       });
+
+      // Verificar si no hay pedidos para hoy
+      if (pedidosParaHoy.length === 0) {
+        return res.status(200).json({ message: 'No hay órdenes de producción pendientes.' });
+      }
 
       // Objeto para almacenar los detalles consolidados de la orden de producción
       const detallesOrdenProduccion = {};
@@ -118,29 +134,57 @@ async function crearOrdenDeProduccion(req, res) {
       const estadoOrden = 'Pendiente en producción'
 
       // Iterar sobre los pedidos para consolidar los detalles de la orden de producción
-      pedidosParaHoy.forEach(pedido => {
-          pedido.detalle_pedido.forEach(detalle => {
-              const claveProducto = `${detalle.nombre_producto}-${detalle.nombre_categoria_producto}`;
-              if (detallesOrdenProduccion[claveProducto]) {
-                  // Verifica si el pedido._id no está ya en pedidos_orden
-                  if (!detallesOrdenProduccion[claveProducto].pedidos_orden.includes(pedido._id)) {
+      for (const pedido of pedidosParaHoy) {
+        for (const detalle of pedido.detalle_pedido) {
+            const producto = await Producto.findOne({ nombre_producto: detalle.nombre_producto });
+            const categoriaProducto = producto.nombre_categoria_producto;
+            const claveProducto = `${detalle.nombre_producto}-${categoriaProducto}`;
+            if (detallesOrdenProduccion[claveProducto]) {
+                // Verifica si el pedido._id no está ya en pedidos_orden
+                if (!detallesOrdenProduccion[claveProducto].pedidos_orden.includes(pedido._id)) {
                     detallesOrdenProduccion[claveProducto].pedidos_orden.push(pedido._id);
-                  }
-                  //Sumar cantidad al producto de la orden si ya existe en detallesOrdenProduccion
-                  detallesOrdenProduccion[claveProducto].cantidad_producto += detalle.cantidad_producto;
-              } else {
-                  detallesOrdenProduccion[claveProducto] = {
-                      nombre_producto: detalle.nombre_producto,
-                      nombre_categoria_producto: detalle.nombre_categoria_producto,
-                      cantidad_producto: detalle.cantidad_producto,
-                      estado_orden: estadoOrden,
-                      fecha_entrega_pedido: pedido.fecha_entrega_pedido,
-                      pedidos_orden: [pedido._id]
-                  };
-              }
-          });
-          idsPedidos.push(pedido._id);
-      });
+                }
+                // Sumar cantidad al producto de la orden si ya existe en detallesOrdenProduccion
+                detallesOrdenProduccion[claveProducto].cantidad_producto += detalle.cantidad_producto;
+            } else {
+                detallesOrdenProduccion[claveProducto] = {
+                    nombre_producto: detalle.nombre_producto,
+                    nombre_categoria_producto: categoriaProducto,
+                    cantidad_producto: detalle.cantidad_producto,
+                    estado_orden: estadoOrden,
+                    fecha_entrega_pedido: convertirFecha(pedido.fecha_entrega_pedido),
+                    pedidos_orden: [pedido._id]
+                };
+            }
+        }
+        idsPedidos.push(pedido._id);
+      }
+
+      // Iterar sobre los pedidos para consolidar los detalles de la orden de producción
+      // pedidosParaHoy.forEach(pedido => {
+      //     pedido.detalle_pedido.forEach(detalle => {
+      //         const producto = await Producto.findOne({nombre_producto: detalle.nombre_producto});
+      //         const claveProducto = `${detalle.nombre_producto}-${detalle.nombre_categoria_producto}`;
+      //         if (detallesOrdenProduccion[claveProducto]) {
+      //             // Verifica si el pedido._id no está ya en pedidos_orden
+      //             if (!detallesOrdenProduccion[claveProducto].pedidos_orden.includes(pedido._id)) {
+      //               detallesOrdenProduccion[claveProducto].pedidos_orden.push(pedido._id);
+      //             }
+      //             //Sumar cantidad al producto de la orden si ya existe en detallesOrdenProduccion
+      //             detallesOrdenProduccion[claveProducto].cantidad_producto += detalle.cantidad_producto;
+      //         } else {
+      //             detallesOrdenProduccion[claveProducto] = {
+      //                 nombre_producto: detalle.nombre_producto,
+      //                 nombre_categoria_producto: detalle.nombre_categoria_producto,
+      //                 cantidad_producto: detalle.cantidad_producto,
+      //                 estado_orden: estadoOrden,
+      //                 fecha_entrega_pedido: pedido.fecha_entrega_pedido,
+      //                 pedidos_orden: [pedido._id]
+      //             };
+      //         }
+      //     });
+      //     idsPedidos.push(pedido._id);
+      // });
 
       // Obtén una matriz de objetos de detallesOrdenProduccion
       const detallesArray = Object.values(detallesOrdenProduccion);
