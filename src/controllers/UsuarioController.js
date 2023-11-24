@@ -5,14 +5,11 @@ const mongoose = require('mongoose');
 // Obtener todos los usuarios con sus roles
 async function getAllUsuarios(req, res) {
   try {
-    const { limite = 5, desde = 0 } = req.query;
     const query = {};
 
     const [total, usuarios] = await Promise.all([
       Usuario.countDocuments(query),
       Usuario.find(query)
-        .skip(Number(desde))
-        .limit(Number(limite))
         .populate('rol_usuario')
     ]);
 
