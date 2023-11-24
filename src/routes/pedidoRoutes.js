@@ -17,7 +17,13 @@ router.put('/pedidos/:id', PedidoController.updatePedido);
 // Ruta para eliminar un pedido por ID
 router.delete('/pedidos/:id', PedidoController.deletePedido);
 
+// Ruta para obtener todos los pedidos
+router.get('/pedidosPendientes', PedidoController.getPedidosPendientes);
 
+// Ruta para obtener todos los pedidos
+router.get('/pedidosTerminados', PedidoController.getPedidosTerminados,);
 
+// Ruta para obtener todos los pedidos
+router.get('/pedidosAnulados', PedidoController.getPedidosAnulados,);
 
 module.exports = router;
