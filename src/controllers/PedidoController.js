@@ -1,7 +1,4 @@
 const Pedido = require('../models/Pedido');
-const Cliente = require('../models/ClientesModel');
-const Empleado = require('../models/empleado')
-
 
 // Obtener todos los pedidos
 async function getAllPedido(req, res) {
@@ -28,6 +25,8 @@ async function getPedidoById(req, res) {
   }
   
 }
+
+
 
 // Crear un nuevo pedido
 async function createPedido(req, res) {
@@ -149,12 +148,24 @@ async function getPedidosAnulados(req, res) {
   }
 }
 
+// Obtener pedidos Enviados
+async function getPedidosEnviados(req, res) {
+  try {
+    const pedidosEnviados = await Pedido.find({ estado_pedido: 'Enviados' });
+    res.json(pedidosEnviados);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener pedidos enviados.' });
+  }
+}
+
 module.exports = {
   getAllPedido,
   getPedidoById,
   getPedidosPendientes,
   getPedidosTerminados,
   getPedidosAnulados,
+  getPedidosEnviados,
   createPedido,
   updatePedido,
   deletePedido,
