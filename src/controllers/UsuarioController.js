@@ -39,11 +39,11 @@ async function getUsuarioById(req, res) {
 }
 
 
-// Obtener todas los empleados -------------------------------------------------------------------------------------------------------------
+// Obtener todos los domiciliarios
 async function obtenerTodosLosDomiciliarios(req, res) {
   try {
     // Filtrar usuarios por rol igual a "Domiciliarios"
-    const usuarios = await Usuario.find({ nombre_rol: 'Domiciliario' });
+    const usuarios = await Usuario.find({ 'rol_usuario': '656126cb933d1fae687598fd' });
     res.json(usuarios);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener los Usuarios." });

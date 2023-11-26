@@ -39,10 +39,7 @@ async function createPedido(req, res) {
     if (!/^[A-Za-z\s]+$/.test(pedidoData.nombre_cliente)) {
       return res.status(400).json({ error: 'El nombre del cliente solo debe contener letras.' });
     }
-     // Validar que el campo 'nombre_cliente' solo contenga letras
-    //  if (!/^[A-Za-z\s]+$/.test(pedidoData.quien_recibe)) {
-    //   return res.status(400).json({ error: 'El nombre del Quien recibe solo debe contener letras.' });
-    // }
+  
       // Validar que el campo 'telefono_cliente' solo contenga números
     if (!/^\d+$/.test(pedidoData.telefono_cliente)) {
       return res.status(400).json({ error: 'El teléfono solo debe contener números.' });
@@ -66,9 +63,7 @@ async function createPedido(req, res) {
 
     res.status(201).json({ message: 'Pedido creado exitosamente', pedido: nuevoPedido });
   } catch (error) {
-   
       res.status(500).json({ error: 'Error al crear el pedido.', error });
-  
   }
 }
  
@@ -151,7 +146,7 @@ async function getPedidosAnulados(req, res) {
 // Obtener pedidos Enviados
 async function getPedidosEnviados(req, res) {
   try {
-    const pedidosEnviados = await Pedido.find({ estado_pedido: 'Enviados' });
+    const pedidosEnviados = await Pedido.find({ estado_pedido: 'Enviado' });
     res.json(pedidosEnviados);
   } catch (error) {
     console.error(error);
