@@ -5,14 +5,11 @@ const mongoose = require('mongoose');
 // Obtener todos los usuarios con sus roles
 async function getAllUsuarios(req, res) {
   try {
-    const { limite = 5, desde = 0 } = req.query;
     const query = {};
 
     const [total, usuarios] = await Promise.all([
       Usuario.countDocuments(query),
       Usuario.find(query)
-        .skip(Number(desde))
-        .limit(Number(limite))
         .populate('rol_usuario')
     ]);
 
@@ -40,6 +37,19 @@ async function getUsuarioById(req, res) {
     res.status(500).json({ error: 'Error al obtener el usuario.' });
   }
 }
+
+
+// Obtener todos los domiciliarios
+async function obtenerTodosLosDomiciliarios(req, res) {
+  try {
+    // Filtrar usuarios por rol igual a "Domiciliarios"
+    const usuarios = await Usuario.find({ 'rol_usuario': '656126cb933d1fae687598fd' });
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener los Usuarios." });
+  }
+}
+
 
 async function createUsuario(req, res) {
   const { correo_electronico, contrasena_usuario, rol_usuario, estado_usuario } = req.body;
@@ -127,4 +137,6 @@ module.exports = {
   createUsuario,
   updateUsuario,
   deleteUsuario,
+  obtenerTodosLosDomiciliarios,
+  
 };
