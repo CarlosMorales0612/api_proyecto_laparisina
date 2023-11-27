@@ -19,7 +19,7 @@ const login = async (req, res = response) => {
         //Si el usuario está activo
         if (!usuario.estado_usuario) {
             return res.status(400).json({
-                msg: 'El usuario está inactivo.'
+                msg: 'El usuario está inactivo.',
             });
         }
         //Verificar la contraseña
