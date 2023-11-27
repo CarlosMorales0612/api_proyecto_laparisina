@@ -12,6 +12,9 @@ router.get('/usuarios', UsuarioController.getAllUsuarios);
 // Ruta para obtener un usuario por ID
 router.get('/usuarios/:id', UsuarioController.getUsuarioById);
 
+//Ruta para obterner todos los domiciliarios
+router.get('/domiciliarios', UsuarioController.obtenerTodosLosDomiciliarios);
+
 // Ruta para crear un nuevo usuario
 router.post('/usuarios', [
     check('correo_electronico', 'El correo es inválido').isEmail(),
