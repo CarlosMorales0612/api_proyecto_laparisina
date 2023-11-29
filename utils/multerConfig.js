@@ -20,6 +20,9 @@ const multerConfig = {
       cb(new Error('Formato de imagen no válido'))
     }
   },
+  limits: {
+    files: 3, // Limitar a 3 archivos por solicitud
+  },
 }
 
 module.exports = multerConfig;
