@@ -40,10 +40,7 @@ async function createPedido(req, res) {
       return res.status(400).json({ error: 'El nombre del cliente solo debe contener letras.' });
     }
   
-      // Validar que el campo 'telefono_cliente' solo contenga números
-    if (!/^\d+$/.test(pedidoData.telefono_cliente)) {
-      return res.status(400).json({ error: 'El teléfono solo debe contener números.' });
-    }
+
     // Validar que el pedido tenga al menos un producto en el detalle_pedido
     if (!pedidoData.detalle_pedido || pedidoData.detalle_pedido.length === 0) {
       return res.status(400).json({ error: 'Debes agregar al menos un producto al pedido.' });
