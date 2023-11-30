@@ -39,14 +39,11 @@ const ProductoSchema = new mongoose.Schema({
         required: true,
     },
 
-    ingredientes_producto: {
-        type: String,
-        required: true,
-    },
-
-    imagen_producto: {
-    type: String,
-    },
+    imagenes_producto: [
+        {
+            type: String,
+        }
+    ],
 
     estado_producto: {
         type: Boolean,

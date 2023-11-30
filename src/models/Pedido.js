@@ -61,9 +61,11 @@ const pedidoSchema = new mongoose.Schema({
     enum: ['Efectivo', 'Transferencia'],
     required: [true, 'El campo metodo pago es requerido.']
   },
-  
   valor_domicilio: {
     type: Number
+  },
+  correo_domiciliario: {
+    type: String
   },
   nit_empresa_cliente: {
     type: String,

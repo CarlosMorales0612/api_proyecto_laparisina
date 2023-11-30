@@ -1,5 +1,4 @@
 const Pedido = require('../models/Pedido');
-const Cliente = require('../models/ClientesModel');
 
 // Obtener todos los pedidos
 async function getAllPedido(req, res) {
@@ -28,6 +27,7 @@ async function getPedidoById(req, res) {
 }
 
 
+
 // Crear un nuevo pedido
 async function createPedido(req, res) {
   try {
@@ -39,14 +39,8 @@ async function createPedido(req, res) {
     if (!/^[A-Za-z\s]+$/.test(pedidoData.nombre_cliente)) {
       return res.status(400).json({ error: 'El nombre del cliente solo debe contener letras.' });
     }
-     // Validar que el campo 'nombre_cliente' solo contenga letras
-    //  if (!/^[A-Za-z\s]+$/.test(pedidoData.quien_recibe)) {
-    //   return res.status(400).json({ error: 'El nombre del Quien recibe solo debe contener letras.' });
-    // }
-      // Validar que el campo 'telefono_cliente' solo contenga números
-    if (!/^\d+$/.test(pedidoData.telefono_cliente)) {
-      return res.status(400).json({ error: 'El teléfono solo debe contener números.' });
-    }
+  
+
     // Validar que el pedido tenga al menos un producto en el detalle_pedido
     if (!pedidoData.detalle_pedido || pedidoData.detalle_pedido.length === 0) {
       return res.status(400).json({ error: 'Debes agregar al menos un producto al pedido.' });
@@ -66,49 +60,11 @@ async function createPedido(req, res) {
 
     res.status(201).json({ message: 'Pedido creado exitosamente', pedido: nuevoPedido });
   } catch (error) {
-   
       res.status(500).json({ error: 'Error al crear el pedido.', error });
-  
   }
 }
  
-// Modificar el estado de un pedido por su ID
-// async function updatePedido(req, res) {
-//   const { id } = req.params;
-//   const { nuevoEstado } = req.body; // El nuevo estado se espera en el cuerpo de la solicitud
 
-//   // información sobre el rol del usuario autenticado
-//   const usuarioAutenticado = req.user;
-
-//   try {
-//     const pedido = await Pedido.findById(id);
-//     if (!pedido) {
-//       return res.status(404).json({ error: 'Pedido no encontrado.' });
-//     }
-
-//     // Validar que el nuevo estado sea válido (debe estar en la lista de estados permitidos)
-//     const estadosPermitidos = ['tomado', 'preparacion', 'terminado', 'asignado', 'enviado', 'entregado', 'anulado'];
-
-//     // Verificar que el usuario tenga permiso para cambiar el estado del pedido
-//     if (
-//       usuarioAutenticado.rol === 'empleado' || usuarioAutenticado.rol === 'administrador' ||
-//       (usuarioAutenticado.rol === 'domiciliario' && pedido.estado_pedido === 'Asignado' && nuevoEstado === 'Cancelado')
-//     ) {
-//       if (!estadosPermitidos.includes(nuevoEstado)) {
-//         return res.status(400).json({ error: 'Estado no válido.' });
-//       }
-
-//       pedido.estado_pedido = nuevoEstado; // Actualizar el estado del pedido
-//       await pedido.save();
-
-//       res.json({ message: 'El estado del pedido se actualizó exitosamente.', pedido });
-//     } else {
-//       return res.status(403).json({ error: 'No tienes permiso para cambiar el estado del pedido.' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error al modificar el estado del pedido.' });
-//   }
-// }
 // Modificar el estado de un pedido por su ID
 async function updatePedido(req, res) {
   const { id } = req.params;
@@ -151,13 +107,57 @@ async function deletePedido(req, res) {
   }
 }
 
+// Obtener pedidos pendientes
+async function getPedidosPendientes(req, res) {
+  try {
+    const pedidosPendientes = await Pedido.find({ estado_pedido: { $in: ['Pendiente', 'Tomado'] } });
+    res.json(pedidosPendientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener pedidos pendientes.' });
+  }
+}
 
+// Obtener pedidos terminados
+async function getPedidosTerminados(req, res) {
+  try {
+    const pedidosTerminados = await Pedido.find({ estado_pedido: 'Terminado' });
+    res.json(pedidosTerminados);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener pedidos terminados.' });
+  }
+}
 
+// Obtener pedidos Anulados
+async function getPedidosAnulados(req, res) {
+  try {
+    const pedidosAnulados = await Pedido.find({ estado_pedido: 'Anulado' });
+    res.json(pedidosAnulados);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener pedidos anulados.' });
+  }
+}
 
+// Obtener pedidos Enviados
+async function getPedidosEnviados(req, res) {
+  try {
+    const pedidosEnviados = await Pedido.find({ estado_pedido: 'Enviado' });
+    res.json(pedidosEnviados);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener pedidos enviados.' });
+  }
+}
 
 module.exports = {
   getAllPedido,
   getPedidoById,
+  getPedidosPendientes,
+  getPedidosTerminados,
+  getPedidosAnulados,
+  getPedidosEnviados,
   createPedido,
   updatePedido,
   deletePedido,

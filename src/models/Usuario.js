@@ -20,7 +20,8 @@ const usuarioSchema = new mongoose.Schema({
   rol_usuario: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Roles',
-    required: [true, 'El rol es obligatorio']
+    required: [true, 'El rol es obligatorio'],
+    default: '654a96ebdbe2126f5a74161e'
   }, // Campo de referencia al esquema de Rol
 
   estado_usuario: {
