@@ -36,16 +36,16 @@ const pedidoSchema = new mongoose.Schema({
     required: [true, 'El campo barrio es requerido.']
   },
   fecha_entrega_pedido: {
-    type: Date,
+    type: String,
     required: [true, 'El campo fecha entrega pedido es requerido.']
   },
   fecha_pedido_tomado: {
-    type: Date,
+    type: String,
   },
   estado_pedido: {
     type: String,
     required: true,
-    enum: ['Pendiente','Tomado','Pendiente en produccion', 'En preparacion', 'Terminado', 'Asignado', 'Enviado', 'Entregado', 'Anulado'],
+    enum: ['Pendiente','Tomado','En produccion', 'En preparacion', 'Terminado', 'Enviado', 'Entregado', 'Anulado'],
     default: 'Pendiente'
   },
   precio_total_venta: {
@@ -76,6 +76,9 @@ const pedidoSchema = new mongoose.Schema({
   aumento_empresa: {
     type: Number,
     
+  },
+  nombre_domiciliario:{
+    type: String,
   },
 
   detalle_pedido: [
