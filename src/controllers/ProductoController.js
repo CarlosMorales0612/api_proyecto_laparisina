@@ -92,6 +92,23 @@ async function obtenerProductoPorId(req, res) {
   }
 }
 
+// Obtener los produstos por categoría --------------------------------------------------------------------------------------------------------------
+async function obtenerProductoPorCategoria(req, res) {
+  const { categoria } = req.params;
+
+  try {
+    const productos = await Producto.find({
+      nombre_categoria_producto: categoria,
+      estado_producto: true
+    });
+
+    res.json(productos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al obtener productos por categoría' });
+  }
+}
+
 // Crear un nuevo producto ------------------------------------------------------------------------------------------------------------------
 async function crearProducto(req, res) {
   const { codigo_producto, nombre_producto, nombre_categoria_producto, descripcion_producto, precio_ico, precio_por_mayor_ico, durabilidad_producto } = req.body
@@ -342,6 +359,7 @@ async function cambiarEstadoProducto(req, res) {
 module.exports = {
   obtenerTodosLosProductos,
   obtenerProductoPorId,
+  obtenerProductoPorCategoria,
   crearProducto,
   actualizarProducto,
   cambiarEstadoProducto,

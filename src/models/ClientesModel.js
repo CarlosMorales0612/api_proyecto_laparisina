@@ -26,7 +26,6 @@ const ClientesSchema = Schema({
 
     nit_empresa_cliente:{
         type:String,
-        unique:[true, 'El nit:{VALUE} ya existe'],
     },
 
     correo_cliente:{
