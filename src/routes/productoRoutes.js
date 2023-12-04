@@ -8,6 +8,9 @@ router.get('/productos', ProductoController.obtenerTodosLosProductos);
 // Ruta para obtener un producto por ID
 router.get('/productos/:id', ProductoController.obtenerProductoPorId);
 
+// Ruta para obtener un productos por caetgoría
+router.get('/productos-categoria/:categoria', ProductoController.obtenerProductoPorCategoria);
+
 // Ruta para crear un nuevo producto y subir las imagenes
 router.post('/productos', ProductoController.subirImagen, ProductoController.crearProducto);
 

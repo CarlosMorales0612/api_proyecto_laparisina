@@ -8,6 +8,7 @@ const upload = multer(multerConfig).single('image');//Cuando llave y valor es ig
 
 //funcion para subir imagen ----------------------------------------------------------------------------------------------------------------
 async function subirImagen(req, res, next) {
+  console.log('File de controlador', req.file)
   upload(req,res, function(error) {
     if (error) {
       res.json({ message: error });
@@ -68,7 +69,7 @@ async function crearCategoria(req, res) {
 
   // Expresión regular para validar la descripcion de la categoría
   const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
-  const longitudMaximaDescripcion = 100;
+  const longitudMaximaDescripcion = 300;
   
   if (!nombreExpReg.test(nombre_categoria_producto)){
     return res.status(400).json({ error: 'El nombre solo permite letras.' });
@@ -81,7 +82,7 @@ async function crearCategoria(req, res) {
     return res.status(400).json({ error: 'La descripción solo permite letras y los signos ",." ' });
   }
   if (descripcion_categoria_producto.length > longitudMaximaDescripcion) {
-    return res.status(400).json({ error: 'La descripción debe tener máximo 100 caracteres.' });
+    return res.status(400).json({ error: 'La descripción debe tener máximo 300 caracteres.' });
   }
 
   const categoria = new CategoriaProducto(req.body);
@@ -118,7 +119,7 @@ async function actualizarCategoria(req, res) {
 
   // Expresión regular para validar la descripcion de la categoría
   const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
-  const longitudMaximaDescripcion = 100;
+  const longitudMaximaDescripcion = 300;
 
   if (!nombreExpReg.test(nombre_categoria_producto)) {
     return res.status(400).json({ error: 'El nombre solo permite letras.' });
@@ -131,7 +132,7 @@ async function actualizarCategoria(req, res) {
     return res.status(400).json({ error: 'La descripción solo permite letras y los signos ",." ' });
   }
   if (descripcion_categoria_producto.length > longitudMaximaDescripcion) {
-    return res.status(400).json({ error: 'La descripción debe tener máximo 100 caracteres.' });
+    return res.status(400).json({ error: 'La descripción debe tener máximo 300 caracteres.' });
   }
 
   try {
@@ -180,74 +181,6 @@ async function actualizarCategoria(req, res) {
     res.status(500).json({ error: 'Error al actualizar la categoría.' });
   }
 }
-
-// Actualizar una categoria por ID ---------------------------------------------------------------------------------------------------------
-// async function actualizarCategoria(req, res) {
-//   const { id } = req.params;
-//   const { nombre_categoria_producto, descripcion_categoria_producto } = req.body;
-
-//   // Expresión regular para validar el nombre de la categoría
-//   const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
-//   const longitudMaximaNombre = 20;
-
-//   // Expresión regular para validar la descripcion de la categoría
-//   const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
-//   const longitudMaximaDescripcion = 100;
-
-//   if (!nombreExpReg.test(nombre_categoria_producto)) {
-//     return res.status(400).json({ error: 'El nombre solo permite letras.' });
-//   }
-//   if (nombre_categoria_producto.length > longitudMaximaNombre) {
-//     return res.status(400).json({ error: 'El nombre debe tener máximo 20 caracteres.' });
-//   }
-
-//   if (!descripcionExpReg.test(descripcion_categoria_producto)) {
-//     return res.status(400).json({ error: 'La descripción solo permite letras y los signos ",." ' });
-//   }
-//   if (descripcion_categoria_producto.length > longitudMaximaDescripcion) {
-//     return res.status(400).json({ error: 'La descripción debe tener máximo 100 caracteres.' });
-//   }
-
-//   try {
-//     // Obtén la categoría existente antes de la actualización
-//     const categoriaExistente = await CategoriaProducto.findById(id);
-
-//     // Verifica si el nombre ha cambiado
-//     const nombreCambiado = nombre_categoria_producto !== categoriaExistente.nombre_categoria_producto;
-
-//     // Realiza la validación de duplicados solo si el nombre ha cambiado
-//     if (nombreCambiado) {
-//       const categoriaDuplicada = await CategoriaProducto.findOne({ nombre_categoria_producto });
-
-//       if (categoriaDuplicada) {
-//         return res.status(400).json({ error: `La categoría ${nombre_categoria_producto} ya existe.` });
-//       }
-//     }
-    
-//     let actualizarCategoria = req.body;
-
-//     // Si se proporciona una nueva imagen, actualiza el campo imagen_categoria_producto
-//     if (req.file && req.file.filename) {
-//       actualizarCategoria.imagen_categoria_producto = req.file.filename;
-//     } else {
-//       const categoria = await CategoriaProducto.findById(req.params.id);
-//       actualizarCategoria.imagen_categoria_producto = categoria.imagen_categoria_producto
-//     }
-
-//     // Realiza la actualización en la base de datos
-//     const categoriaActualizada = await CategoriaProducto.findByIdAndUpdate(id, actualizarCategoria, { new: true });
-
-//     // Verifica si la categoría fue encontrada y actualizada correctamente
-//     if (!categoriaActualizada) {
-//       return res.status(404).json({ error: 'Categoría no encontrada.' });
-//     }
-    
-//     // Si la categoría se actualiza exitosamente, envía un mensaje de éxito en la respuesta
-//     res.status(200).json({ message: 'Categoría actualizada exitosamente.', categoria: categoriaActualizada });
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error al actualizar la categoría.' });
-//   }
-// }
 
 // Cambiar el estado de una categoria por ID ------------------------------------------------------------------------------------------------------------
 async function cambiarEstadoCategoria(req, res) {
