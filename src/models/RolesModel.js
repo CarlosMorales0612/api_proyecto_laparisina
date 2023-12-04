@@ -18,6 +18,7 @@ const RolesSchema = new Schema({
   
   permisos_rol: [{
     type: PermisoSchema,
+    require: true,
    }],
 
   estado_rol: {
