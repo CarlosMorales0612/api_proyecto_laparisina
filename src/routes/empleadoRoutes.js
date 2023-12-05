@@ -1,22 +1,33 @@
 const express = require('express');
 const router = express.Router();
-const empledosController = require('../controllers/empleadoController');
+const empledoController = require('../controllers/empleadoController');
+const cors = require('cors');
+const app = express();
 
+
+app.use(cors());
+
+const corsOptions = {
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200, // Algunos navegadores pueden enviar solicitudes OPTIONS antes de una solicitud POST
+  };
+  
+  app.use(cors(corsOptions));
 // Ruta para obtener todos los usuarios
-router.get('/empleados', empledosController.obtenerTodosLosEmpleados);
+router.get('/empleados', empledoController.obtenerTodosLosEmpleados);
 
 //Ruta Obtener empleado por id
-router.get('/empleados/:id', empledosController.obtenerEmpleadoPorId);
+router.get('/empleados/:id', empledoController.obtenerEmpleadoPorId);
 
 
 // Ruta para crear un nuevo usuario
-router.post('/empleados', empledosController.crearEmpleado);
+router.post('/empleados', empledoController.crearEmpleado);
 
 // Ruta para actualizar un usuario por ID
-router.put('/empleados/:id', empledosController.actualizarEmpleado);
+router.put('/empleados/:id', empledoController.actualizarEmpleado);
 
 // Ruta para eliminar un usuario por ID
-router.delete('/empleados/:id', empledosController.eliminarEmpleado);
+router.delete('/empleados/:id', empledoController.eliminarEmpleado);
 
 
 module.exports = router;
