@@ -22,6 +22,9 @@ router.put('/clientes/:id',ClientesController.actualizarCliente);
 router.put('/clientes_estado/:id',ClientesController.cambiarEstadoCliente);
 
 // Ruta para eliminar un cliente por ID
+router.get('/clientes_excel', ClientesController.clienteGetexcel);
+
+// Ruta para eliminar un cliente por ID
 router.delete('/clientes/:id', ClientesController.eliminarCliente);
 
 
