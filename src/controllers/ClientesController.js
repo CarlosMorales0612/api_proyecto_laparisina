@@ -1,3 +1,4 @@
+const exceljs = require('exceljs');
 const mongoose = require('mongoose');
 const Clientes = require('../models/ClientesModel');
 
@@ -263,6 +264,56 @@ async function cambiarEstadoCliente(req, res) {
   }
 }
 
+//Funcion para el pdf-------------------------------------------------------------------------------------------------------------------------
+const clienteGetexcel = async (req, res = response) => {
+  try {
+    const clientes = await Clientes.find();
+
+    if (!clientes || clientes.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron clientes' });
+    }
+
+    // Crear un libro de Excel
+    const workbook = new exceljs.Workbook();
+    const worksheet = workbook.addWorksheet('Clientes');
+
+    // Agregar información del cliente al archivo Excel
+    // Crear una fila con los nombres de las columnas
+    const columnas = ['Tipo cliente', 'Nombre de contacto', 'Nombre juridico','NIT', 'Número de cedula','Número de celular', 'Ciudad', 'Barrio', 'Dirección', 'Correo electrónico', 'Estado'];
+    worksheet.addRow(columnas);
+
+    // Agregar información del cliente al archivo Excel
+    clientes.forEach(cliente => {
+      const estadoCliente = cliente.estado_cliente ? 'activo' : 'inactivo';
+      const datosCliente = [
+      cliente.tipo_cliente,
+      cliente.nombre_contacto,
+      cliente.nombre_juridico,
+      cliente.nit_empresa_cliente,
+      cliente.numero_documento_cliente,
+      cliente.telefono_cliente,
+      cliente.ciudad_cliente,
+      cliente.barrio_cliente,
+      cliente.direccion_cliente,
+      cliente.correo_cliente,
+      estadoCliente
+    ];
+    worksheet.addRow(datosCliente);
+  });
+
+    // Configurar la respuesta HTTP para descargar el archivo
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=cliente.xlsx');
+
+    // Enviar el archivo Excel al cliente
+    await workbook.xlsx.write(res);
+
+    res.end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error en el servidor' });
+  }
+}
 
 //Exportar funciones -------------------------------------------------------------------------------------------------------------------------
 module.exports = {
@@ -272,5 +323,6 @@ module.exports = {
   crearCliente,
   actualizarCliente,
   cambiarEstadoCliente,
-  eliminarCliente
+  eliminarCliente,
+  clienteGetexcel
 };
