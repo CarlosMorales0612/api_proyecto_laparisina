@@ -97,15 +97,22 @@ async function createUsuario(req, res) {
 //Actualizar usuario
 const updateUsuario = async (req, res = response) => {
   const { id } = req.params;
-  const { _id, contrasena_usuario, correo_electronico, ...resto } = req.body;
+  const { _id, correo_electronico, contrasena_usuario, ...resto } = req.body;
+
   try {
-    // Validar la contraseña actual (opcional)
+    // Verificar si el correo existe en otro usuario
+    const existingUser = await Usuario.findOne({ correo_electronico });
+    if (existingUser && existingUser._id.toString() !== id) {
+      return res.status(400).json({ error: 'El correo electrónico ya está registrado en otro usuario.' });
+    }
+
+    // Validar y encriptar la contraseña actual (opcional)
     if (contrasena_usuario) {
-      // Encriptar la contraseña antes de guardarla en la base de datos
       const salt = bcrypt.genSaltSync();
       resto.contrasena_usuario = bcrypt.hashSync(contrasena_usuario, salt);
     }
 
+    // Actualizar usuario
     const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
     res.json(usuario);
