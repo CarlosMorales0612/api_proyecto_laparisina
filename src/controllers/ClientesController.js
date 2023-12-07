@@ -264,7 +264,7 @@ async function cambiarEstadoCliente(req, res) {
   }
 }
 
-//Funcion para el pdf-------------------------------------------------------------------------------------------------------------------------
+//Funcion para el excel-------------------------------------------------------------------------------------------------------------------------
 const clienteGetexcel = async (req, res = response) => {
   try {
     const clientes = await Clientes.find();
