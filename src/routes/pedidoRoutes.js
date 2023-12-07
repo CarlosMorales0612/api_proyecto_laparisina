@@ -29,4 +29,5 @@ router.get('/pedidosAnulados', PedidoController.getPedidosAnulados,);
 // Ruta para obtener todos los pedidos Terminados
 router.get('/pedidosEnviados', PedidoController.getPedidosEnviados,);
 
+
 module.exports = router;
