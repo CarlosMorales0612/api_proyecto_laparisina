@@ -114,13 +114,12 @@ const resetpassword = async (req, res = response) => {
             resetPasswordToken: token,
             resetPasswordExpires: { $gt: Date.now() } // El token aún no ha expirado
         });
-        console.log(user);
+
         if (!user) {
             return res.status(400).json({ message: 'El token es inválido o ha expirado' });
         }
 
         // Validar la contraseña con la expresión regular
-        console.log('Contraseña a enviar:', newPassword); // Agregar este console.log
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
         if (!passwordRegex.test(newPassword)) {
             return res.status(400).json({
