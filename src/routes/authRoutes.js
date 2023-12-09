@@ -22,10 +22,8 @@ router.post('/forgot-password', [
 
 // Ruta para restablecer la contraseña
 router.post('/reset-password', [
-    check('correo_electronico', 'El correo es inválido').isEmail(),
     check('newPassword', 'La nueva contraseña es obligatoria').not().isEmpty(),
-    check('token', 'El token es obligatorio').not().isEmpty(),
-    validarCampos,
+    check('token', 'El token es obligatorio').not().isEmpty()
 ],
     AuthController.resetpassword);
 

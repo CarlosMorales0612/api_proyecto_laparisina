@@ -61,7 +61,7 @@ async function createUsuario(req, res) {
     if (!passwordRegex.test(contrasena_usuario)) {
       return res.status(400).json({
         error: 'La contraseña no cumple con los requisitos.',
-        details: 'La contraseña debe contener al menos una ,letra minúscula, una letra mayúscula, un número y tener al menos 6 caracteres.'
+        details: 'La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y tener al menos 6 caracteres.'
       });
     }
 

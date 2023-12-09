@@ -91,7 +91,7 @@ const forgotpassword = async (req, res = response) => {
             from: 'isaacdavidmez79@gmail.com', // Coloca tu correo electrónico
             to: correo_electronico,
             subject: 'Recuperación de contraseña',
-            text: `Hola ${user.correo_electronico}, aquí está tu enlace para restablecer la contraseña: ${ngrokUrl}/reset-password?token=${token}` //${ngrokUrl}/reset-password?token=${token}
+            text: `Hola ${user.correo_electronico}; somos el equipo Parisina, aquí está tu enlace para restablecer la contraseña: http://localhost:4200/#/auth/restaurar-contrasena?token=${token}` //${ngrokUrl}/reset-password?token=${token}
         };
 
         // Envía el correo electrónico
@@ -107,26 +107,24 @@ const forgotpassword = async (req, res = response) => {
 // Endpoint para resetear la contraseña
 const resetpassword = async (req, res = response) => {
     try {
-        const { correo_electronico, newPassword, token } = req.body;
+        const { newPassword, token } = req.body;
 
-        // Aquí podrías validar el token enviado por el usuario para garantizar la autenticidad
-
-        // Verifica si el usuario existe en la base de datos
-        const user = await Usuario.findOne({ correo_electronico });
-
+        // Buscar al usuario cuyo token coincide y aún no ha expirado
+        const user = await Usuario.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() } // El token aún no ha expirado
+        });
+        console.log(user);
         if (!user) {
-            return res.status(404).json({ message: 'El usuario no existe' });
-        }
-
-        if (user.resetPasswordToken !== token || user.resetPasswordExpires < Date.now()) {
             return res.status(400).json({ message: 'El token es inválido o ha expirado' });
         }
 
         // Validar la contraseña con la expresión regular
+        console.log('Contraseña a enviar:', newPassword); // Agregar este console.log
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
         if (!passwordRegex.test(newPassword)) {
             return res.status(400).json({
-                message: 'La contraseña no cumple con los requisitos.',
+                message: 'La contraseña no cumple con los requisitos, cuál es el vacile mi papá.',
                 details: 'La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y tener al menos 6 caracteres.'
             });
         }
@@ -144,6 +142,7 @@ const resetpassword = async (req, res = response) => {
         res.status(500).json({ message: 'Ha ocurrido un error al procesar la solicitud' });
     }
 };
+
 
 
 module.exports = {
