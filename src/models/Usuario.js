@@ -29,12 +29,14 @@ const usuarioSchema = new mongoose.Schema({
     required: [true, 'El estado es obligatorio'],
     default: true,
   },
+  resetPasswordToken: String, // Nuevo campo para el token de restablecimiento
+  resetPasswordExpires: Date,
 
 
 });
 
 usuarioSchema.methods.toJSON = function() {
-  const { __v, contrasena_usuario, _id, ...usuario } = this.toObject(); 
+  const { __v, contrasena_usuario, resetPasswordToken, resetPasswordExpires, _id, ...usuario } = this.toObject(); 
   usuario.uid = _id;
   return usuario;
 }
