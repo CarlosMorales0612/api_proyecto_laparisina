@@ -109,7 +109,7 @@ async function crearOrdenDeProduccion(req, res) {
                   nombre_categoria_producto: categoriaProducto,
                   cantidad_producto: detalle.cantidad_producto,
                   estado_orden: estadoOrden,
-                  fecha_entrega_pedido: convertirFecha(pedido.fecha_entrega_pedido),
+                  fecha_entrega_pedido: pedido.fecha_entrega_pedido,
                   pedidos_orden: [pedido._id]
               };
           }
