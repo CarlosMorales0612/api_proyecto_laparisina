@@ -37,6 +37,19 @@ async function obtenerEmpleadoPorId(req, res) {
   
 }
 
+async function obtenerEmpleadoPorCorreo(req, res) {
+  const { correo_empleado } = req.params;
+  try {
+    const empleado = await Empleado.findOne({ correo_empleado: correo_empleado });
+    if (!empleado) {
+      return res.status(404).json({ error: 'Empleado no encontrado.' });
+    }
+    res.json(empleado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el empleado.' });
+  }
+}
 
 
 //Registrar empleados
@@ -368,6 +381,7 @@ async function eliminarEmpleado(req, res) {
 module.exports = {
     obtenerTodosLosEmpleados,
     obtenerEmpleadoPorId,
+    obtenerEmpleadoPorCorreo,
     crearEmpleado,
     actualizarEmpleado,
     eliminarEmpleado
