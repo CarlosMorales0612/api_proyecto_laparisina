@@ -32,17 +32,18 @@ router.put('/usuarios/:id', [
     validarCampos
 ], UsuarioController.updateUsuario);
 
-// Ruta para eliminar un usuario por ID
-router.delete('/usuarios/:id', [
-    validarJWT,
-    //Esta validación, se encarga de verificar de que sí o sí para acceder a este método se deba ser administrador.
-    esAdminRol,
-    //Esta validación, se encarga de verificar de que los roles que se encuentren aquí, tengan acceso a este método.
-    //tieneRol('Administrador'),
-    check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom(existeUsuarioPorId),
-    validarCampos
-], UsuarioController.deleteUsuario);
+// Ruta para eliminar una categoria por ID
+router.put('/usuario-estado/:id', UsuarioController.cambiarEstadoUsuario);
+
+// // Ruta para eliminar un usuario por ID
+// router.delete('/usuarios/:id', [
+
+//     //Esta validación, se encarga de verificar de que los roles que se encuentren aquí, tengan acceso a este método.
+//     //tieneRol('Administrador'),
+//     check('id', 'No es un ID válido').isMongoId(),
+//     check('id').custom(existeUsuarioPorId),
+//     validarCampos
+// ], UsuarioController.deleteUsuario);
 
 
 module.exports = router;

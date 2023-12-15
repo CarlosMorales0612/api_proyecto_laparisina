@@ -1,5 +1,6 @@
 const Pedido = require('../models/Pedido');
 
+
 // Obtener todos los pedidos
 async function getAllPedido(req, res) {
   try {
@@ -151,6 +152,11 @@ async function getPedidosEnviados(req, res) {
   }
 }
 
+
+
+
+
+
 module.exports = {
   getAllPedido,
   getPedidoById,
@@ -161,4 +167,5 @@ module.exports = {
   createPedido,
   updatePedido,
   deletePedido,
+ 
 };

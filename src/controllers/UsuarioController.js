@@ -54,14 +54,14 @@ async function obtenerTodosLosDomiciliarios(req, res) {
 async function createUsuario(req, res) {
   const { correo_electronico, contrasena_usuario, rol_usuario, estado_usuario } = req.body;
   try {
-    
-    const usuario = new Usuario({correo_electronico, contrasena_usuario, rol_usuario, estado_usuario});
+
+    const usuario = new Usuario({ correo_electronico, contrasena_usuario, rol_usuario, estado_usuario });
     // Validar la contraseña con una expresión regular
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!passwordRegex.test(contrasena_usuario)) {
       return res.status(400).json({
         error: 'La contraseña no cumple con los requisitos.',
-        details: 'La contraseña debe contener al menos una ,letra minúscula, una letra mayúscula, un número y tener al menos 6 caracteres.'
+        details: 'La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y tener al menos 6 caracteres.'
       });
     }
 
@@ -97,15 +97,22 @@ async function createUsuario(req, res) {
 //Actualizar usuario
 const updateUsuario = async (req, res = response) => {
   const { id } = req.params;
-  const { _id, contrasena_usuario, correo_electronico, ...resto } = req.body;
+  const { _id, correo_electronico, contrasena_usuario, ...resto } = req.body;
+
   try {
-    // Validar la contraseña actual (opcional)
+    // Verificar si el correo existe en otro usuario
+    const existingUser = await Usuario.findOne({ correo_electronico });
+    if (existingUser && existingUser._id.toString() !== id) {
+      return res.status(400).json({ error: 'El correo electrónico ya está registrado en otro usuario.' });
+    }
+
+    // Validar y encriptar la contraseña actual (opcional)
     if (contrasena_usuario) {
-      // Encriptar la contraseña antes de guardarla en la base de datos
       const salt = bcrypt.genSaltSync();
       resto.contrasena_usuario = bcrypt.hashSync(contrasena_usuario, salt);
     }
 
+    // Actualizar usuario
     const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
     res.json(usuario);
@@ -115,19 +122,41 @@ const updateUsuario = async (req, res = response) => {
 }
 
 
-// Eliminar un usuario por ID
-async function deleteUsuario(req, res) {
+// // Eliminar un usuario por ID
+// async function deleteUsuario(req, res) {
+//   const { id } = req.params;
+//   try {
+//     const usuario = await Usuario.findByIdAndUpdate(id, { estado_usuario: false });
+
+//     res.json({ usuario });
+
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error al eliminar el usuario.' });
+//   }
+// }
+
+async function cambiarEstadoUsuario(req, res) {
   const { id } = req.params;
   try {
-    const usuario = await Usuario.findByIdAndUpdate(id, { estado_usuario: false });
+    const verificarEstado = await Usuario.findById(id)
 
-    res.json({ usuario});
+    if (!verificarEstado) {
+      return res.status(404).json({ error: 'Usuario no encontrada.' });
+    } else {
+      const estado = verificarEstado.estado_usuario
 
+      const usuario = await Usuario.findByIdAndUpdate(
+        id,
+        { $set: { estado_usuario: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
+        { new: true }
+      );
+    }
+
+    res.status(200).json({ message: 'Estado del usuario cambiado exitosamente.' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el usuario.' });
+    res.status(500).json({ error: 'Error al cambiar el estado del usuario.' });
   }
 }
-
 
 
 
@@ -136,7 +165,6 @@ module.exports = {
   getUsuarioById,
   createUsuario,
   updateUsuario,
-  deleteUsuario,
+  cambiarEstadoUsuario,
   obtenerTodosLosDomiciliarios,
-  
 };

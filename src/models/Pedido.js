@@ -70,6 +70,9 @@ const pedidoSchema = new mongoose.Schema({
   nit_empresa_cliente: {
     type: String,
   },
+  estado_pago:{
+    type: String
+  },
   nombre_juridico: {
     type: String,
   },
