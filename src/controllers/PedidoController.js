@@ -153,10 +153,6 @@ async function getPedidosEnviados(req, res) {
 }
 
 
-
-
-
-
 module.exports = {
   getAllPedido,
   getPedidoById,
