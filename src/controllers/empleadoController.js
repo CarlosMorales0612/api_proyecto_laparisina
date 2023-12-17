@@ -438,6 +438,28 @@ async function asignarPedidoADomiciliario(req, res) {
   }
 }
 
+// En tu archivo de rutas o controladores
+async function domiciliario (req, res) {
+  const { correo } = req.params;
+  try {
+    const usuario = await Empleado.findOne({ correo_empleado: correo });
+    if (!usuario || usuario.area_empleado !== 'Domiciliario') {
+      return res.status(404).json({ error: 'Domiciliario no encontrado.' });
+    }
+
+    const pedido = await Pedido.findOne({ empleado_id: usuario._id });
+
+    if (!pedido) {
+      return res.status(404).json({ message: 'No hay pedidos asignados a este domiciliario.' });
+    }
+
+    res.json(pedido);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el pedido del domiciliario.' });
+  }
+};
+
 module.exports = {
     obtenerTodosLosEmpleados,
     obtenerEmpleadoPorId,
@@ -447,5 +469,6 @@ module.exports = {
     eliminarEmpleado,
     obtenerPedidoPorIdDomiciliario,
     obtenerTodosLosDomiciliarios,
-    asignarPedidoADomiciliario
+    asignarPedidoADomiciliario,
+    domiciliario
 }

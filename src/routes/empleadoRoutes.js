@@ -36,5 +36,7 @@ router.get('/empleados/pedidos/:id', empledoController.obtenerPedidoPorIdDomicil
 
 router.post('/empleados/asignar-pedido', empledoController.asignarPedidoADomiciliario);
 
+router.get('/empleado/:correo', empledoController.domiciliario)
+
 
 module.exports = router;
