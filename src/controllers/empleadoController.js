@@ -3,8 +3,7 @@ const {response} = require('express')
 const mongoose = require('mongoose');
 //Importación de los modelos
 const Empleado = require('../models/empleado') // la importación de modelos no se instancia con llaves para evitar errores
-
-
+const Pedido = require('../models/Pedido')
 
 
 
@@ -377,6 +376,39 @@ async function eliminarEmpleado(req, res) {
     }
   }
   
+// Obtener pedidos por correo del empleado
+async function obtenerPedidosPorCorreoEmpleado(req, res) {
+  const { correo_empleado } = req.params;
+  try {
+    // Buscar al empleado por su correo
+    const empleado = await Empleado.findOne({ correo_empleado });
+
+    if (!empleado) {
+      return res.status(404).json({ error: 'Empleado no encontrado.' });
+    }
+
+    // Buscar los pedidos asignados al empleado por su ID
+    const pedidos = await Pedido.find({ empleado_id: empleado._id });
+
+    res.json(pedidos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener los pedidos del empleado.' });
+  }
+}
+
+// Obtener todos los domiciliarios
+async function obtenerTodosLosDomiciliarios(req, res) {
+  try {
+    // Filtrar usuarios por rol igual a "Domiciliarios"
+    const empleados = await Empleado.find({ 'area_empleado': 'Domiciliario' });
+    res.json(empleados);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener los empleados." });
+  }
+}
+
+
 
 module.exports = {
     obtenerTodosLosEmpleados,
@@ -384,5 +416,7 @@ module.exports = {
     obtenerEmpleadoPorCorreo,
     crearEmpleado,
     actualizarEmpleado,
-    eliminarEmpleado
+    eliminarEmpleado,
+    obtenerPedidosPorCorreoEmpleado,
+    obtenerTodosLosDomiciliarios
 }
