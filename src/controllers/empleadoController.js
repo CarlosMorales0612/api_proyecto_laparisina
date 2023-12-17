@@ -376,26 +376,29 @@ async function eliminarEmpleado(req, res) {
     }
   }
   
-// Obtener pedidos por correo del empleado
-async function obtenerPedidosPorCorreoEmpleado(req, res) {
-  const { correo_empleado } = req.params;
-  try {
-    // Buscar al empleado por su correo
-    const empleado = await Empleado.findOne({ correo_empleado });
-
-    if (!empleado) {
-      return res.status(404).json({ error: 'Empleado no encontrado.' });
+  async function obtenerPedidoPorIdDomiciliario(req, res) {
+    const { id } = req.params;
+    try {
+      // Buscar al domiciliario por su ID
+      const domiciliario = await Empleado.findById(id);
+  
+      if (!domiciliario || domiciliario.area_empleado !== 'Domiciliario') {
+        return res.status(404).json({ error: 'Domiciliario no encontrado.' });
+      }
+  
+      // Buscar el pedido asignado al domiciliario por su ID
+      const pedido = await Pedido.findOne({ empleado_id: domiciliario._id });
+  
+      if (!pedido) {
+        return res.status(404).json({ message: 'No hay pedidos asignados a este domiciliario.' });
+      }
+  
+      res.json(pedido);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error al obtener el pedido del domiciliario.' });
     }
-
-    // Buscar los pedidos asignados al empleado por su ID
-    const pedidos = await Pedido.find({ empleado_id: empleado._id });
-
-    res.json(pedidos);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener los pedidos del empleado.' });
   }
-}
 
 // Obtener todos los domiciliarios
 async function obtenerTodosLosDomiciliarios(req, res) {
@@ -408,7 +411,32 @@ async function obtenerTodosLosDomiciliarios(req, res) {
   }
 }
 
+async function asignarPedidoADomiciliario(req, res) {
+  const { id_pedido, id_empleado_domiciliario } = req.body;
 
+  try {
+    // Validar que el pedido exista
+    const pedido = await Pedido.findById(id_pedido);
+    if (!pedido) {
+      return res.status(404).json({ error: 'Pedido no encontrado.' });
+    }
+
+    // Validar que el empleado exista y sea un domiciliario
+    const domiciliario = await Empleado.findById(id_empleado_domiciliario);
+    if (!domiciliario || domiciliario.area_empleado !== 'Domiciliario') {
+      return res.status(404).json({ error: 'Domiciliario no encontrado.' });
+    }
+
+    // Asignar el domiciliario al pedido
+    pedido.empleado_id = domiciliario._id; // Usar el ID del domiciliario
+    await pedido.save();
+
+    res.json({ message: 'Domiciliario asignado al pedido exitosamente.', pedido });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al asignar domiciliario al pedido.' });
+  }
+}
 
 module.exports = {
     obtenerTodosLosEmpleados,
@@ -417,6 +445,7 @@ module.exports = {
     crearEmpleado,
     actualizarEmpleado,
     eliminarEmpleado,
-    obtenerPedidosPorCorreoEmpleado,
-    obtenerTodosLosDomiciliarios
+    obtenerPedidoPorIdDomiciliario,
+    obtenerTodosLosDomiciliarios,
+    asignarPedidoADomiciliario
 }

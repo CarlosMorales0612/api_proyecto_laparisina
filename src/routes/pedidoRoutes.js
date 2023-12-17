@@ -29,5 +29,8 @@ router.get('/pedidosAnulados', PedidoController.getPedidosAnulados,);
 // Ruta para obtener todos los pedidos Terminados
 router.get('/pedidosEnviados', PedidoController.getPedidosEnviados,);
 
+router.post('/pedido/asignar-domiciliario', PedidoController.asignarDomiciliarioAPedido);
+
+
 
 module.exports = router;

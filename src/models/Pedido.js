@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const pedidoSchema = new mongoose.Schema({
 
+  empleado_id: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+
   documento_cliente: {
     type: String,
     required: [true, 'El campo documento es requerido.'],
