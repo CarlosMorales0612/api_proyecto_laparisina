@@ -32,7 +32,11 @@ router.put('/empleados/:id', empledoController.actualizarEmpleado);
 // Ruta para eliminar un usuario por ID
 router.delete('/empleados/:id', empledoController.eliminarEmpleado);
 
-router.get('/empleados/pedidos/:correo_empleado', empledoController.obtenerPedidosPorCorreoEmpleado);
+router.get('/empleados/pedidos/:id', empledoController.obtenerPedidoPorIdDomiciliario);
+
+router.post('/empleados/asignar-pedido', empledoController.asignarPedidoADomiciliario);
+
+router.get('/empleado/:correo', empledoController.domiciliario)
 
 
 module.exports = router;
