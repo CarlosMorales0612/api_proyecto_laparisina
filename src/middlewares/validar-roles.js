@@ -1,22 +1,36 @@
+const Usuario = require('../models/Usuario');
 const { response } = require('express');
 
-const esAdminRol = (req, res = response, next) => {
-
+const esAdminRol = async (req, res, next) => {
     if (!req.usuario) {
         return res.status(500).json({
-            msg: 'Se quiere verificar el rol  sin validar el token primero'
+            msg: 'Se quiere verificar el rol sin validar el token primero'
         });
     }
 
-    const { rol_usuario, correo_electronico } = req.usuario;
+    try {
+        // Obtener el nombre del rol a partir del ID almacenado en el usuario
+        const usuario = await Usuario.findById(req.usuario._id).populate('rol_usuario');
+        const { nombre_rol } = usuario.rol_usuario;
 
-    if (rol_usuario && rol_usuario.nombre_rol === 'Administrador') {
-        return res.status(401).json({
-            msg: `${correo_electronico} no es Administrador, no puede hacer esto`
+        const { correo_electronico } = req.usuario;
+
+        // Verificar si el nombre del rol coincide con los roles permitidos
+        if (nombre_rol !== 'Super Admin' && nombre_rol !== 'Administrador') {
+            return res.status(401).json({
+                msg: `${correo_electronico} no es Super Admin o Administrador, no puede hacer esto`
+            });
+        }
+
+        // Si el usuario tiene el rol adecuado, permitir continuar con la ejecución
+        next();
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Error al verificar el rol del usuario'
         });
     }
-    next();
-}
+};
 
 
 const tieneRol = (...roles) => {
