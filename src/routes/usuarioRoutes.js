@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const UsuarioController = require('../controllers/UsuarioController');
 const { check } = require('express-validator');
- const { rol_valido, email_existe, existeUsuarioPorId } = require('../helpers/db-validadores');
+const { rol_valido, email_existe, existeUsuarioPorId } = require('../helpers/db-validadores');
 const { validarCampos, validarJWT, esAdminRol, tieneRol } = require('../middlewares/index');
 
 
 // Ruta para obtener todos los usuarios
-router.get('/usuarios', UsuarioController.getAllUsuarios);
+router.get('/usuarios', [], UsuarioController.getAllUsuarios);
 
 // Ruta para obtener un usuario por ID
 router.get('/usuarios/:id', UsuarioController.getUsuarioById);
@@ -22,6 +22,8 @@ router.post('/usuarios', [
     check('contrasena_usuario', 'La contraseña debe contar con al menos 6 caracteres').isLength({ min: 6 }),
     validarCampos,
     check('rol_usuario').custom(rol_valido),
+    validarJWT,
+    esAdminRol
 
 ], UsuarioController.createUsuario);
 
@@ -29,11 +31,13 @@ router.post('/usuarios', [
 router.put('/usuarios/:id', [
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(existeUsuarioPorId),
-    validarCampos
+    validarCampos,
+    validarJWT,
+    esAdminRol
 ], UsuarioController.updateUsuario);
 
-// Ruta para eliminar una categoria por ID
-router.put('/usuario-estado/:id', UsuarioController.cambiarEstadoUsuario);
+// Ruta para cambiar el estado de un usuario por ID
+router.put('/usuario-estado/:id', [validarJWT, esAdminRol], UsuarioController.cambiarEstadoUsuario);
 
 // // Ruta para eliminar un usuario por ID
 // router.delete('/usuarios/:id', [
