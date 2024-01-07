@@ -56,7 +56,6 @@ async function createPedido(req, res) {
       }
     }
     const nuevoPedido = new Pedido(pedidoData);
-
     await nuevoPedido.save();
 
     res.status(201).json({ message: 'Pedido creado exitosamente', pedido: nuevoPedido });
@@ -174,8 +173,12 @@ async function asignarDomiciliarioAPedido(req, res) {
       return res.status(400).json({ error: 'El empleado no es un domiciliario.' });
     }
 
+    console.log("AQUIIIIII",empleadoDomiciliario);
+
     // Asignar el domiciliario al pedido
-    pedido.empleado_id = id_empleado_domiciliario;
+    pedido.empleado_id = empleadoDomiciliario._id;
+    pedido.correo_domiciliario =empleadoDomiciliario.correo_empleado;
+
     await pedido.save();
 
     res.json({ message: 'Domiciliario asignado al pedido exitosamente.', pedido });
