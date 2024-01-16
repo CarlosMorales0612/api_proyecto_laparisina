@@ -421,6 +421,7 @@ async function asignarPedidoADomiciliario(req, res) {
       return res.status(404).json({ error: 'Pedido no encontrado.' });
     }
 
+
     // Validar que el empleado exista y sea un domiciliario
     const domiciliario = await Empleado.findById(id_empleado_domiciliario);
     if (!domiciliario || domiciliario.area_empleado !== 'Domiciliario') {
@@ -428,7 +429,8 @@ async function asignarPedidoADomiciliario(req, res) {
     }
 
     // Asignar el domiciliario al pedido
-    pedido.empleado_id = domiciliario._id; // Usar el ID del domiciliario
+    pedido.empleado_id = domiciliario._id.toString(); // Usar el ID del domiciliario
+    debugger;
     await pedido.save();
 
     res.json({ message: 'Domiciliario asignado al pedido exitosamente.', pedido });
@@ -447,7 +449,7 @@ async function domiciliario (req, res) {
       return res.status(404).json({ error: 'Domiciliario no encontrado.' });
     }
 
-    const pedido = await Pedido.findOne({ empleado_id: usuario._id });
+    const pedido = await Pedido.find({ empleado_id: usuario._id, estado_pedido: 'Enviado' });
 
     if (!pedido) {
       return res.status(404).json({ message: 'No hay pedidos asignados a este domiciliario.' });
