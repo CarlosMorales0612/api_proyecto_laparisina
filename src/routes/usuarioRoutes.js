@@ -3,7 +3,7 @@ const router = express.Router();
 const UsuarioController = require('../controllers/UsuarioController');
 const { check } = require('express-validator');
 const { rol_valido, email_existe, existeUsuarioPorId } = require('../helpers/db-validadores');
-const { validarCampos, validarJWT, esAdminRol, tieneRol } = require('../middlewares/index');
+const { validarCampos, validarJWT, permiso_usuarios, tieneRol } = require('../middlewares/index');
 
 
 // Ruta para obtener todos los usuarios
@@ -23,8 +23,7 @@ router.post('/usuarios', [
     validarCampos,
     check('rol_usuario').custom(rol_valido),
     validarJWT,
-    esAdminRol
-
+    permiso_usuarios
 ], UsuarioController.createUsuario);
 
 // Ruta para actualizar un usuario por ID
@@ -33,11 +32,11 @@ router.put('/usuarios/:id', [
     check('id').custom(existeUsuarioPorId),
     validarCampos,
     validarJWT,
-    esAdminRol
+    permiso_usuarios
 ], UsuarioController.updateUsuario);
 
 // Ruta para cambiar el estado de un usuario por ID
-router.put('/usuario-estado/:id', [validarJWT, esAdminRol], UsuarioController.cambiarEstadoUsuario);
+router.put('/usuario-estado/:id', [validarJWT, permiso_usuarios], UsuarioController.cambiarEstadoUsuario);
 
 // // Ruta para eliminar un usuario por ID
 // router.delete('/usuarios/:id', [
