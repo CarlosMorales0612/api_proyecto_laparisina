@@ -1,7 +1,38 @@
 const Usuario = require('../models/Usuario');
 const { response } = require('express');
 
-const esAdminRol = async (req, res, next) => {
+// const esAdminRol = async (req, res, next) => {
+//     if (!req.usuario) {
+//         return res.status(500).json({
+//             msg: 'Se quiere verificar el rol sin validar el token primero'
+//         });
+//     }
+
+//     try {
+//         // Obtener el nombre del rol a partir del ID almacenado en el usuario
+//         const usuario = await Usuario.findById(req.usuario._id).populate('rol_usuario');
+//         const { nombre_rol } = usuario.rol_usuario;
+
+//         const { correo_electronico } = req.usuario;
+
+//         // Verificar si el nombre del rol coincide con los roles permitidos
+//         if (nombre_rol !== 'Super Admin' && nombre_rol !== 'Administrador') {
+//             return res.status(401).json({
+//                 msg: `${correo_electronico} no es Super Admin o Administrador, no puede hacer esto`
+//             });
+//         }
+
+//         // Si el usuario tiene el rol adecuado, permitir continuar con la ejecución
+//         next();
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({
+//             msg: 'Error al verificar el rol del usuario'
+//         });
+//     }
+// };
+
+const tienePermiso = async (req, res, next, permisoRequerido) => {
     if (!req.usuario) {
         return res.status(500).json({
             msg: 'Se quiere verificar el rol sin validar el token primero'
@@ -11,14 +42,20 @@ const esAdminRol = async (req, res, next) => {
     try {
         // Obtener el nombre del rol a partir del ID almacenado en el usuario
         const usuario = await Usuario.findById(req.usuario._id).populate('rol_usuario');
-        const { nombre_rol } = usuario.rol_usuario;
-
+        const rolUsuario = usuario.rol_usuario;
         const { correo_electronico } = req.usuario;
 
-        // Verificar si el nombre del rol coincide con los roles permitidos
-        if (nombre_rol !== 'Super Admin' && nombre_rol !== 'Administrador') {
+        if (!rolUsuario) {
             return res.status(401).json({
-                msg: `${correo_electronico} no es Super Admin o Administrador, no puede hacer esto`
+                msg: 'El usuario no tiene un rol asignado'
+            });
+        }
+
+        const permisos = rolUsuario.permisos_rol.map(permiso => permiso.nombre_permiso);
+
+        if (!permisos.includes(permisoRequerido)) {
+            return res.status(401).json({
+                msg: `${req.usuario.correo_electronico} no tiene el permiso necesario (${permisoRequerido}) para realizar esta acción`
             });
         }
 
@@ -30,6 +67,56 @@ const esAdminRol = async (req, res, next) => {
             msg: 'Error al verificar el rol del usuario'
         });
     }
+};
+
+// Verificar el permiso 'Dashboard'
+const permiso_dashboard = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Dashboard');
+};
+
+// Verificar el permiso 'Roles'
+const permiso_roles = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Roles');
+};
+
+// Verificar el permiso 'Usuarios'
+const permiso_usuarios = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Usuarios');
+};
+
+// Verificar el permiso 'Categorías'
+const permiso_categorias = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Categorias');
+};
+
+// Verificar el permiso 'Productos'
+const permiso_productos = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Productos');
+};
+
+// Verificar el permiso 'Empleados'
+const permiso_empleados = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Empleados');
+};
+
+// Verificar el permiso 'Clientes'
+const permiso_clientes = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'CLientes');
+};
+
+// Verificar el permiso 'Pedidos'
+const permiso_pedidos = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Pedidos');
+};
+
+// Verificar el permiso 'Orden de producción'
+const permiso_orden_produccion = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Orden de produccion');
+};
+
+// Verificar el permiso 'Ventas'
+const permiso_ventas = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Ventas');
 };
 
 
@@ -57,6 +144,15 @@ const tieneRol = (...roles) => {
 
 
 module.exports = {
-    esAdminRol,
-    tieneRol
+    tieneRol,
+    permiso_dashboard,
+    permiso_roles,
+    permiso_usuarios,
+    permiso_categorias,
+    permiso_productos,
+    permiso_empleados,
+    permiso_pedidos,
+    permiso_clientes,
+    permiso_orden_produccion,
+    permiso_ventas
 }
