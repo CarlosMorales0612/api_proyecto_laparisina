@@ -66,7 +66,8 @@ const pedidoSchema = new mongoose.Schema({
     required: [true, 'El campo metodo pago es requerido.']
   },
   valor_domicilio: {
-    type: Number
+    type: Number,
+    required: [true, 'El campo valor Domicilio es requerido.']
   },
   correo_domiciliario: {
     type: String
