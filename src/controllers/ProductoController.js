@@ -117,8 +117,8 @@ async function crearProducto(req, res) {
   const codigoExpReg = /^[0-9]{3,4}$/;
 
   //Expresión regular para validar el nombre del producto
-  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
-  const longitudMaximaNombre = 20;
+  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,30}$/;
+  const longitudMaximaNombre = 30;
 
   // Expresión regular para validar la descripcion del producto
   const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s:-]+$/;
@@ -216,8 +216,8 @@ async function actualizarProducto(req, res) {
   const codigoExpReg = /^[0-9]{3,4}$/;
 
   //Expresión regular para validar el nombre del producto
-  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
-  const longitudMaximaNombre = 20;
+  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,30}$/;
+  const longitudMaximaNombre = 30;
 
   // Expresión regular para validar la descripcion del producto
   const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
