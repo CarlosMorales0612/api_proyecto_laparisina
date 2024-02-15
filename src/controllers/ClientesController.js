@@ -2,7 +2,7 @@ const exceljs = require('exceljs');
 const mongoose = require('mongoose');
 const Clientes = require('../models/ClientesModel');
 
-// Obtener todas los clientes -------------------------------------------------------------------------------------------------------------
+// Obtener todos los clientes -------------------------------------------------------------------------------------------------------------
 async function obtenerTodosLosClientes(req, res) {
   const{numero_documento_cliente}= req.query 
   try {
@@ -31,6 +31,21 @@ async function obtenerClientePorDocumento(req, res) {
   const { numero_documento_cliente } = req.params;
   try {
     const clientes = await Clientes.findOne({ numero_documento_cliente: numero_documento_cliente });
+    if (!clientes) {
+      return res.status(404).json({ error: 'Cliente no encontrada.' });
+    }
+    res.json(clientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el cliente.' });
+  }
+}
+
+// Obtener un cliente por Correo --------------------------------------------------------------------------------------------------------------
+async function obtenerClientePorCorreo(req, res) {
+  const { correo_cliente } = req.params;
+  try {
+    const clientes = await Clientes.findOne({ correo_cliente: correo_cliente });
     if (!clientes) {
       return res.status(404).json({ error: 'Cliente no encontrada.' });
     }
@@ -320,6 +335,7 @@ module.exports = {
   obtenerTodosLosClientes,
   obtenerClientePorId,
   obtenerClientePorDocumento,
+  obtenerClientePorCorreo,
   crearCliente,
   actualizarCliente,
   cambiarEstadoCliente,
