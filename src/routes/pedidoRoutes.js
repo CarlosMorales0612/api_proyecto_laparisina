@@ -2,8 +2,12 @@ const express = require('express');
 const router = express.Router();
 const PedidoController = require('../controllers/PedidoController');
 
+ // Ruta para obtener todos los pedidos
+ router.get('/pedidos', PedidoController.getAllPedido);
+ 
 // Ruta para obtener todos los pedidos
-router.get('/pedidos', PedidoController.getAllPedido);
+//router.get('/pedidos', [validarJWT,  permiso_pedidos], PedidoController.getAllPedido);
+
 
 // Ruta para obtener un pedido por ID
 router.get('/pedidos/:id', PedidoController.getPedidoById);
@@ -28,6 +32,11 @@ router.get('/pedidosAnulados', PedidoController.getPedidosAnulados,);
 
 // Ruta para obtener todos los pedidos Terminados
 router.get('/pedidosEnviados', PedidoController.getPedidosEnviados,);
+
+//Ruta para asignar un domiciliario a pedidos
+router.post('/pedido/asignar-domiciliario', PedidoController.asignarDomiciliarioAPedido);
+
+
 
 
 module.exports = router;

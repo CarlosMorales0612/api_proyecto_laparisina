@@ -1,5 +1,5 @@
 const Pedido = require('../models/Pedido');
-
+const Empleado = require ('../models/empleado')
 
 // Obtener todos los pedidos
 async function getAllPedido(req, res) {
@@ -56,7 +56,6 @@ async function createPedido(req, res) {
       }
     }
     const nuevoPedido = new Pedido(pedidoData);
-
     await nuevoPedido.save();
 
     res.status(201).json({ message: 'Pedido creado exitosamente', pedido: nuevoPedido });
@@ -152,9 +151,42 @@ async function getPedidosEnviados(req, res) {
   }
 }
 
+async function asignarDomiciliarioAPedido(req, res) {
+  const { id_pedido, id_empleado_domiciliario } = req.body;
 
+  try {
+    const pedido = await Pedido.findById(id_pedido);
 
+    if (!pedido) {
+      return res.status(404).json({ error: 'Pedido no encontrado.' });
+    }
 
+    // Validar que el empleado exista y sea un domiciliario
+    const empleadoDomiciliario = await Empleado.findById(id_empleado_domiciliario);
+
+    if (!empleadoDomiciliario) {
+      return res.status(404).json({ error: 'Domiciliario no encontrado.' });
+    }
+
+    // Puedes agregar una verificación adicional para asegurarte de que el empleado es un domiciliario
+    if (empleadoDomiciliario.tipo_empleado !== 'Domiciliario') {
+      return res.status(400).json({ error: 'El empleado no es un domiciliario.' });
+    }
+
+    console.log("AQUIIIIII",empleadoDomiciliario);
+
+    // Asignar el domiciliario al pedido
+    pedido.empleado_id = empleadoDomiciliario._id;
+    pedido.correo_domiciliario =empleadoDomiciliario.correo_empleado;
+
+    await pedido.save();
+
+    res.json({ message: 'Domiciliario asignado al pedido exitosamente.', pedido });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al asignar domiciliario al pedido.' });
+  }
+}
 
 
 module.exports = {
@@ -167,5 +199,6 @@ module.exports = {
   createPedido,
   updatePedido,
   deletePedido,
+  asignarDomiciliarioAPedido
  
 };

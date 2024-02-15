@@ -16,6 +16,9 @@ const corsOptions = {
 // Ruta para obtener todos los usuarios
 router.get('/empleados', empledoController.obtenerTodosLosEmpleados);
 
+router.get('/domiciliarios', empledoController.obtenerTodosLosDomiciliarios);
+
+
 //Ruta Obtener empleado por id
 router.get('/empleados/:id', empledoController.obtenerEmpleadoPorId);
 
@@ -28,6 +31,12 @@ router.put('/empleados/:id', empledoController.actualizarEmpleado);
 
 // Ruta para eliminar un usuario por ID
 router.delete('/empleados/:id', empledoController.eliminarEmpleado);
+
+router.get('/empleados/pedidos/:id', empledoController.obtenerPedidoPorIdDomiciliario);
+
+router.post('/empleados/asignar-pedido', empledoController.asignarPedidoADomiciliario);
+
+router.get('/empleado/:correo', empledoController.domiciliario)
 
 
 module.exports = router;
