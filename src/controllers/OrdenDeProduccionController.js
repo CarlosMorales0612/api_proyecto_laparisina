@@ -61,7 +61,23 @@ async function obtenerOrdenDeProduccionPorId(req, res) {
   }
 }
 
+// Obtener ordenes por área ----------------------------------------------------------------------------------------------------------------------
+async function obtenerOrdenesDeProduccionPorArea(req, res) {
+  const { area } = req.params;
 
+  try {
+    const ordenes = await OrdenDeProduccion.find({
+      nombre_area: area,
+    });
+
+    res.json(ordenes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al obtener las ordenes de producción por área' });
+  }
+}
+
+// crear ordenes de producción ---------------------------------------------------------------------------------------------------------------------
 async function crearOrdenDeProduccion(req, res) {
   try {
     // Obtener los IDs de los pedidos desde el cuerpo de la solicitud
@@ -109,7 +125,7 @@ async function crearOrdenDeProduccion(req, res) {
                   nombre_categoria_producto: categoriaProducto,
                   cantidad_producto: detalle.cantidad_producto,
                   estado_orden: estadoOrden,
-                  fecha_entrega_pedido: convertirFecha(pedido.fecha_entrega_pedido),
+                  fecha_entrega_pedido: pedido.fecha_entrega_pedido,
                   pedidos_orden: [pedido._id]
               };
           }
@@ -289,6 +305,7 @@ async function actualizarEstadoPedido(idPedido) {
 module.exports = {
   obtenerTodasLasOrdenesDeProduccion,
   obtenerOrdenDeProduccionPorId,
+  obtenerOrdenesDeProduccionPorArea,
   crearOrdenDeProduccion,
   actualizarOrdenDeProduccion
 };

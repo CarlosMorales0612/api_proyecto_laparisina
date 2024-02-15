@@ -8,7 +8,6 @@ const upload = multer(multerConfig).single('image');//Cuando llave y valor es ig
 
 //funcion para subir imagen ----------------------------------------------------------------------------------------------------------------
 async function subirImagen(req, res, next) {
-  console.log('File de controlador', req.file)
   upload(req,res, function(error) {
     if (error) {
       res.json({ message: error });

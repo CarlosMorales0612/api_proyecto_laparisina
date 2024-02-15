@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const pedidoSchema = new mongoose.Schema({
 
+  empleado_id: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+
   documento_cliente: {
     type: String,
     required: [true, 'El campo documento es requerido.'],
@@ -62,13 +66,17 @@ const pedidoSchema = new mongoose.Schema({
     required: [true, 'El campo metodo pago es requerido.']
   },
   valor_domicilio: {
-    type: Number
+    type: Number,
+    required: [true, 'El campo valor Domicilio es requerido.']
   },
   correo_domiciliario: {
     type: String
   },
   nit_empresa_cliente: {
     type: String,
+  },
+  estado_pago:{
+    type: String
   },
   nombre_juridico: {
     type: String,
