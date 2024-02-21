@@ -21,9 +21,7 @@ router.post('/usuarios', [
     check('correo_electronico').custom(email_existe),
     check('contrasena_usuario', 'La contraseña debe contar con al menos 6 caracteres').isLength({ min: 6 }),
     validarCampos,
-    check('rol_usuario').custom(rol_valido),
-    validarJWT,
-    permiso_usuarios
+    check('rol_usuario').custom(rol_valido)
 ], UsuarioController.createUsuario);
 
 // Ruta para actualizar un usuario por ID
