@@ -8,6 +8,9 @@ router.get('/consultar-produccion', OrdenDeProduccionController.obtenerTodasLasO
 // Ruta para obtener una orden de producción por ID
 router.get('/consultar-produccion/:id', OrdenDeProduccionController.obtenerOrdenDeProduccionPorId);
 
+// Ruta para obtener ordenes de producción por área
+router.get('/consultar-produccion-area/:area', OrdenDeProduccionController.obtenerOrdenesDeProduccionPorArea);
+
 // Ruta para generar nuevas ordenes de producción
 router.post('/crear-produccion', OrdenDeProduccionController.crearOrdenDeProduccion);
 

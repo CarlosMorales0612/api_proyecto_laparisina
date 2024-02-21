@@ -12,6 +12,9 @@ router.get('/clientes/:id', ClientesController.obtenerClientePorId);
 // Ruta para obtener un cliente por documento
 router.get('/clientes/consultar/:numero_documento_cliente', ClientesController.obtenerClientePorDocumento);
 
+// Ruta para obtener un cliente por ID
+router.get('/clientes/correo/:correo_cliente', ClientesController.obtenerClientePorCorreo);
+
 // Ruta para crear un nuevo cliente
 router.post('/clientes',  ClientesController.crearCliente);
 
@@ -21,7 +24,7 @@ router.put('/clientes/:id',ClientesController.actualizarCliente);
 // Ruta para actualizar un cliente por ID
 router.put('/clientes_estado/:id',ClientesController.cambiarEstadoCliente);
 
-// Ruta para eliminar un cliente por ID
+// Ruta para descargar el excel
 router.get('/clientes_excel', ClientesController.clienteGetexcel);
 
 // Ruta para eliminar un cliente por ID

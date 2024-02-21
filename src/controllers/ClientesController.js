@@ -4,7 +4,7 @@ const Clientes = require('../models/ClientesModel');
 const ExcelJS = require('exceljs');
 
 
-// Obtener todas los clientes -------------------------------------------------------------------------------------------------------------
+// Obtener todos los clientes -------------------------------------------------------------------------------------------------------------
 async function obtenerTodosLosClientes(req, res) {
   const{numero_documento_cliente}= req.query 
   try {
@@ -43,12 +43,27 @@ async function obtenerClientePorDocumento(req, res) {
   }
 }
 
+// Obtener un cliente por Correo --------------------------------------------------------------------------------------------------------------
+async function obtenerClientePorCorreo(req, res) {
+  const { correo_cliente } = req.params;
+  try {
+    const clientes = await Clientes.findOne({ correo_cliente: correo_cliente });
+    if (!clientes) {
+      return res.status(404).json({ error: 'Cliente no encontrada.' });
+    }
+    res.json(clientes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el cliente.' });
+  }
+}
+
 // Crear un nuevo cliente-----------------------------------------------------------------------------------------------------------------
  async function crearCliente(req, res) {
   const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,ciudad_cliente, estado_cliente} = req.body
 
   //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
-  const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
+  const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,100}$/;
   const longitudMaximaLetras = 20;
 
 
@@ -146,7 +161,7 @@ async function actualizarCliente(req, res) {
   const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,ciudad_cliente, estado_cliente} = req.body;
    
    //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
-   const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
+   const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,100}$/;
    const longitudMaximaLetras = 20;
 
    // Expresión regular para validar documento, celular
@@ -322,6 +337,7 @@ module.exports = {
   obtenerTodosLosClientes,
   obtenerClientePorId,
   obtenerClientePorDocumento,
+  obtenerClientePorCorreo,
   crearCliente,
   actualizarCliente,
   cambiarEstadoCliente,
