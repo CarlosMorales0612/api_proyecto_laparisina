@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const { Schema, model } = require('mongoose');
 
 const usuarioSchema = new mongoose.Schema({
+
+  nombre_usuario: {
+    type: String,
+  },
+
   correo_electronico: {
     type: String,
     required: [true, 'El correo es obligatorio'],
@@ -35,8 +40,8 @@ const usuarioSchema = new mongoose.Schema({
 
 });
 
-usuarioSchema.methods.toJSON = function() {
-  const { __v, contrasena_usuario, resetPasswordToken, resetPasswordExpires, _id, ...usuario } = this.toObject(); 
+usuarioSchema.methods.toJSON = function () {
+  const { __v, contrasena_usuario, resetPasswordToken, resetPasswordExpires, _id, ...usuario } = this.toObject();
   usuario.uid = _id;
   return usuario;
 }

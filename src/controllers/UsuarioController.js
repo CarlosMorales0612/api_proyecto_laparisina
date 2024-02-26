@@ -52,16 +52,23 @@ async function obtenerTodosLosDomiciliarios(req, res) {
 
 
 async function createUsuario(req, res) {
-  const { correo_electronico, contrasena_usuario, rol_usuario, estado_usuario } = req.body;
+  const { nombre_usuario, correo_electronico, contrasena_usuario, rol_usuario, estado_usuario } = req.body;
   try {
 
-    const usuario = new Usuario({ correo_electronico, contrasena_usuario, rol_usuario, estado_usuario });
+    const usuario = new Usuario({ nombre_usuario, correo_electronico, contrasena_usuario, rol_usuario, estado_usuario });
+
+    const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,24}$/;
+    if (!letrasExpReg.test(nombre_usuario) && nombre_usuario !== '') {
+      return res.status(400).json({ error: 'El campo nombre de usuario solo permite letras y cada palabra debe comenzar con mayúscula.' });
+    }
+
+
     // Validar la contraseña con una expresión regular
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,15}$/;
     if (!passwordRegex.test(contrasena_usuario)) {
       return res.status(400).json({
         error: 'La contraseña no cumple con los requisitos.',
-        details: 'La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y tener al menos 6 caracteres.'
+        details: 'La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y tener al menos 6 caracteres. El límite son 15'
       });
     }
 
