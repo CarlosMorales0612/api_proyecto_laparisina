@@ -27,6 +27,20 @@ async function getPedidoById(req, res) {
   
 }
 
+async function getPedidoCliente(req, res) {
+  const { id } = req.params;
+  try {
+    const pedido = await Pedido.find({ documento_cliente: id });
+    if (!pedido) {
+      return res.status(404).json({ error: 'Pedido no encontrado.' });
+    }
+    res.json(pedido);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener el pedido.' });
+  }
+  
+}
+
 
 
 // Crear un nuevo pedido
@@ -63,7 +77,7 @@ async function createPedido(req, res) {
       res.status(500).json({ error: 'Error al crear el pedido.', error });
   }
 }
- 
+
 
 // Modificar el estado de un pedido por su ID
 async function updatePedido(req, res) {
@@ -173,7 +187,6 @@ async function asignarDomiciliarioAPedido(req, res) {
       return res.status(400).json({ error: 'El empleado no es un domiciliario.' });
     }
 
-    console.log("AQUIIIIII",empleadoDomiciliario);
 
     // Asignar el domiciliario al pedido
     pedido.empleado_id = empleadoDomiciliario._id;
@@ -186,6 +199,8 @@ async function asignarDomiciliarioAPedido(req, res) {
     console.error(error);
     res.status(500).json({ error: 'Error al asignar domiciliario al pedido.' });
   }
+
+  
 }
 
 
@@ -196,6 +211,7 @@ module.exports = {
   getPedidosTerminados,
   getPedidosAnulados,
   getPedidosEnviados,
+  getPedidoCliente,
   createPedido,
   updatePedido,
   deletePedido,

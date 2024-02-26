@@ -43,6 +43,20 @@ async function obtenerClientePorDocumento(req, res) {
   }
 }
 
+ async function obtenerClientePorCorreo (req, res) {
+  const { correo_cliente } = req.params;
+  try {
+    const cliente = await Clientes.findOne({ correo_cliente: correo_cliente });
+    if (!cliente) {
+      return res.status(404).json({ error: 'Cliente no encontrada.' });
+    }
+    res.json(cliente);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el cliente.' });
+  }
+}
+
 // Crear un nuevo cliente-----------------------------------------------------------------------------------------------------------------
  async function crearCliente(req, res) {
   const {tipo_cliente,nombre_contacto,nombre_juridico,numero_documento_cliente,nit_empresa_cliente,correo_cliente,telefono_cliente,direccion_cliente,barrio_cliente,ciudad_cliente, estado_cliente} = req.body
@@ -326,5 +340,6 @@ module.exports = {
   actualizarCliente,
   cambiarEstadoCliente,
   eliminarCliente,
-  clienteGetexcel
+  clienteGetexcel,
+  obtenerClientePorCorreo
 };

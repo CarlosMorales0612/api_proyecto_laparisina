@@ -21,3 +21,5 @@ router.put('/categoria-estado/:id', CategoriaController.cambiarEstadoCategoria);
 
 
 module.exports = router;
+
+
