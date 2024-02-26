@@ -1,4 +1,5 @@
 const CategoriaProducto = require('../models/CategoriaModel');
+const Producto = require('../models/ProductoModel');
 const multer = require('multer')
 const multerConfig = require('../../utils/multerConfig')
 const fs = require('fs');
@@ -27,7 +28,6 @@ async function eliminarImagen(nombreArchivo) {
     // Elimina el archivo
     await fs.promises.unlink(rutaImagen);
 
-    console.log(`Imagen ${nombreArchivo} eliminada exitosamente.`);
   } catch (error) {
     console.error(`Error al intentar eliminar la imagen ${nombreArchivo}: ${error.message}`);
     throw error; // Puedes decidir manejar el error de otra manera según tus necesidades
@@ -57,6 +57,24 @@ async function obtenerCategoriasPorId(req, res) {
     res.status(500).json({ error: 'Error al obtener la categoria.' });
   }
 }
+
+// Obtener una categoria por Nombre ------------------------------------------------------------------------------------------------------------
+async function obtenerCategoriaPorNombre(req, res) {
+  const { nombre_categoria_producto } = req.params;
+
+  try {
+    const categoria = await CategoriaProducto.findOne({ nombre_categoria_producto });
+
+    if (!categoria) {
+      return res.status(404).json({ error: 'Categoría no encontrada.' });
+    }
+
+    res.json(categoria);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener la categoría.' });
+  }
+}
+
 
 // Crear una nueva categoria ---------------------------------------------------------------------------------------------------------------
 async function crearCategoria(req, res) {
@@ -88,7 +106,6 @@ async function crearCategoria(req, res) {
   try {
       if (req.file && req.file.filename) {
         categoria.imagen_categoria_producto = req.file.filename;
-        console.log(categoria.imagen_categoria_producto)
       } 
       // Guarda la categoría en la base de datos
       await categoria.save();
@@ -104,6 +121,8 @@ async function crearCategoria(req, res) {
       // Otro tipo de error, envía una respuesta de error genérica
       res.status(500).json({ error: 'Error al crear la categoría.' });
     }
+    //Eliminar imagen cargada si existe un error
+    eliminarImagen(req.file.filename)
   }
 }
 
@@ -146,7 +165,9 @@ async function actualizarCategoria(req, res) {
       const categoriaDuplicada = await CategoriaProducto.findOne({ nombre_categoria_producto });
 
       if (categoriaDuplicada) {
-        return res.status(400).json({ error: `La categoría ${nombre_categoria_producto} ya existe.` });
+        //Eliminar imagen cargada si existe un error
+        eliminarImagen(req.file.filename)
+        return res.status(400).json({ error: `La categoría con nombre ${nombre_categoria_producto} ya existe.` });
       }
     }
     
@@ -178,37 +199,79 @@ async function actualizarCategoria(req, res) {
     res.status(200).json({ message: 'Categoría actualizada exitosamente.', categoria: categoriaActualizada });
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar la categoría.' });
+    //Eliminar imagen cargada si existe un error
+    eliminarImagen(req.file.filename)
   }
 }
 
 // Cambiar el estado de una categoria por ID ------------------------------------------------------------------------------------------------------------
+// async function cambiarEstadoCategoria(req, res) {
+//   const { id } = req.params;
+//   try {
+//     const verificarEstado = await CategoriaProducto.findById(id)
+
+//     if (!verificarEstado) {
+//       return res.status(404).json({ error: 'Categoría no encontrada.' });
+//     } else {
+//       const estado = verificarEstado.estado_categoria_producto
+
+//       const categoria = await CategoriaProducto.findByIdAndUpdate(
+//         id,
+//         { $set: { estado_categoria_producto: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
+//         { new: true }
+//       );
+//     }
+
+//     res.status(200).json({ message: 'Estado de la categoría cambiado exitosamente.' });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error al cambiar el estado de la categoría.' });
+//   }
+// }
+
 async function cambiarEstadoCategoria(req, res) {
   const { id } = req.params;
+
   try {
-    const verificarEstado = await CategoriaProducto.findById(id)
+    // Paso 1: Obtener el nombre de la categoría
+    const verificarEstado = await CategoriaProducto.findById(id);
 
     if (!verificarEstado) {
       return res.status(404).json({ error: 'Categoría no encontrada.' });
-    } else {
-      const estado = verificarEstado.estado_categoria_producto
-
-      const categoria = await CategoriaProducto.findByIdAndUpdate(
-        id,
-        { $set: { estado_categoria_producto: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
-        { new: true }
-      );
     }
+
+    const nombreCategoria = verificarEstado.nombre_categoria_producto;
+    const nuevoEstadoCategoria = !verificarEstado.estado_categoria_producto;
+
+    // Paso 2: Buscar productos con el mismo nombre_categoria_producto
+    const productosRelacionados = await Producto.find({
+      nombre_categoria_producto: nombreCategoria,
+    });
+
+    // Paso 3: Actualizar el estado de los productos encontrados
+    await Producto.updateMany(
+      { nombre_categoria_producto: nombreCategoria },
+      { $set: { estado_producto: nuevoEstadoCategoria } }
+    );
+
+    // Cambiar el estado de la categoría
+    const categoria = await CategoriaProducto.findByIdAndUpdate(
+      id,
+      { $set: { estado_categoria_producto: nuevoEstadoCategoria } },
+      { new: true }
+    );
 
     res.status(200).json({ message: 'Estado de la categoría cambiado exitosamente.' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al cambiar el estado de la categoría.' });
+    res.status(500).json({ error: 'Error al cambiar el estado de la categoría y sus productos.' });
   }
 }
+
 
 //Exportar funciones ------------------------------------------------------------------------------------------------------------------------
 module.exports = {
   obtenerTodasLasCategorias,
   obtenerCategoriasPorId,
+  obtenerCategoriaPorNombre,
   crearCategoria,
   actualizarCategoria,
   cambiarEstadoCategoria,

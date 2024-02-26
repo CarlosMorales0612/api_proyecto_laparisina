@@ -20,8 +20,5 @@ router.put('/productos/:id', ProductoController.subirImagen,ProductoController.a
 // Ruta para cambiar el estado de un producto por ID
 router.put('/producto-estado/:id', ProductoController.cambiarEstadoProducto);
 
-// Ruta para eliminar una imagen por nombre
-router.delete('/eliminar-imagen-producto/:nombreImagen', ProductoController.eliminarImagen);
-
 
 module.exports = router;
