@@ -22,10 +22,10 @@ async function getVentas(req, res) {
 async function getVentaById(req, res) {
   const { id } = req.params;
   try {
-    const venta = await Pedido.findOne({ _id: id, estado_pedido: 'Entregado' });
+    const venta = await Pedido.findOne({ _id: id, estado_pago: 'Pagado' });
 
     if (!venta) {
-      return res.status(404).json({ error: 'Pedido no encontrado o no está "Entregado".' });
+      return res.status(404).json({ error: 'Pedido no encontrado o no se encuentra "Pagado".' });
     }
 
     res.json(venta);
@@ -36,7 +36,7 @@ async function getVentaById(req, res) {
 
 const ventasGetExcel = async (req, res = response) => {
   try {
-    const query = { estado_pedido: 'Entregado' };
+    const query = { estado_pago: 'Pagado' };
     const ventas = await Pedido.find(query);
 
     if (!ventas || ventas.length === 0) {
@@ -65,26 +65,13 @@ const ventasGetExcel = async (req, res = response) => {
       'NIT Empresa Cliente',
       'Nombre Jurídico',
       'Aumento Empresa',
-      'Nombre Domiciliario',
-      // Columnas para los detalles del pedido
-      'Nombre Producto 1',
-      'Cantidad Producto 1',
-      'Estado Producto 1',
-      'Precio ICO Producto 1',
-      'Precio Por Mayor ICO Producto 1',
-      'Precio Total Producto 1',
-      'Nombre Producto 2',
-      'Cantidad Producto 2',
-      'Estado Producto 2',
-      'Precio ICO Producto 2',
-      'Precio Por Mayor ICO Producto 2',
-      'Precio Total Producto 2',
-      // Asegúrate de ajustar y agregar más columnas si hay más detalles esperados
+      'Nombre Domiciliario'
     ];
     worksheet.addRow(columnas);
 
     ventas.forEach(venta => {
       const datosVenta = [
+        // Datos de la venta
         venta.documento_cliente,
         venta.tipo_cliente,
         venta.nombre_contacto,
@@ -104,24 +91,6 @@ const ventasGetExcel = async (req, res = response) => {
         venta.nombre_juridico,
         venta.aumento_empresa,
         venta.nombre_domiciliario,
-        // Datos de la venta
-
-        // Detalles del primer producto
-        (venta.detalle_pedido[0] || {}).nombre_producto || '',
-        (venta.detalle_pedido[0] || {}).cantidad_producto || '',
-        (venta.detalle_pedido[0] || {}).estado_producto || '',
-        (venta.detalle_pedido[0] || {}).precio_ico || '',
-        (venta.detalle_pedido[0] || {}).precio_por_mayor_ico || '',
-        (venta.detalle_pedido[0] || {}).precio_total_producto || '',
-
-        // Detalles del segundo producto
-        (venta.detalle_pedido[1] || {}).nombre_producto || '',
-        (venta.detalle_pedido[1] || {}).cantidad_producto || '',
-        (venta.detalle_pedido[1] || {}).estado_producto || '',
-        (venta.detalle_pedido[1] || {}).precio_ico || '',
-        (venta.detalle_pedido[1] || {}).precio_por_mayor_ico || '',
-        (venta.detalle_pedido[1] || {}).precio_total_producto || '',
-        // Asegúrate de ajustar para manejar más detalles si son posibles
       ];
 
       worksheet.addRow(datosVenta);

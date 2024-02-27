@@ -8,7 +8,7 @@ router.get('/productos', ProductoController.obtenerTodosLosProductos);
 // Ruta para obtener un producto por ID
 router.get('/productos/:id', ProductoController.obtenerProductoPorId);
 
-// Ruta para obtener un productos por caetgoría
+// Ruta para obtener un productos por categoría
 router.get('/productos-categoria/:categoria', ProductoController.obtenerProductoPorCategoria);
 
 // Ruta para crear un nuevo producto y subir las imagenes
@@ -19,9 +19,6 @@ router.put('/productos/:id', ProductoController.subirImagen,ProductoController.a
 
 // Ruta para cambiar el estado de un producto por ID
 router.put('/producto-estado/:id', ProductoController.cambiarEstadoProducto);
-
-// Ruta para eliminar una imagen por nombre
-router.delete('/eliminar-imagen-producto/:nombreImagen', ProductoController.eliminarImagen);
 
 
 module.exports = router;

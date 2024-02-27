@@ -35,39 +35,6 @@ async function eliminarImagenPorNombre(nombreArchivo) {
   }
 }
 
-// Define tu función para eliminar una imagen por su nombre y el nombre de la imagen de imagenes_producto
-async function eliminarImagen(req, res) {
-  const { nombreImagen } = req.params;
-  console.log(nombreImagen)
-
-  try {
-    
-
-    // Buscar y actualizar el producto en la base de datos
-    const producto = await Producto.findOne({ imagenes_producto: nombreImagen });
-    console.log(producto)
-
-    if (!producto) {
-      return res.status(404).json({ error: 'Producto no encontrado con la imagen proporcionada.' });
-    } else {
-      // Eliminar la imagen del sistema de archivos
-      await eliminarImagenPorNombre(nombreImagen);
-
-      // Eliminar el nombre de la imagen del array imagenes_producto
-      producto.imagenes_producto = producto.imagenes_producto.filter(img => img !== nombreImagen);
-
-      // Guardar el producto actualizado en la base de datos
-      await producto.save();
-
-      // Devolver una respuesta exitosa
-      res.status(200).json({ message: `Imagen ${nombreImagen} eliminada exitosamente.` });
-      }
-  } catch (error) {
-    // Devolver una respuesta de error si ocurre algún problema
-    res.status(500).json({ error: `Error al eliminar la imagen ${nombreImagen}: ${error.message}` });
-  }
-}
-
 // Obtener todos los productos ------------------------------------------------------------------------------------------------------------
 async function obtenerTodosLosProductos(req, res) {
   try {
@@ -92,7 +59,7 @@ async function obtenerProductoPorId(req, res) {
   }
 }
 
-// Obtener los produstos por categoría --------------------------------------------------------------------------------------------------------------
+// Obtener los productos por categoría --------------------------------------------------------------------------------------------------------------
 async function obtenerProductoPorCategoria(req, res) {
   const { categoria } = req.params;
 
@@ -117,8 +84,8 @@ async function crearProducto(req, res) {
   const codigoExpReg = /^[0-9]{3,4}$/;
 
   //Expresión regular para validar el nombre del producto
-  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
-  const longitudMaximaNombre = 20;
+  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,30}$/;
+  const longitudMaximaNombre = 30;
 
   // Expresión regular para validar la descripcion del producto
   const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s:-]+$/;
@@ -139,7 +106,7 @@ async function crearProducto(req, res) {
     return res.status(400).json({ error: 'El campo nombre producto solo permite letras.' });
   }
   if (nombre_producto.length > longitudMaximaNombre) {
-    return res.status(400).json({ error: 'El campo nombre producto debe tener máximo 20 caracteres.' });
+    return res.status(400).json({ error: 'El campo nombre producto debe tener máximo 30 caracteres.' });
   }
   //Validación campo nombre_categoria_producto
   if (!nombreExpReg.test(nombre_categoria_producto)){
@@ -177,17 +144,15 @@ async function crearProducto(req, res) {
   }
   
   const producto = new Producto(req.body);
+  console.log(req.files)
   try {
 
       // Agregar nombres de archivo al campo imagenes_producto
       if (req.files && req.files.length > 0) {
         producto.imagenes_producto = req.files.map(file => file.filename);
       }
+      
     
-      // if (req.file && req.file.filename) {
-      //   producto.imagen_producto = req.file.filename;
-      //   console.log(producto.imagen_producto)
-      // } 
       // Guarda el producto en la base de datos
       await producto.save();
       res.status(201).json({
@@ -204,6 +169,13 @@ async function crearProducto(req, res) {
       // Otro tipo de error, envía una respuesta de error genérica
       res.status(500).json({ error: 'Error al crear el producto.' });
     }
+
+    // Elimina las imágenes cargadas en caso de error
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(async (file) => {
+        await eliminarImagenPorNombre(file.filename);
+      });
+    }
   }
 }
 
@@ -216,8 +188,8 @@ async function actualizarProducto(req, res) {
   const codigoExpReg = /^[0-9]{3,4}$/;
 
   //Expresión regular para validar el nombre del producto
-  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
-  const longitudMaximaNombre = 20;
+  const nombreExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,30}$/;
+  const longitudMaximaNombre = 30;
 
   // Expresión regular para validar la descripcion del producto
   const descripcionExpReg = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ,.\s-]+$/;
@@ -238,7 +210,7 @@ async function actualizarProducto(req, res) {
     return res.status(400).json({ error: 'El campo nombre producto solo permite letras.' });
   }
   if (nombre_producto.length > longitudMaximaNombre) {
-    return res.status(400).json({ error: 'El campo nombre producto debe tener máximo 20 caracteres.' });
+    return res.status(400).json({ error: 'El campo nombre producto debe tener máximo 30 caracteres.' });
   }
   //Validación campo nombre_categoria_producto
   if (!nombreExpReg.test(nombre_categoria_producto)){
@@ -287,7 +259,14 @@ async function actualizarProducto(req, res) {
       const productoDuplicado = await Producto.findOne({ nombre_producto });
 
       if (productoDuplicado) {
+        // Elimina las imágenes cargadas en caso de error
+        if (req.files && req.files.length > 0) {
+          req.files.forEach(async (file) => {
+            await eliminarImagenPorNombre(file.filename);
+          });
+        }
         return res.status(400).json({ error: `El producto ${nombre_producto} ya existe.` });
+        
       }
     }
 
@@ -330,6 +309,12 @@ async function actualizarProducto(req, res) {
       // Otro tipo de error, envía una respuesta de error genérica
       res.status(500).json({ error: 'Error al actualizar el producto.' });
     }
+    // Elimina las imágenes cargadas en caso de error
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(async (file) => {
+        await eliminarImagenPorNombre(file.filename);
+      });
+    }
   }
 }
 
@@ -364,5 +349,4 @@ module.exports = {
   actualizarProducto,
   cambiarEstadoProducto,
   subirImagen,
-  eliminarImagen
 };
