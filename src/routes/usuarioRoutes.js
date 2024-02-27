@@ -7,7 +7,7 @@ const { validarCampos, validarJWT, permiso_usuarios, tieneRol } = require('../mi
 
 
 // Ruta para obtener todos los usuarios
-router.get('/usuarios', [], UsuarioController.getAllUsuarios);
+router.get('/usuarios', [validarJWT, permiso_usuarios], UsuarioController.getAllUsuarios);
 
 // Ruta para obtener un usuario por ID
 router.get('/usuarios/:id', UsuarioController.getUsuarioById);
@@ -21,6 +21,8 @@ router.post('/usuarios', [
     check('correo_electronico').custom(email_existe),
     check('contrasena_usuario', 'La contraseña debe contar con al menos 6 caracteres').isLength({ min: 6 }),
     validarCampos,
+    validarJWT,
+    permiso_usuarios,
     check('rol_usuario').custom(rol_valido)
 ], UsuarioController.createUsuario);
 

@@ -4,7 +4,7 @@ const exceljs = require('exceljs');
 // Realizar una consulta para obtener los pedidos con estado "entregado"
 async function getVentas(req, res) {
   try {
-    const query = { estado_pedido: 'Entregado' };
+    const query = { estado_pago: 'Pagado' };
 
     const ventas = await Pedido.find(query);
 
