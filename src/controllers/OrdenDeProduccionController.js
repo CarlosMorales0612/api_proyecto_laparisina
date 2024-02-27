@@ -92,7 +92,7 @@ async function crearOrdenDeProduccion(req, res) {
     // Obtener los detalles de los pedidos para los IDs proporcionados
     const pedidosParaHoy = await Pedido.find({
       _id: { $in: idsPedidos },
-      estado_pedido: 'En produccion'
+      estado_pedido: 'En producción'
     });
     console.log(pedidosParaHoy)
 
@@ -104,7 +104,7 @@ async function crearOrdenDeProduccion(req, res) {
     // Objeto para almacenar los detalles consolidados de la orden de producción
     const detallesOrdenProduccion = {};
     //const idsPedidos = []
-    const estadoOrden = 'En preparacion'
+    const estadoOrden = 'En preparación'
 
     // Iterar sobre los pedidos para consolidar los detalles de la orden de producción
     for (const pedido of pedidosParaHoy) {
