@@ -50,7 +50,7 @@ const empleadoSchema = new mongoose.Schema({
   },
 
   edad_empleado: {
-    type: Number,
+    type: String,
     required: [true, 'La edad empleado es requerido'],
   },
   lugar_nacimiento_empleado: {
@@ -74,7 +74,7 @@ const empleadoSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El celular empleado es requerido'],
   },
-  correo_empleado: {
+  correo_electronico: {
     type: String,
     unique: [true, 'El correo empleado:{VALUE} ya existe'],
     required: [true, 'El correo empleado es requerido'],
@@ -86,7 +86,7 @@ const empleadoSchema = new mongoose.Schema({
   grupo_sanguineo_empleado: {
     type: String,
     enum: ['AB+', 'AB-', 'A+', 'A-', 'B+', 'B-', 'O+', 'O-'],
-    required: true
+    // required: true
   },
   contacto_emergencia: [{
     nombre_contacto_emergencia: {
@@ -147,7 +147,7 @@ const empleadoSchema = new mongoose.Schema({
       },
 
       edad_empleado: {
-        type: Number,
+        type: String,
         required: [true, 'La edad empleado es requerido'],
       },
       lugar_nacimiento_empleado: {
@@ -172,7 +172,7 @@ const empleadoSchema = new mongoose.Schema({
         type: String,
         required: [true, 'El celular empleado es requerido'],
       },
-      correo_empleado: {
+      correo_electronico: {
         type: String,
         unique: [true, 'El correo empleado:{VALUE} ya existe'],
         required: [true, 'El correo empleado es requerido'],
@@ -181,7 +181,7 @@ const empleadoSchema = new mongoose.Schema({
         type: String,
         required: [true, 'El campo alergia es requerido'],
       },
-      grupo_sanguineo_emeplado: {
+      grupo_sanguineo_empleado: {
         type: String,
       },
       eps_empleado: {
