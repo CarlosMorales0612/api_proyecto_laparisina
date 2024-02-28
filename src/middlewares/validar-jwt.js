@@ -9,8 +9,6 @@ const validarJWT = async (req, res = response, next) => {
             msg: 'No hay un token en la petición'
         });
     }
-    console.log(token);
-
 
     try {
 
