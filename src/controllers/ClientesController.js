@@ -43,15 +43,14 @@ async function obtenerClientePorDocumento(req, res) {
   }
 }
 
-// Obtener un cliente por Correo --------------------------------------------------------------------------------------------------------------
-async function obtenerClientePorCorreo(req, res) {
+ async function obtenerClientePorCorreo (req, res) {
   const { correo_cliente } = req.params;
   try {
-    const clientes = await Clientes.findOne({ correo_cliente: correo_cliente });
-    if (!clientes) {
+    const cliente = await Clientes.findOne({ correo_cliente: correo_cliente });
+    if (!cliente) {
       return res.status(404).json({ error: 'Cliente no encontrada.' });
     }
-    res.json(clientes);
+    res.json(cliente);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener el cliente.' });
@@ -342,5 +341,6 @@ module.exports = {
   actualizarCliente,
   cambiarEstadoCliente,
   eliminarCliente,
-  clienteGetexcel
+  clienteGetexcel,
+  obtenerClientePorCorreo
 };
