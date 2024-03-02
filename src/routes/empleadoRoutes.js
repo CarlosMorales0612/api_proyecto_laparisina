@@ -18,6 +18,8 @@ router.get('/empleados', empledoController.obtenerTodosLosEmpleados);
 
 router.get('/domiciliarios', empledoController.obtenerTodosLosDomiciliarios);
 
+router.get('/obtenerEmpleadoPorIdentificacion/:identificacion_empleado', empledoController.obtenerEmpleadoPorIdentificacion);
+
 
 //Ruta Obtener empleado por id
 router.get('/empleados/:id', empledoController.obtenerEmpleadoPorId);

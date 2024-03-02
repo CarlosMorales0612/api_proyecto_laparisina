@@ -49,13 +49,30 @@ async function obtenerEmpleadoPorCorreo(req, res) {
     res.status(500).json({ error: 'Error al obtener el empleado.' });
   }
 }
-
-
+async function obtenerEmpleadoPorIdentificacion(req, res) {
+  const { identificacion_empleado } = req.params;
+  try {
+    const empleado = await Empleado.findOne({ identificacion_empleado: identificacion_empleado });
+    if (!empleado) {
+      return res.status(404).json({ error: 'Empleado no encontrado.' });
+    }
+    res.json(empleado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el empleado.' });
+  }
+}
 //Registrar empleados
 async function crearEmpleado(req, res) {
   
 
-  const { codigo_rotulacion_empleado, nombre_empleado, tipo_contrato_empleado, fecha_inicio_empleado, fecha_vencimiento_contrato_empleado, tipo_documento_empleado, identificacion_empleado, fecha_nacimiento_empleado, edad_empleado, lugar_nacimiento_empleado, direccion_empleado, municipio_domicilio_empleado, estado_civil_empleado, celular_empleado, correo_electronico, alergia_empleado, grupo_sanguineo_emeplado, contacto_emergencia, eps_empleado, pension_empleado, cuenta_bancaria_empleado, area_empleado } = req.body
+  const { codigo_rotulacion_empleado, nombre_empleado, tipo_contrato_empleado, 
+    fecha_inicio_empleado, fecha_vencimiento_contrato_empleado, tipo_documento_empleado, 
+    identificacion_empleado, fecha_nacimiento_empleado, edad_empleado, 
+    lugar_nacimiento_empleado, direccion_empleado, municipio_domicilio_empleado, 
+    estado_civil_empleado, celular_empleado, correo_electronico, alergia_empleado, 
+    grupo_sanguineo_emeplado, contacto_emergencia, eps_empleado, pension_empleado, 
+    cuenta_bancaria_empleado, area_empleado } = req.body
 
   
   //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
@@ -488,5 +505,6 @@ module.exports = {
   obtenerPedidoPorIdDomiciliario,
   obtenerTodosLosDomiciliarios,
   asignarPedidoADomiciliario,
-  domiciliario
+  domiciliario,
+  obtenerEmpleadoPorIdentificacion,
 }
