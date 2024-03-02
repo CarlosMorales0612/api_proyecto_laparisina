@@ -26,7 +26,7 @@ const usuarioSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Roles',
     required: [true, 'El rol es obligatorio'],
-    default: '654a96ebdbe2126f5a74161e'
+    default: '654a96ebdbe2126f5a74161e' //por default sera cliente
   }, // Campo de referencia al esquema de Rol
 
   estado_usuario: {
@@ -38,6 +38,17 @@ const usuarioSchema = new mongoose.Schema({
   resetPasswordExpires: Date,
 
 
+});
+// Middleware para actualizar el rol del usuario antes de guardar
+usuarioSchema.pre('save', function (next) {
+  // Verifica si el rol del usuario es el predeterminado para cliente
+  if (this.rol_usuario.toString() === '654a96ebdbe2126f5a74161e') {
+    // Actualiza el rol a 'ID_DEL_ROL_DE_EMPLEADO' al crear un empleado
+    this.rol_usuario = '654aefc54524da3db0bc3a18';
+  }
+
+  // Continúa con el proceso de guardar
+  next();
 });
 
 usuarioSchema.methods.toJSON = function () {

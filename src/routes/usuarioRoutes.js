@@ -7,7 +7,7 @@ const { validarCampos, validarJWT, permiso_usuarios, tieneRol } = require('../mi
 
 
 // Ruta para obtener todos los usuarios
-router.get('/usuarios', [validarJWT, permiso_usuarios], UsuarioController.getAllUsuarios);
+router.get('/usuarios', [], UsuarioController.getAllUsuarios);
 
 // Ruta para obtener un usuario por ID
 router.get('/usuarios/:id', UsuarioController.getUsuarioById);
