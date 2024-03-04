@@ -39,25 +39,13 @@ async function getUsuarioById(req, res) {
 }
 
 
-// Obtener todos los domiciliarios
-async function obtenerTodosLosDomiciliarios(req, res) {
-  try {
-    // Filtrar usuarios por rol igual a "Domiciliarios"
-    const usuarios = await Usuario.find({ 'rol_usuario': '656126cb933d1fae687598fd' });
-    res.json(usuarios);
-  } catch (error) {
-    res.status(500).json({ error: "Error al obtener los Usuarios." });
-  }
-}
-
-
 async function createUsuario(req, res) {
   const { nombre_usuario, correo_electronico, contrasena_usuario, rol_usuario, estado_usuario } = req.body;
   try {
 
     const usuario = new Usuario({ nombre_usuario, correo_electronico, contrasena_usuario, rol_usuario, estado_usuario });
 
-    const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,24}$/;
+    const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,25}$/;
     if (!letrasExpReg.test(nombre_usuario) && nombre_usuario !== '') {
       return res.status(400).json({ error: 'El campo nombre de usuario solo permite letras y cada palabra debe comenzar con mayúscula.' });
     }
@@ -120,7 +108,7 @@ const updateUsuario = async (req, res = response) => {
     }
 
     // Actualizar usuario
-    const usuario = await Usuario.findByIdAndUpdate(id, resto);
+    const usuario = await Usuario.findByIdAndUpdate(id, { ...resto, correo_electronico }, { new: true });
 
     res.json(usuario);
   } catch (error) {
@@ -173,5 +161,4 @@ module.exports = {
   createUsuario,
   updateUsuario,
   cambiarEstadoUsuario,
-  obtenerTodosLosDomiciliarios,
 };

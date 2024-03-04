@@ -26,13 +26,12 @@ const usuarioSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Roles',
     required: [true, 'El rol es obligatorio'],
-    default: '654a96ebdbe2126f5a74161e'
   }, // Campo de referencia al esquema de Rol
 
   estado_usuario: {
     type: Boolean,
     required: [true, 'El estado es obligatorio'],
-    default: true,
+    default: true
   },
   resetPasswordToken: String, // Nuevo campo para el token de restablecimiento
   resetPasswordExpires: Date,

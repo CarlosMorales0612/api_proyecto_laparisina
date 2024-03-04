@@ -25,3 +25,5 @@ router.put('/categoria-estado/:id',[validarJWT, permiso_categorias], CategoriaCo
 
 
 module.exports = router;
+
+
