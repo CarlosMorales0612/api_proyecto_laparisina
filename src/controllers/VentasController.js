@@ -61,11 +61,9 @@ const ventasGetExcel = async (req, res = response) => {
       'Subtotal Venta',
       'Método de Pago',
       'Valor Domicilio',
-      'Correo Domiciliario',
       'NIT Empresa Cliente',
       'Nombre Jurídico',
-      'Aumento Empresa',
-      'Nombre Domiciliario'
+      'Aumento Empresa'
     ];
     worksheet.addRow(columnas);
 
@@ -86,11 +84,9 @@ const ventasGetExcel = async (req, res = response) => {
         venta.subtotal_venta,
         venta.metodo_pago,
         venta.valor_domicilio,
-        venta.correo_domiciliario,
         venta.nit_empresa_cliente,
         venta.nombre_juridico,
-        venta.aumento_empresa,
-        venta.nombre_domiciliario,
+        venta.aumento_empresa
       ];
 
       worksheet.addRow(datosVenta);
