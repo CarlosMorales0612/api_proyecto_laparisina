@@ -232,7 +232,7 @@ async function cambiarEstadoCategoria(req, res) {
   const { id } = req.params;
 
   try {
-    // Paso 1: Obtener el nombre de la categoría
+    //Obtener el nombre de la categoría
     const verificarEstado = await CategoriaProducto.findById(id);
 
     if (!verificarEstado) {
@@ -242,18 +242,18 @@ async function cambiarEstadoCategoria(req, res) {
     const nombreCategoria = verificarEstado.nombre_categoria_producto;
     const nuevoEstadoCategoria = !verificarEstado.estado_categoria_producto;
 
-    // Paso 2: Buscar productos con el mismo nombre_categoria_producto
+    //Buscar productos con el mismo nombre_categoria_producto
     const productosRelacionados = await Producto.find({
       nombre_categoria_producto: nombreCategoria,
     });
 
-    // Paso 3: Actualizar el estado de los productos encontrados
+    //Actualizar el estado de los productos encontrados
     await Producto.updateMany(
       { nombre_categoria_producto: nombreCategoria },
       { $set: { estado_producto: nuevoEstadoCategoria } }
     );
 
-    // Cambiar el estado de la categoría
+    //Cambiar el estado de la categoría
     const categoria = await CategoriaProducto.findByIdAndUpdate(
       id,
       { $set: { estado_categoria_producto: nuevoEstadoCategoria } },
