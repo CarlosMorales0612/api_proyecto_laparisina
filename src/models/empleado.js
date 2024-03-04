@@ -115,10 +115,20 @@ const empleadoSchema = new mongoose.Schema({
     unique: [true, 'la cuenta bancaria del empleado:{VALUE} ya existe'],
     required: [true, 'La cuenta bancaria es requerido'],
   },
+  banco_cuenta: {
+    type: String,
+   
+  },
+  tipo_cuenta: {
+    type: String,
+   
+  },
   area_empleado: {
     type: String,
     required: [true, 'El area empleado es requerido'],
   },
+  area_empleado_produccion: {
+    type: String,},
 
   DetalleEmpleado: [
     {
@@ -197,6 +207,15 @@ const empleadoSchema = new mongoose.Schema({
         unique: [true, 'la cuenta bancaria del empleado:{VALUE} ya existe'],
         required: [true, 'La cuenta bancaria es requerido'],
       },
+      banco_cuenta: {
+        type: String,
+       
+      },
+      tipo_cuenta: {
+        type: String,
+       
+      },
+      
       area_empleado: {
         type: String,
         required: [true, 'El area empleado es requerido'],
