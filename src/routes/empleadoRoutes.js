@@ -36,9 +36,12 @@ router.delete('/empleados/:id', empledoController.eliminarEmpleado);
 
 router.get('/empleados/pedidos/:id', empledoController.obtenerPedidoPorIdDomiciliario);
 
-router.post('/empleados/asignar-pedido', empledoController.asignarPedidoADomiciliario);
+// Ruta para asignar un pedido a un domiciliario
+router.post('/empleados/asignar-pedido', empledoController.asignarPedidoDomiciliario);
+
 
 router.get('/empleado/:correo', empledoController.domiciliario)
+
 
 
 module.exports = router;

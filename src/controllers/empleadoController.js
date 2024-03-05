@@ -93,7 +93,7 @@ async function crearEmpleado(req, res) {
   const edadExpReg = /[0-9]$/;
   const longitudMaximaEdad = 3;
 
-  const direccionExpReg = /^[A-Za-z0-9\s,.'-*!]+$/;
+  //const direccionExpReg = /^[A-Za-z0-9\s,.'-*!]+$/;
   // Expresión regular para validar el correo
   const correoExpReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -197,9 +197,9 @@ async function crearEmpleado(req, res) {
   if (edad_empleado.length > longitudMaximaEdad) {
     return res.status(400).json({ error: 'El campo código del empleado debe tener máximo 3 caracteres.' });
   }
-  if (!direccionExpReg.test(direccion_empleado)) {
-    return res.status(400).json({ error: 'Opción de direccón invalida.' });
-  }
+  // if (!direccionExpReg.test(direccion_empleado)) {
+  //   return res.status(400).json({ error: 'Opción de direccón invalida.' });
+  // }
   if (!numerosExpReg.test(celular_empleado)) {
     return res.status(400).json({ error: 'El campo celular del empleado solo   permite numeros, sin ningun signo.' });
   }
@@ -418,7 +418,7 @@ async function obtenerPedidoPorIdDomiciliario(req, res) {
     if (!domiciliario || domiciliario.area_empleado !== 'Domiciliario') {
       return res.status(404).json({ error: 'Domiciliario no encontrado.' });
     }
-
+  
     // Buscar el pedido asignado al domiciliario por su ID
     const pedido = await Pedido.findOne({ empleado_id: domiciliario._id });
 
@@ -444,7 +444,7 @@ async function obtenerTodosLosDomiciliarios(req, res) {
   }
 }
 
-async function asignarPedidoADomiciliario(req, res) {
+async function asignarPedidoDomiciliario(req, res) {
   const { id_pedido, id_empleado_domiciliario } = req.body;
 
   try {
@@ -504,7 +504,7 @@ module.exports = {
   eliminarEmpleado,
   obtenerPedidoPorIdDomiciliario,
   obtenerTodosLosDomiciliarios,
-  asignarPedidoADomiciliario,
+  asignarPedidoDomiciliario,
   domiciliario,
   obtenerEmpleadoPorIdentificacion,
 }
