@@ -40,7 +40,10 @@ router.get('/empleados/pedidos/:id', empledoController.obtenerPedidoPorIdDomicil
 router.post('/empleados/asignar-pedido', empledoController.asignarPedidoDomiciliario);
 
 
-router.get('/empleado/:correo', empledoController.domiciliario)
+router.get('/empleado/:correo', empledoController.domiciliario);
+
+router.get('/consultar-empleado/:correo_electronico', empledoController.obtenerEmpleadoPorCorreo)
+
 
 
 
