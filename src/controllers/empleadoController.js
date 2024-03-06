@@ -92,11 +92,7 @@ async function crearEmpleado(req, res) {
   const edadExpReg = /[0-9]$/;
   const longitudMaximaEdad = 3;
 
-<<<<<<< HEAD
-  const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/
-=======
   //const direccionExpReg = /^[A-Za-z0-9\s,.'-*!]+$/;
->>>>>>> efd9509da4a7326a85cc5f659f32f3d62d5e759a
   // Expresión regular para validar el correo
   const correoExpReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
