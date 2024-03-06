@@ -72,9 +72,8 @@ async function crearEmpleado(req, res) {
     lugar_nacimiento_empleado, direccion_empleado, municipio_domicilio_empleado, 
     estado_civil_empleado, celular_empleado, correo_electronico, alergia_empleado, 
     grupo_sanguineo_emeplado, contacto_emergencia, eps_empleado, pension_empleado, 
-    cuenta_bancaria_empleado, area_empleado } = req.body
+    cuenta_bancaria_empleado, area_empleado, area_empleado_produccion } = req.body
 
-  
   //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
   const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
   const longitudMaximaLetras = 20;
@@ -93,7 +92,7 @@ async function crearEmpleado(req, res) {
   const edadExpReg = /[0-9]$/;
   const longitudMaximaEdad = 3;
 
-  const direccionExpReg = /^[A-Za-z0-9\s,.'-*!]+$/;
+  const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/
   // Expresión regular para validar el correo
   const correoExpReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -136,12 +135,12 @@ async function crearEmpleado(req, res) {
   if (estado_civil_empleado.length > longitudMaximaLetras) {
     return res.status(400).json({ error: 'El campo estado civil empleado debe tener máximo 20 caracteres.' });
   }
-  if (!letrasExpReg.test(alergia_empleado)) {
-    return res.status(400).json({ error: 'El campo alergia empleado solo permite letras.' });
-  }
-  if (alergia_empleado.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo alergia empleado debe tener máximo 20 caracteres.' });
-  }
+  // if (!letrasExpReg.test(alergia_empleado)) {
+  //   return res.status(400).json({ error: 'El campo alergia empleado solo permite letras.' });
+  // }
+  // if (alergia_empleado.length > longitudMaximaLetras) {
+  //   return res.status(400).json({ error: 'El campo alergia empleado debe tener máximo 20 caracteres.' });
+  // }
   // if (!letrasExpReg.test(eps_empleado)) {
   //   return res.status(400).json({ error: 'El campo eps empleado solo permite letras.' });
   // }
@@ -174,12 +173,12 @@ async function crearEmpleado(req, res) {
   // if (codigo_rotulacion_empleado.length > longitudMaximaCodigo) {
   //   return res.status(400).json({ error: 'El campo código del empleado debe tener máximo 4 caracteres.' });
   // }
-  if (!numerosExpReg.test(identificacion_empleado)) {
-    return res.status(400).json({ error: 'El campo cedula del empleado solo   permite numeros, sin ningun signo.' });
-  }
-  if (identificacion_empleado.length < longitudMinimaNumeros || identificacion_empleado.length > longitudMaximaNumeros) {
-    return res.status(400).json({ error: 'El campo cédula del empleado debe tener entre 6 y 10 caracteres.' });
-  }
+  // if (!numerosExpReg.test(identificacion_empleado)) {
+  //   return res.status(400).json({ error: 'El campo cedula del empleado solo   permite numeros, sin ningun signo.' });
+  // }
+  // if (identificacion_empleado.length < longitudMinimaNumeros || identificacion_empleado.length > longitudMaximaNumeros) {
+  //   return res.status(400).json({ error: 'El campo cédula del empleado debe tener entre 6 y 10 caracteres.' });
+  // }
 
   //Se crean dos variables para poder comparar la fecha de nacimiento, que no sea mayor a la fecha actual y que la edad del empleado sea por lo mínimo 18 años, comparando su fecha de nacimiento
   var fecha_actual = new Date();
@@ -197,9 +196,9 @@ async function crearEmpleado(req, res) {
   if (edad_empleado.length > longitudMaximaEdad) {
     return res.status(400).json({ error: 'El campo código del empleado debe tener máximo 3 caracteres.' });
   }
-  if (!direccionExpReg.test(direccion_empleado)) {
-    return res.status(400).json({ error: 'Opción de direccón invalida.' });
-  }
+  // if (!direccionExpReg.test(direccion_empleado)) {
+  //   return res.status(400).json({ error: 'Opción de direccón invalida.' });
+  // }
   if (!numerosExpReg.test(celular_empleado)) {
     return res.status(400).json({ error: 'El campo celular del empleado solo   permite numeros, sin ningun signo.' });
   }
