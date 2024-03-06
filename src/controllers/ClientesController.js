@@ -2,6 +2,7 @@ const exceljs = require('exceljs');
 const mongoose = require('mongoose');
 const Clientes = require('../models/ClientesModel');
 const ExcelJS = require('exceljs');
+const Usuario = require('../models/Usuario');
 
 
 // Obtener todos los clientes -------------------------------------------------------------------------------------------------------------
@@ -64,7 +65,7 @@ async function obtenerClientePorCorreo(req, res) {
 
   //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
   const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,100}$/;
-  const longitudMaximaLetras = 20;
+  const longitudMaximaLetras = 100;
 
 
 
@@ -76,7 +77,7 @@ async function obtenerClientePorCorreo(req, res) {
   const correoExpReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
   //Expresión regular para validar la dirección 
-  const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/;
+  const direccionExpReg = /^[A-Za-z0-9\s,.'#-]+$/;
 
 
  //Validación de los campos validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
@@ -162,7 +163,7 @@ async function actualizarCliente(req, res) {
    
    //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
    const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,100}$/;
-   const longitudMaximaLetras = 20;
+   const longitudMaximaLetras = 100;
 
    // Expresión regular para validar documento, celular
    const numerosExpReg = /^[0-9]{7,10}$/;
@@ -172,7 +173,7 @@ async function actualizarCliente(req, res) {
    const correoExpReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
  
    //Expresión regular para validar la dirección 
-   const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/;
+   const direccionExpReg = /^[A-Za-z0-9\s,.'#-]+$/;
  
   
   //Validación de los campos validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
@@ -257,27 +258,41 @@ async function eliminarCliente(req, res) {
     res.status(500).json({ error: 'Error al eliminar la cliente.' });
   }
 }
-// Cambiar el estado de un cliente por ID ------------------------------------------------------------------------------------------------------------
+// Cambiar el estado de un cliente por ID------------------------------------------------------------------------------------------------------------
 async function cambiarEstadoCliente(req, res) {
   const { id } = req.params;
+
   try {
-    const verificarEstado = await Clientes.findById(id)
+    const verificarEstado = await Clientes.findById(id);
 
     if (!verificarEstado) {
       return res.status(404).json({ error: 'Cliente no encontrado.' });
-    } else {
-      const estado = verificarEstado.estado_cliente
-
-      const clientes = await Clientes.findByIdAndUpdate(
-        id,
-        { $set: { estado_cliente: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
-        { new: true }
-      );
     }
 
-    res.status(200).json({ message: 'Estado del cliente ha cambiado exitosamente.' });
+    const correoCliente = verificarEstado.correo_cliente;
+    const nuevoEstadoCliente = !verificarEstado.estado_cliente;
+
+    //Buscar usuario con el mismo correo
+    const correoRelacionado = await Usuario.find({
+        correo_electronico: correoCliente,
+    });
+
+    //Actualizar el estado del usuario encontrado
+    await Usuario.findOneAndUpdate(
+      { correo_electronico: correoCliente},
+      { $set: { estado_usuario: nuevoEstadoCliente } }
+    );
+
+    //Cambiar el estado del cliente
+    const clientes = await Clientes.findByIdAndUpdate(
+      id,
+      { $set: { estado_cliente: nuevoEstadoCliente } },
+      { new: true }
+    );
+
+    res.status(200).json({ message: 'Estado del cliente cambiado exitosamente.' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al cambiar el estado del cliente.' });
+    res.status(500).json({ error: 'Error al cambiar el estado del cliente y su usuario.' });
   }
 }
 

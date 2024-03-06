@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 //Importacion de los modelos 
-const Roles = require('../models/RolesModel')
+const Roles = require('../models/RolesModel');
+const Usuario = require('../models/Usuario');
 
 // Obtener todos los roles -------------------------------------------------------------------------------------------------------------
 async function obtenerTodosLosRoles(req, res) {
@@ -114,26 +115,63 @@ async function eliminarRol(req, res) {
 }
 
 // Cambiar el estado de un rol por ID ------------------------------------------------------------------------------------------------------------
+// async function cambiarEstadoRol(req, res) {
+//   const { id } = req.params;
+//   try {
+//     const verificarEstado = await Roles.findById(id)
+
+//     if (!verificarEstado) {
+//       return res.status(404).json({ error: 'Rol no encontrado.' });
+//     } else {
+//       const estado = verificarEstado.estado_rol
+
+//       const roles = await Roles.findByIdAndUpdate(
+//         id,
+//         { $set: { estado_rol: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
+//         { new: true }
+//       );
+//     }
+
+//     res.status(200).json({ message: 'Estado del rol ha cambiado exitosamente.' });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error al cambiar el estado del rol.' });
+//   }
+// }
+
 async function cambiarEstadoRol(req, res) {
   const { id } = req.params;
+
   try {
-    const verificarEstado = await Roles.findById(id)
+    // Obtener el rol
+    const verificarEstado = await Roles.findById(id);
 
     if (!verificarEstado) {
       return res.status(404).json({ error: 'Rol no encontrado.' });
-    } else {
-      const estado = verificarEstado.estado_rol
-
-      const roles = await Roles.findByIdAndUpdate(
-        id,
-        { $set: { estado_rol: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
-        { new: true }
-      );
     }
 
-    res.status(200).json({ message: 'Estado del rol ha cambiado exitosamente.' });
+    const idRol = verificarEstado._id;
+    const nuevoEstadoRol = !verificarEstado.estado_rol;
+
+    // Actualizar el estado de los usuarios asociados al rol
+    const usuariosRelacionados = await Usuario.find({ rol_usuario: idRol });
+
+    await Promise.all(usuariosRelacionados.map(async usuario => {
+      await Usuario.findByIdAndUpdate(
+        { _id: usuario._id },
+        { $set: { estado_usuario: nuevoEstadoRol } }
+      );
+    }));
+
+    // Cambiar el estado del rol
+    const roles = await Roles.findByIdAndUpdate(
+      id,
+      { $set: { estado_rol: nuevoEstadoRol } },
+      { new: true }
+    );
+
+    res.status(200).json({ message: 'Estado del rol y sus usuarios cambiado exitosamente.' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al cambiar el estado del rol.' });
+    res.status(500).json({ error: 'Error al cambiar el estado del rol y sus usuarios.' });
   }
 }
 
