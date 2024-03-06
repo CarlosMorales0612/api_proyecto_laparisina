@@ -46,10 +46,11 @@ const pedidoSchema = new mongoose.Schema({
   fecha_pedido_tomado: {
     type: String,
   },
+
   estado_pedido: {
     type: String,
     required: true,
-    enum: ['Pendiente','Tomado','En produccion', 'En preparacion', 'Terminado', 'Enviado', 'Entregado', 'Anulado'],
+    enum: ['Pendiente','Tomado','En producción', 'En preparación', 'Terminado', 'Enviado', 'Entregado', 'Anulado'],
     default: 'Pendiente'
   },
   precio_total_venta: {

@@ -32,7 +32,7 @@ const empleadoSchema = new mongoose.Schema({
 
   fecha_vencimiento_contrato_empleado: {
     type: Date,
-    required: true
+    
   },
 
   tipo_documento_empleado: {
@@ -50,7 +50,7 @@ const empleadoSchema = new mongoose.Schema({
   },
 
   edad_empleado: {
-    type: Number,
+    type: String,
     required: [true, 'La edad empleado es requerido'],
   },
   lugar_nacimiento_empleado: {
@@ -74,25 +74,26 @@ const empleadoSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El celular empleado es requerido'],
   },
-  correo_empleado: {
+  correo_electronico: {
     type: String,
     unique: [true, 'El correo empleado:{VALUE} ya existe'],
     required: [true, 'El correo empleado es requerido'],
   },
-  alergia_empleado: {
-    type: String,
-    required: [true, 'El campo alergia es requerido'],
-  },
+  alergia_empleado: { type: String, minlength: 3, maxlength: 255 },
+
   grupo_sanguineo_empleado: {
     type: String,
     enum: ['AB+', 'AB-', 'A+', 'A-', 'B+', 'B-', 'O+', 'O-'],
-    required: true
+    // required: true
   },
   contacto_emergencia: [{
     nombre_contacto_emergencia: {
-      type: String,
-      match: /^[a-zA-Z\s]*$/,
-    },
+    type: String,
+    required: true,
+    match: /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s'-]+$/,
+    minlength: 3,
+    maxlength: 50,
+  },
     parentesco_empleado: {
       type: String,
       match: /^[a-zA-Z\s]*$/,
@@ -115,95 +116,116 @@ const empleadoSchema = new mongoose.Schema({
     unique: [true, 'la cuenta bancaria del empleado:{VALUE} ya existe'],
     required: [true, 'La cuenta bancaria es requerido'],
   },
+  banco_cuenta: {
+    type: String,
+   
+  },
+  tipo_cuenta: {
+    type: String,
+   
+  },
   area_empleado: {
     type: String,
     required: [true, 'El area empleado es requerido'],
   },
+  area_empleado_produccion: {
+    type: String,
+   
+  },
 
-  DetalleEmpleado: [
-    {
-      tipo_contrato_empleado: {
-        type: String,
-        required: [true, 'El tipo contrato empleado es requerido'],
+  // DetalleEmpleado: [
+  //   {
+  //     tipo_contrato_empleado: {
+  //       type: String,
+  //       required: [true, 'El tipo contrato empleado es requerido'],
 
-      },
-      fecha_inicio_empleado: {
-        type: Date,
-        required: true
-      },
+  //     },
+  //     fecha_inicio_empleado: {
+  //       type: Date,
+  //       required: true
+  //     },
 
-      fecha_vencimiento_contrato_empleado: {
-        type: Date,
-        required: true
-      },
-      identificacion_empleado: {
-        type: String,
-        unique: [true, 'La identicicacion empleado:{VALUE} ya existe'],
-        required: [true, 'La identificacion empleado es requerido'],
-      },
-      fecha_nacimiento_empleado: {
-        type: Date,
-        required: [true, 'La fecha nacimiento empleado es requerido'],
-      },
+  //     fecha_vencimiento_contrato_empleado: {
+  //       type: Date,
+  //       required: true
+  //     },
+  //     identificacion_empleado: {
+  //       type: String,
+  //       unique: [true, 'La identicicacion empleado:{VALUE} ya existe'],
+  //       required: [true, 'La identificacion empleado es requerido'],
+  //     },
+  //     fecha_nacimiento_empleado: {
+  //       type: Date,
+  //       required: [true, 'La fecha nacimiento empleado es requerido'],
+  //     },
 
-      edad_empleado: {
-        type: Number,
-        required: [true, 'La edad empleado es requerido'],
-      },
-      lugar_nacimiento_empleado: {
-        type: String,
-        required: [true, 'El lugar nacimiento empleado es requerido'],
-      },
-      direccion_empleado: {
-        type: String,
-        required: [true, 'La direccion empleado es requerido'],
+  //     edad_empleado: {
+  //       type: String,
+  //       required: [true, 'La edad empleado es requerido'],
+  //     },
+  //     lugar_nacimiento_empleado: {
+  //       type: String,
+  //       required: [true, 'El lugar nacimiento empleado es requerido'],
+  //     },
+  //     direccion_empleado: {
+  //       type: String,
+  //       required: [true, 'La direccion empleado es requerido'],
 
-      },
-      municipio_domicilio_empleado: {
-        type: String,
-        required: [true, 'El municipio domicilio es requerido'],
-      },
-      estado_civil_empleado: {
-        type: String,
-        required: [true, 'El estado civil del empleado es requerido'],
-        enum: ['Soltero', 'Casado', 'Convivencia', 'Viudo', 'Separado', 'Divorciado']
-      },
-      celular_empleado: {
-        type: String,
-        required: [true, 'El celular empleado es requerido'],
-      },
-      correo_empleado: {
-        type: String,
-        unique: [true, 'El correo empleado:{VALUE} ya existe'],
-        required: [true, 'El correo empleado es requerido'],
-      },
-      alergia_empleado: {
-        type: String,
-        required: [true, 'El campo alergia es requerido'],
-      },
-      grupo_sanguineo_emeplado: {
-        type: String,
-      },
-      eps_empleado: {
-        type: String,
-        required: [true, 'La eps empleado es requerido'],
-      },
-      pension_empleado: {
-        type: String,
-        required: [true, 'El fondo pension empleado es requerido'],
-      },
-      cuenta_bancaria_empleado: {
-        type: String,
-        unique: [true, 'la cuenta bancaria del empleado:{VALUE} ya existe'],
-        required: [true, 'La cuenta bancaria es requerido'],
-      },
-      area_empleado: {
-        type: String,
-        required: [true, 'El area empleado es requerido'],
-      },
+  //     },
+  //     municipio_domicilio_empleado: {
+  //       type: String,
+  //       required: [true, 'El municipio domicilio es requerido'],
+  //     },
+  //     estado_civil_empleado: {
+  //       type: String,
+  //       required: [true, 'El estado civil del empleado es requerido'],
+  //       enum: ['Soltero', 'Casado', 'Convivencia', 'Viudo', 'Separado', 'Divorciado']
+  //     },
+  //     celular_empleado: {
+  //       type: String,
+  //       required: [true, 'El celular empleado es requerido'],
+  //     },
+  //     correo_electronico: {
+  //       type: String,
+  //       unique: [true, 'El correo empleado:{VALUE} ya existe'],
+  //       required: [true, 'El correo empleado es requerido'],
+  //     },
+  //     alergia_empleado: {
+  //       type: String,
+  //       required: [true, 'El campo alergia es requerido'],
+  //     },
+  //     grupo_sanguineo_empleado: {
+  //       type: String,
+  //     },
+  //     eps_empleado: {
+  //       type: String,
+  //       required: [true, 'La eps empleado es requerido'],
+  //     },
+  //     pension_empleado: {
+  //       type: String,
+  //       required: [true, 'El fondo pension empleado es requerido'],
+  //     },
+  //     cuenta_bancaria_empleado: {
+  //       type: String,
+  //       unique: [true, 'la cuenta bancaria del empleado:{VALUE} ya existe'],
+  //       required: [true, 'La cuenta bancaria es requerido'],
+  //     },
+  //     banco_cuenta: {
+  //       type: String,
+       
+  //     },
+  //     tipo_cuenta: {
+  //       type: String,
+       
+  //     },
+      
+  //     area_empleado: {
+  //       type: String,
+  //       required: [true, 'El area empleado es requerido'],
+  //     },
 
-    }
-  ]
+  //   }
+  // ]
 });
 
 const empleado = mongoose.model('empleado', empleadoSchema);

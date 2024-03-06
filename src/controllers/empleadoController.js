@@ -37,9 +37,9 @@ async function obtenerEmpleadoPorId(req, res) {
 }
 
 async function obtenerEmpleadoPorCorreo(req, res) {
-  const { correo_empleado } = req.params;
+  const { correo_electronico } = req.params;
   try {
-    const empleado = await Empleado.findOne({ correo_empleado: correo_empleado });
+    const empleado = await Empleado.findOne({ correo_electronico: correo_electronico });
     if (!empleado) {
       return res.status(404).json({ error: 'Empleado no encontrado.' });
     }
@@ -49,12 +49,30 @@ async function obtenerEmpleadoPorCorreo(req, res) {
     res.status(500).json({ error: 'Error al obtener el empleado.' });
   }
 }
-
-
+async function obtenerEmpleadoPorIdentificacion(req, res) {
+  const { identificacion_empleado } = req.params;
+  try {
+    const empleado = await Empleado.findOne({ identificacion_empleado: identificacion_empleado });
+    if (!empleado) {
+      return res.status(404).json({ error: 'Empleado no encontrado.' });
+    }
+    res.json(empleado);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el empleado.' });
+  }
+}
 //Registrar empleados
 async function crearEmpleado(req, res) {
+  
 
-  const { codigo_rotulacion_empleado, nombre_empleado, tipo_contrato_empleado, fecha_inicio_empleado, fecha_vencimiento_contrato_empleado, tipo_documento_empleado, identificacion_empleado, fecha_nacimiento_empleado, edad_empleado, lugar_nacimiento_empleado, direccion_empleado, municipio_domicilio_empleado, estado_civil_empleado, celular_empleado, correo_empleado, alergia_empleado, grupo_sanguineo_emeplado, contacto_emergencia, eps_empleado, pension_empleado, cuenta_bancaria_empleado, area_empleado } = req.body
+  const { codigo_rotulacion_empleado, nombre_empleado, tipo_contrato_empleado, 
+    fecha_inicio_empleado, fecha_vencimiento_contrato_empleado, tipo_documento_empleado, 
+    identificacion_empleado, fecha_nacimiento_empleado, edad_empleado, 
+    lugar_nacimiento_empleado, direccion_empleado, municipio_domicilio_empleado, 
+    estado_civil_empleado, celular_empleado, correo_electronico, alergia_empleado, 
+    grupo_sanguineo_emeplado, contacto_emergencia, eps_empleado, pension_empleado, 
+    cuenta_bancaria_empleado, area_empleado, area_empleado_produccion } = req.body
 
   //Expresión regular para validar el tipocliente, nombrecontacto, nombrejuridico, barrio, ciudad.
   const letrasExpReg = /^[A-Za-zÑñÁáÉéÍíÓóÚú\s]{1,20}$/;
@@ -74,18 +92,22 @@ async function crearEmpleado(req, res) {
   const edadExpReg = /[0-9]$/;
   const longitudMaximaEdad = 3;
 
-  const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/;
+<<<<<<< HEAD
+  const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/
+=======
+  //const direccionExpReg = /^[A-Za-z0-9\s,.'-*!]+$/;
+>>>>>>> efd9509da4a7326a85cc5f659f32f3d62d5e759a
   // Expresión regular para validar el correo
   const correoExpReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-  const grupoSanguineoExpReg = /^[a-zA-Z\s]*$/;
+  // const grupoSanguineoExpReg = /^[a-zA-Z\s\+\-]*$/;
 
-  if (!letrasExpReg.test(nombre_empleado)) {
-    return res.status(400).json({ error: 'El campo nombre empleado solo   permite letras.' });
-  }
-  if (nombre_empleado.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo nombre empleado debe tener máximo 20 caracteres.' });
-  }
+  // if (!letrasExpReg.test(nombre_empleado)) {
+  //   return res.status(400).json({ error: 'El campo nombre empleado solo permite letras.' });
+  // }
+  // if (nombre_empleado.length > longitudMaximaLetras) {
+  //   return res.status(400).json({ error: 'El campo nombre empleado debe tener máximo 20 caracteres.' });
+  // }
   // if (!letrasExpReg.test(tipo_contrato_empleado)){
   //     return res.status(400).json({ error: 'El campo tipo contrato empleado solo permite letras.' });
   //   }
@@ -117,18 +139,18 @@ async function crearEmpleado(req, res) {
   if (estado_civil_empleado.length > longitudMaximaLetras) {
     return res.status(400).json({ error: 'El campo estado civil empleado debe tener máximo 20 caracteres.' });
   }
-  if (!letrasExpReg.test(alergia_empleado)) {
-    return res.status(400).json({ error: 'El campo alergia empleado solo permite letras.' });
-  }
-  if (alergia_empleado.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo alergia empleado debe tener máximo 20 caracteres.' });
-  }
-  if (!letrasExpReg.test(eps_empleado)) {
-    return res.status(400).json({ error: 'El campo eps empleado solo permite letras.' });
-  }
-  if (eps_empleado.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo campo eps empleado debe tener máximo 20 caracteres.' });
-  }
+  // if (!letrasExpReg.test(alergia_empleado)) {
+  //   return res.status(400).json({ error: 'El campo alergia empleado solo permite letras.' });
+  // }
+  // if (alergia_empleado.length > longitudMaximaLetras) {
+  //   return res.status(400).json({ error: 'El campo alergia empleado debe tener máximo 20 caracteres.' });
+  // }
+  // if (!letrasExpReg.test(eps_empleado)) {
+  //   return res.status(400).json({ error: 'El campo eps empleado solo permite letras.' });
+  // }
+  // if (eps_empleado.length > longitudMaximaLetras) {
+  //   return res.status(400).json({ error: 'El campo campo eps empleado debe tener máximo 20 caracteres.' });
+  // }
   if (!letrasExpReg.test(pension_empleado)) {
     return res.status(400).json({ error: 'El campo pension empleado solo permite letras.' });
   }
@@ -142,25 +164,25 @@ async function crearEmpleado(req, res) {
     return res.status(400).json({ error: 'El campo area empleado debe tener máximo 20 caracteres.' });
   }
 
-  if (!cuentaExpReg.test(cuenta_bancaria_empleado)) {
-    return res.status(400).json({ error: 'El campo cuenta empleado solo permite letras.' });
-  }
+  // if (!cuentaExpReg.test(cuenta_bancaria_empleado)) {
+  //   return res.status(400).json({ error: 'El campo cuenta empleado solo permite letras.' });
+  // }
 
-  if (cuenta_bancaria_empleado.length > longitudMaximaCuenta) {
-    return res.status(400).json({ error: 'El campo cuenta empleado debe tener máximo 20 caracteres.' });
-  }
-  if (!codigoExpReg.test(codigo_rotulacion_empleado)) {
-    return res.status(400).json({ error: 'El campo código del empleado solo   permite numeros.' });
-  }
-  if (codigo_rotulacion_empleado.length > longitudMaximaCodigo) {
-    return res.status(400).json({ error: 'El campo código del empleado debe tener máximo 4 caracteres.' });
-  }
-  if (!numerosExpReg.test(identificacion_empleado)) {
-    return res.status(400).json({ error: 'El campo cedula del empleado solo   permite numeros, sin ningun signo.' });
-  }
-  if (identificacion_empleado.length < longitudMinimaNumeros || identificacion_empleado.length > longitudMaximaNumeros) {
-    return res.status(400).json({ error: 'El campo cédula del empleado debe tener entre 6 y 10 caracteres.' });
-  }
+  // if (cuenta_bancaria_empleado.length > longitudMaximaCuenta) {
+  //   return res.status(400).json({ error: 'El campo cuenta empleado debe tener máximo 20 caracteres.' });
+  // }
+  // if (!codigoExpReg.test(codigo_rotulacion_empleado)) {
+  //   return res.status(400).json({ error: 'El campo código del empleado solo   permite numeros.' });
+  // }
+  // if (codigo_rotulacion_empleado.length > longitudMaximaCodigo) {
+  //   return res.status(400).json({ error: 'El campo código del empleado debe tener máximo 4 caracteres.' });
+  // }
+  // if (!numerosExpReg.test(identificacion_empleado)) {
+  //   return res.status(400).json({ error: 'El campo cedula del empleado solo   permite numeros, sin ningun signo.' });
+  // }
+  // if (identificacion_empleado.length < longitudMinimaNumeros || identificacion_empleado.length > longitudMaximaNumeros) {
+  //   return res.status(400).json({ error: 'El campo cédula del empleado debe tener entre 6 y 10 caracteres.' });
+  // }
 
   //Se crean dos variables para poder comparar la fecha de nacimiento, que no sea mayor a la fecha actual y que la edad del empleado sea por lo mínimo 18 años, comparando su fecha de nacimiento
   var fecha_actual = new Date();
@@ -178,23 +200,23 @@ async function crearEmpleado(req, res) {
   if (edad_empleado.length > longitudMaximaEdad) {
     return res.status(400).json({ error: 'El campo código del empleado debe tener máximo 3 caracteres.' });
   }
-  if (!direccionExpReg.test(direccion_empleado)) {
-    return res.status(400).json({ error: 'Opción de direccón invalida.' });
-  }
+  // if (!direccionExpReg.test(direccion_empleado)) {
+  //   return res.status(400).json({ error: 'Opción de direccón invalida.' });
+  // }
   if (!numerosExpReg.test(celular_empleado)) {
     return res.status(400).json({ error: 'El campo celular del empleado solo   permite numeros, sin ningun signo.' });
   }
   if (celular_empleado.length > longitudMaximaNumeros) {
     return res.status(400).json({ error: 'El campo celular del empleado debe tener máximo 10 caracteres.' });
   }
-  if (!correoExpReg.test(correo_empleado)) {
+  if (!correoExpReg.test(correo_electronico)) {
     return res.status(400).json({ error: 'Estructura de correo invalida.' });
   }
 
   //ESTA VALIDACIÓN ES IRRELEVANTE E INÚTIL YA QUE SE HIZO EL CAMBIO Y SE AGREGÓ UN ENUM DIRECTAMENTE EN EL CAMPO: grupo_sanguineo_emeplado
   // //AB+, AB-, A+, A-, B+, B-, O+, O-
-  // if (!grupoSanguineoExpReg.test(grupo_sanguineo_emeplado)) {
-  //   return res.status(400).json({ error: 'Grupo sanguíneo no válido. Debe ser uno de los siguientes: A+, A-, B+, B-, AB+, AB-, O+, O-' });
+  //  if (!grupoSanguineoExpReg.test(grupo_sanguineo_emeplado)) {
+  //    return res.status(400).json({ error: 'Grupo sanguíneo no válido. Debe ser uno de los siguientes: A+, A-, B+, B-, AB+, AB-, O+, O-' });
   // }
 
   const body = req.body //Captura de atributos
@@ -229,7 +251,7 @@ async function crearEmpleado(req, res) {
 //Actualizar empleado
 async function actualizarEmpleado(req, res) {
   const { id } = req.params;
-  const { codigo_rotulacion_empleado, nombre_empleado, tipo_contrato_empleado, fecha_inicio_empleado, fecha_vencimiento_contrato_empleado, tipo_documento_empleado, identificacion_empleado, fecha_nacimiento_empleado, edad_empleado, lugar_nacimiento_empleado, direccion_empleado, municipio_domicilio_empleado, estado_civil_empleado, celular_empleado, correo_empleado, alergia_empleado, grupo_sanguineo_emeplado, contacto_emergencia, eps_empleado, pension_empleado, cuenta_bancaria_empleado, area_empleado } = req.body
+  const { codigo_rotulacion_empleado, nombre_empleado, tipo_contrato_empleado, fecha_inicio_empleado, fecha_vencimiento_contrato_empleado, tipo_documento_empleado, identificacion_empleado, fecha_nacimiento_empleado, edad_empleado, lugar_nacimiento_empleado, direccion_empleado, municipio_domicilio_empleado, estado_civil_empleado, celular_empleado, correo_electronico, alergia_empleado, grupo_sanguineo_emeplado, contacto_emergencia, eps_empleado, pension_empleado, cuenta_bancaria_empleado, area_empleado } = req.body
   // if (!mongoose.Types.ObjectId.isValid(id)) {
   //   return res.status(400).json({ error: 'ID de empleado no válido.' });
   // }
@@ -250,7 +272,7 @@ async function actualizarEmpleado(req, res) {
   const edadExpReg = /[0-9]$/;
   const longitudMaximaEdad = 3;
 
-  const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/;
+  const direccionExpReg = /^[A-Za-z0-9\s,.'-*!]+$/;
   // Expresión regular para validar el correo
   const correoExpReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -399,7 +421,7 @@ async function obtenerPedidoPorIdDomiciliario(req, res) {
     if (!domiciliario || domiciliario.area_empleado !== 'Domiciliario') {
       return res.status(404).json({ error: 'Domiciliario no encontrado.' });
     }
-
+  
     // Buscar el pedido asignado al domiciliario por su ID
     const pedido = await Pedido.findOne({ empleado_id: domiciliario._id });
 
@@ -425,7 +447,7 @@ async function obtenerTodosLosDomiciliarios(req, res) {
   }
 }
 
-async function asignarPedidoADomiciliario(req, res) {
+async function asignarPedidoDomiciliario(req, res) {
   const { id_pedido, id_empleado_domiciliario } = req.body;
 
   try {
@@ -458,7 +480,7 @@ async function asignarPedidoADomiciliario(req, res) {
 async function domiciliario(req, res) {
   const { correo } = req.params;
   try {
-    const usuario = await Empleado.findOne({ correo_empleado: correo });
+    const usuario = await Empleado.findOne({ correo_electronico: correo });
     if (!usuario || usuario.area_empleado !== 'Domiciliario') {
       return res.status(404).json({ error: 'Domiciliario no encontrado.' });
     }
@@ -485,6 +507,7 @@ module.exports = {
   eliminarEmpleado,
   obtenerPedidoPorIdDomiciliario,
   obtenerTodosLosDomiciliarios,
-  asignarPedidoADomiciliario,
-  domiciliario
+  asignarPedidoDomiciliario,
+  domiciliario,
+  obtenerEmpleadoPorIdentificacion,
 }

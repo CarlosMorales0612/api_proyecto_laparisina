@@ -91,7 +91,10 @@ const forgotpassword = async (req, res = response) => {
             from: 'isaacdavidmez79@gmail.com', // Coloca tu correo electrónico
             to: correo_electronico,
             subject: 'Recuperación de contraseña',
-            text: `Hola ${user.correo_electronico}; somos el equipo Parisina, aquí está tu enlace para restablecer la contraseña: http://localhost:4200/#/auth/restaurar-contrasena?token=${token}` //${ngrokUrl}/reset-password?token=${token}
+            text: `Hola ${user.correo_electronico}.
+            Somos el equipo Parisina, recibimos una solicitud para restablecer tu contrseña,
+            aquí está tu enlace para restablecer la contraseña: http://localhost:4200/#/auth/restaurar-contrasena?token=${token}.
+            Tenga en cuenta que este link tiene una duración de una hora` //${ngrokUrl}/reset-password?token=${token}
         };
 
         // Envía el correo electrónico
