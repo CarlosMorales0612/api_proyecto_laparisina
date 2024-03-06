@@ -6,6 +6,7 @@ const { validarJWT, permiso_categorias } = require('../middlewares/index');
 //const upload = multer({dest: 'uploads/'})
 
 // Ruta para obtener todos las categorias
+//router.get('/categorias',[validarJWT, permiso_categorias], CategoriaController.obtenerTodasLasCategorias);
 router.get('/categorias', CategoriaController.obtenerTodasLasCategorias);
 
 // Ruta para obtener una categoria por ID
@@ -25,5 +26,4 @@ router.put('/categoria-estado/:id',[validarJWT, permiso_categorias], CategoriaCo
 
 
 module.exports = router;
-
 

@@ -92,7 +92,11 @@ async function crearEmpleado(req, res) {
   const edadExpReg = /[0-9]$/;
   const longitudMaximaEdad = 3;
 
+<<<<<<< HEAD
   const direccionExpReg = /^[A-Za-z0-9\s,.'-]+$/
+=======
+  //const direccionExpReg = /^[A-Za-z0-9\s,.'-*!]+$/;
+>>>>>>> efd9509da4a7326a85cc5f659f32f3d62d5e759a
   // Expresión regular para validar el correo
   const correoExpReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -417,7 +421,7 @@ async function obtenerPedidoPorIdDomiciliario(req, res) {
     if (!domiciliario || domiciliario.area_empleado !== 'Domiciliario') {
       return res.status(404).json({ error: 'Domiciliario no encontrado.' });
     }
-
+  
     // Buscar el pedido asignado al domiciliario por su ID
     const pedido = await Pedido.findOne({ empleado_id: domiciliario._id });
 
@@ -443,7 +447,7 @@ async function obtenerTodosLosDomiciliarios(req, res) {
   }
 }
 
-async function asignarPedidoADomiciliario(req, res) {
+async function asignarPedidoDomiciliario(req, res) {
   const { id_pedido, id_empleado_domiciliario } = req.body;
 
   try {
@@ -503,7 +507,7 @@ module.exports = {
   eliminarEmpleado,
   obtenerPedidoPorIdDomiciliario,
   obtenerTodosLosDomiciliarios,
-  asignarPedidoADomiciliario,
+  asignarPedidoDomiciliario,
   domiciliario,
   obtenerEmpleadoPorIdentificacion,
 }
