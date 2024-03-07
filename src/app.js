@@ -9,6 +9,7 @@ const pedidoRoutes = require('./routes/pedidoRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const ClientesRoutes = require('./routes/ClientesRoutes');
 const RolesRoutes = require('./routes/RolesRoutes');
+const TransporteRoutes = require('./routes/TransporteRoutes');
 const EmpleadoRoutes = require('./routes/empleadoRoutes');
 const ventasRoutes = require('./routes/ventasRoutes');
 const cors = require('cors');
@@ -20,6 +21,6 @@ app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
 
 // Conectar las rutas
-app.use('/api', authRoutes, usuarioRoutes, EmpleadoRoutes, ClientesRoutes, RolesRoutes, categoriaRoutes, productoRoutes, ordenDeProduccionRoutes, pedidoRoutes, ventasRoutes);
+app.use('/api', authRoutes, usuarioRoutes, EmpleadoRoutes, ClientesRoutes, RolesRoutes, TransporteRoutes,categoriaRoutes, productoRoutes, ordenDeProduccionRoutes, pedidoRoutes, ventasRoutes);
 
 module.exports = app;

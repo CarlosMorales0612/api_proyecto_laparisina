@@ -46,6 +46,7 @@ const pedidoSchema = new mongoose.Schema({
   fecha_pedido_tomado: {
     type: String,
   },
+
   estado_pedido: {
     type: String,
     required: true,
