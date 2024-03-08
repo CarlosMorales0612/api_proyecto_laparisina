@@ -101,7 +101,7 @@ const permiso_empleados = async (req, res, next) => {
 
 // Verificar el permiso 'Clientes'
 const permiso_clientes = async (req, res, next) => {
-    await tienePermiso(req, res, next, 'CLientes');
+    await tienePermiso(req, res, next, 'Clientes');
 };
 
 // Verificar el permiso 'Pedidos'
