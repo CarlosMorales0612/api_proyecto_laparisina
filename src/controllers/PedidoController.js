@@ -79,10 +79,11 @@ async function createPedido(req, res) {
 }
 
 
-// Modificar el estado de un pedido por su ID
+
+// Modificar el estado del pedido y/o estado del pago por su ID
 async function updatePedido(req, res) {
   const { id } = req.params;
-  const { estado_pedido } = req.body;
+  const { estado_pedido, estado_pago } = req.body;
 
   try {
     const pedido = await Pedido.findById(id);
@@ -91,15 +92,25 @@ async function updatePedido(req, res) {
       return res.status(404).json({ error: 'Pedido no encontrado.' });
     }
 
-    pedido.estado_pedido = estado_pedido;
+    // Actualizar estado del pedido si se proporciona
+    if (estado_pedido !== undefined) {
+      pedido.estado_pedido = estado_pedido;
+    }
+
+    // Actualizar estado del pago si se proporciona
+    if (estado_pago !== undefined) {
+      pedido.estado_pago = estado_pago;
+    }
+
     await pedido.save();
 
-    res.json({ message: 'El estado del pedido se actualizó exitosamente.', pedido });
+    res.json({ message: 'El estado del pedido y del pago se actualizaron exitosamente.', pedido });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al modificar el estado del pedido.' });
+    res.status(500).json({ error: 'Error al modificar el estado del pedido y del pago.' });
   }
 }
+
 
 
 // Eliminar un pedido por su ID
@@ -200,8 +211,8 @@ async function asignarDomiciliarioAPedido(req, res) {
     res.status(500).json({ error: 'Error al asignar domiciliario al pedido.' });
   }
 
-  
 }
+
 
 
 module.exports = {
@@ -213,8 +224,7 @@ module.exports = {
   getPedidosEnviados,
   getPedidoCliente,
   createPedido,
-  updatePedido,
   deletePedido,
-  asignarDomiciliarioAPedido
- 
+  updatePedido,
+  asignarDomiciliarioAPedido,
 };
