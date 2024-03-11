@@ -137,12 +137,10 @@ async function eliminarRol(req, res) {
 //     res.status(500).json({ error: 'Error al cambiar el estado del rol.' });
 //   }
 // }
-
 async function cambiarEstadoRol(req, res) {
   const { id } = req.params;
 
   try {
-    // Obtener el rol
     const verificarEstado = await Roles.findById(id);
 
     if (!verificarEstado) {
@@ -152,29 +150,29 @@ async function cambiarEstadoRol(req, res) {
     const idRol = verificarEstado._id;
     const nuevoEstadoRol = !verificarEstado.estado_rol;
 
-    // Actualizar el estado de los usuarios asociados al rol
-    const usuariosRelacionados = await Usuario.find({ rol_usuario: idRol });
+    //Buscar usuario con el mismo correo
+    const rolesRelacionado = await Usuario.find({
+        rol_usuario: idRol,
+    });
 
-    await Promise.all(usuariosRelacionados.map(async usuario => {
-      await Usuario.findByIdAndUpdate(
-        { _id: usuario._id },
-        { $set: { estado_usuario: nuevoEstadoRol } }
-      );
-    }));
+    //Actualizar el estado del usuario encontrado
+    await Usuario.updateMany(
+      { rol_usuario: idRol},
+      { $set: { estado_usuario: nuevoEstadoRol } }
+    );
 
-    // Cambiar el estado del rol
+    //Cambiar el estado del cliente
     const roles = await Roles.findByIdAndUpdate(
       id,
-      { $set: { estado_rol: nuevoEstadoRol } },
+      { $set: { estado_usuario: nuevoEstadoRol } },
       { new: true }
     );
 
-    res.status(200).json({ message: 'Estado del rol y sus usuarios cambiado exitosamente.' });
+    res.status(200).json({ message: 'Estado del cliente cambiado exitosamente.' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al cambiar el estado del rol y sus usuarios.' });
+    res.status(500).json({ error: 'Error al cambiar el estado del cliente y su usuario.' });
   }
 }
-
 
 module.exports={
    obtenerTodosLosRoles,
