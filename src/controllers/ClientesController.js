@@ -87,10 +87,10 @@ async function obtenerClientePorDocumento(req, res) {
     return res.status(400).json({ error: 'El campo tipo de cliente debe tener máximo 20 caracteres.' });
   }
   if (!letrasExpReg.test(nombre_contacto)){
-    return res.status(400).json({ error: 'El campo nombre de contacto solo   permite letras.' });
+    return res.status(400).json({ error: 'El campo nombre de contacto solo permite letras.' });
   }
   if (nombre_contacto.length > longitudMaximaLetras) {
-    return res.status(400).json({ error: 'El campo nombre de contacto debe tener máximo 20 caracteres.' });
+    return res.status(400).json({ error: 'El campo nombre de contacto debe tener máximo 100 caracteres.' });
   }
 
   if (!letrasExpReg.test(barrio_cliente)){
@@ -292,7 +292,7 @@ async function cambiarEstadoCliente(req, res) {
     res.status(200).json({ message: 'Estado del cliente cambiado exitosamente.' });
   } catch (error) {
     res.status(500).json({ error: 'Error al cambiar el estado del cliente y su usuario.' });
-  }
+}
 }
 
 //Funcion para el excel-------------------------------------------------------------------------------------------------------------------------
