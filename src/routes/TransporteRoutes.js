@@ -9,6 +9,10 @@ router.get('/transporte', TransporteController.obtenerTodosLosTransporte);
 // Ruta para obtener un rol por ID
 router.get('/transporte/:id', TransporteController.obtenerTransportePorId);
 
+// Ruta para obtener un rol por ID
+router.get('/transporteActivo', TransporteController.obtenerTransporteActivos);
+
+
 // Ruta para crear un nuevo rol
 router.post('/transporte',  TransporteController.crearTransporte);
 
