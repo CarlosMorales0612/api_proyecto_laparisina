@@ -89,6 +89,9 @@ const pedidoSchema = new mongoose.Schema({
   nombre_domiciliario:{
     type: String,
   },
+  tipo_entrega:{
+    type: String,
+  },
 
   detalle_pedido: [
     {

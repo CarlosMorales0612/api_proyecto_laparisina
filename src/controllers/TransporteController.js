@@ -12,6 +12,18 @@ async function obtenerTodosLosTransporte(req, res) {
     }
   }
 
+  // Obtener todos los Transporte -------------------------------------------------------------------------------------------------------------
+async function obtenerTransporteActivos(req, res) {
+
+  const{ciudad_cliente}= req.query 
+  try {
+    const transporte = await Transporte.find({estado_transporte : true});
+    res.json(transporte);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener los transportes activos.' });
+  }
+}
+
 // Obtener un rol por ID --------------------------------------------------------------------------------------------------------------
  async function obtenerTransportePorId(req, res) {
   const { id } = req.params;
@@ -164,5 +176,6 @@ module.exports={
   crearTransporte,
   actualizarTransporte,
   cambiarEstadoTransporte,
-  eliminarTranspote
+  eliminarTranspote,
+  obtenerTransporteActivos,
 }
