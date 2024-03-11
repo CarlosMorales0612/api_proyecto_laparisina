@@ -81,14 +81,14 @@ const forgotpassword = async (req, res = response) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'isaacdavidmez79@gmail.com', // Coloca tu correo electrónico desde el que se enviará el mensaje
-                pass: 'fobd jhlg tsqy wuso' // Coloca tu contraseña del correo electrónico
+                user: 'proyectoparisina@gmail.com', // Coloca tu correo electrónico desde el que se enviará el mensaje
+                pass: 'baqk kskc nhuf yzbv' // Coloca tu contraseña del correo electrónico
             }
         });
 
         // Crea el mensaje de correo electrónico
         const mailOptions = {
-            from: 'isaacdavidmez79@gmail.com', // Coloca tu correo electrónico
+            from: 'proyectoparisina@gmail.com', // Coloca tu correo electrónico
             to: correo_electronico,
             subject: 'Recuperación de contraseña',
             html: `<p>Hola ${user.correo_electronico},</p>
