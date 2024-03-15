@@ -27,6 +27,7 @@ async function eliminarImagen(nombreArchivo) {
     
     // Elimina el archivo
     await fs.promises.unlink(rutaImagen);
+    console.log('img eliminada',rutaImagen)
 
   } catch (error) {
     console.error(`Error al intentar eliminar la imagen ${nombreArchivo}: ${error.message}`);
@@ -106,7 +107,9 @@ async function crearCategoria(req, res) {
   try {
       if (req.file && req.file.filename) {
         categoria.imagen_categoria_producto = req.file.filename;
-      } 
+        console.log(categoria.imagen_categoria_producto)
+      }
+      
       // Guarda la categoría en la base de datos
       await categoria.save();
       res.status(201).json({
@@ -166,8 +169,10 @@ async function actualizarCategoria(req, res) {
 
       if (categoriaDuplicada) {
         //Eliminar imagen cargada si existe un error
-        eliminarImagen(req.file.filename)
-        return res.status(400).json({ error: `La categoría con nombre ${nombre_categoria_producto} ya existe.` });
+        if(req.file && req.file.filename){
+          eliminarImagen(req.file.filename)
+        }
+        return res.status(400).json({ error: `La categoría ${nombre_categoria_producto} ya existe.` });
       }
     }
     
@@ -200,7 +205,9 @@ async function actualizarCategoria(req, res) {
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar la categoría.' });
     //Eliminar imagen cargada si existe un error
-    eliminarImagen(req.file.filename)
+    if(req.file && req.file.filename){
+      eliminarImagen(req.file.filename)
+    }
   }
 }
 
