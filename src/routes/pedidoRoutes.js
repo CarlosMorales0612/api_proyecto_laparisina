@@ -18,10 +18,11 @@ router.post('/pedidos', PedidoController.createPedido);
 // Ruta para actualizar un pedido por ID
 router.put('/pedidos/:id', PedidoController.updatePedido);
 
+
 // Ruta para eliminar un pedido por ID
 router.delete('/pedidos/:id', PedidoController.deletePedido);
 
-// Ruta para obtener los pedidos de un cliente
+// Ruta para obtener los pedidos de un client
 router.get('/pedidosCliente/:id', PedidoController.getPedidoCliente);
 
 // Ruta para obtener todos los pedidos pendientes
@@ -38,6 +39,7 @@ router.get('/pedidosEnviados', PedidoController.getPedidosEnviados,);
 
 //Ruta para asignar un domiciliario a pedidos
 router.post('/pedido/asignar-domiciliario', PedidoController.asignarDomiciliarioAPedido);
+
 
 
 

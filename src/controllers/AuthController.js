@@ -81,20 +81,29 @@ const forgotpassword = async (req, res = response) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'isaacdavidmez79@gmail.com', // Coloca tu correo electrónico desde el que se enviará el mensaje
-                pass: 'fobd jhlg tsqy wuso' // Coloca tu contraseña del correo electrónico
+                user: 'proyectoparisina@gmail.com', // Coloca tu correo electrónico desde el que se enviará el mensaje
+                pass: 'baqk kskc nhuf yzbv' // Coloca tu contraseña del correo electrónico
             }
         });
 
         // Crea el mensaje de correo electrónico
         const mailOptions = {
-            from: 'isaacdavidmez79@gmail.com', // Coloca tu correo electrónico
+            from: 'proyectoparisina@gmail.com', // Coloca tu correo electrónico
             to: correo_electronico,
             subject: 'Recuperación de contraseña',
-            text: `Hola ${user.correo_electronico}.
-            Somos el equipo Parisina, recibimos una solicitud para restablecer tu contrseña,
-            aquí está tu enlace para restablecer la contraseña: http://localhost:4200/#/auth/restaurar-contrasena?token=${token}.
-            Tenga en cuenta que este link tiene una duración de una hora` //${ngrokUrl}/reset-password?token=${token}
+            html: `<p>Hola ${user.correo_electronico},</p>
+            <p>Somos el equipo Parisina, recibimos una solicitud para restablecer tu contraseña.</p>
+            <p>Aquí está tu enlace para restablecer la contraseña: <a href="http://localhost:4200/#/auth/restaurar-contrasena?token=${token}">Restablecer contraseña</a>.</p>
+            <p>Tenga en cuenta que este enlace tiene una duración de una hora.</p>
+            <br>
+            <p>Atentamente,</p>
+            <p>El equipo de soporte de Parisina</p>
+            <img src="cid:firma" alt="Firma de correo electrónico">`, // Agrega la imagen de la firma
+            attachments: [{
+                filename: 'firma-parisina.png',
+                path: './firma-parisina/firma-parisina.png',
+                cid: 'firma'
+            }] //${ngrokUrl}/reset-password?token=${token}
         };
 
         // Envía el correo electrónico
