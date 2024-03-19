@@ -27,6 +27,7 @@ async function eliminarImagen(nombreArchivo) {
     
     // Elimina el archivo
     await fs.promises.unlink(rutaImagen);
+    console.log('img eliminada',rutaImagen)
 
   } catch (error) {
     console.error(`Error al intentar eliminar la imagen ${nombreArchivo}: ${error.message}`);
@@ -36,6 +37,15 @@ async function eliminarImagen(nombreArchivo) {
 
 // Obtener todas las categorias -------------------------------------------------------------------------------------------------------------
 async function obtenerTodasLasCategorias(req, res) {
+  try {
+    const categorias = await CategoriaProducto.find();
+    res.json(categorias);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener las categorias.' });
+  }
+}
+
+async function obtenerTodasLasCategorias_Cliente(req, res) {
   try {
     const categorias = await CategoriaProducto.find();
     res.json(categorias);
@@ -106,7 +116,9 @@ async function crearCategoria(req, res) {
   try {
       if (req.file && req.file.filename) {
         categoria.imagen_categoria_producto = req.file.filename;
-      } 
+        console.log(categoria.imagen_categoria_producto)
+      }
+      
       // Guarda la categoría en la base de datos
       await categoria.save();
       res.status(201).json({
@@ -166,8 +178,10 @@ async function actualizarCategoria(req, res) {
 
       if (categoriaDuplicada) {
         //Eliminar imagen cargada si existe un error
-        eliminarImagen(req.file.filename)
-        return res.status(400).json({ error: `La categoría con nombre ${nombre_categoria_producto} ya existe.` });
+        if(req.file && req.file.filename){
+          eliminarImagen(req.file.filename)
+        }
+        return res.status(400).json({ error: `La categoría ${nombre_categoria_producto} ya existe.` });
       }
     }
     
@@ -200,33 +214,13 @@ async function actualizarCategoria(req, res) {
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar la categoría.' });
     //Eliminar imagen cargada si existe un error
-    eliminarImagen(req.file.filename)
+    if(req.file && req.file.filename){
+      eliminarImagen(req.file.filename)
+    }
   }
 }
 
 // Cambiar el estado de una categoria por ID ------------------------------------------------------------------------------------------------------------
-// async function cambiarEstadoCategoria(req, res) {
-//   const { id } = req.params;
-//   try {
-//     const verificarEstado = await CategoriaProducto.findById(id)
-
-//     if (!verificarEstado) {
-//       return res.status(404).json({ error: 'Categoría no encontrada.' });
-//     } else {
-//       const estado = verificarEstado.estado_categoria_producto
-
-//       const categoria = await CategoriaProducto.findByIdAndUpdate(
-//         id,
-//         { $set: { estado_categoria_producto: !estado } }, // Cambia a 'false', puedes cambiarlo según tus necesidades
-//         { new: true }
-//       );
-//     }
-
-//     res.status(200).json({ message: 'Estado de la categoría cambiado exitosamente.' });
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error al cambiar el estado de la categoría.' });
-//   }
-// }
 
 async function cambiarEstadoCategoria(req, res) {
   const { id } = req.params;
@@ -270,6 +264,7 @@ async function cambiarEstadoCategoria(req, res) {
 //Exportar funciones ------------------------------------------------------------------------------------------------------------------------
 module.exports = {
   obtenerTodasLasCategorias,
+  obtenerTodasLasCategorias_Cliente,
   obtenerCategoriasPorId,
   obtenerCategoriaPorNombre,
   crearCategoria,

@@ -27,8 +27,8 @@ function convertirFecha(fechaDate) {
 
 function obtenerFechaActualConHoraString() {
   const fecha = new Date();
-  const dia = fecha.getDate();
-  const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0
+  const dia = fecha.getDate().toString().padStart(2, '0'); // Asegura 2 dígitos para el día
+  const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Los meses comienzan desde 0por eso el +1
   const año = fecha.getFullYear();
   const horas = fecha.getHours().toString().padStart(2, '0'); // Obtén las horas y asegúrate de que tenga 2 dígitos
   const minutos = fecha.getMinutes().toString().padStart(2, '0'); // Obtén los minutos y asegúrate de que tenga 2 dígitos
