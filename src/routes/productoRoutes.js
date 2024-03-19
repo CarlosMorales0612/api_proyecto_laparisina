@@ -5,12 +5,14 @@ const { validarJWT, permiso_productos } = require('../middlewares/index');
 
 // Ruta para obtener todos los productos
 router.get('/productos', ProductoController.obtenerTodosLosProductos);
+router.get('/productos-cliente', ProductoController.obtenerTodosLosProductos_Cliente);
 
 // Ruta para obtener un producto por ID
 router.get('/productos/:id', ProductoController.obtenerProductoPorId);
 
 // Ruta para obtener un productos por categoría
 router.get('/productos-categoria/:categoria', ProductoController.obtenerProductoPorCategoria);
+router.get('/productos-categoria-cliente/:categoria', ProductoController.obtenerProductoPorCategoria_Cliente);
 
 // Ruta para crear un nuevo producto y subir las imagenes
 router.post('/productos',[validarJWT, permiso_productos], ProductoController.subirImagen, ProductoController.crearProducto);

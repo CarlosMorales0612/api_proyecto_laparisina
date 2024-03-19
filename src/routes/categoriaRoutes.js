@@ -6,8 +6,8 @@ const { validarJWT, permiso_categorias } = require('../middlewares/index');
 //const upload = multer({dest: 'uploads/'})
 
 // Ruta para obtener todos las categorias
-//router.get('/categorias', CategoriaController.obtenerTodasLasCategorias);
 router.get('/categorias', CategoriaController.obtenerTodasLasCategorias);
+router.get('/categorias-cliente', CategoriaController.obtenerTodasLasCategorias_Cliente);
 
 // Ruta para obtener una categoria por ID
 router.get('/categorias/:id', CategoriaController.obtenerCategoriasPorId);
