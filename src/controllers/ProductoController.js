@@ -45,6 +45,15 @@ async function obtenerTodosLosProductos(req, res) {
   }
 }
 
+async function obtenerTodosLosProductos_Cliente(req, res) {
+  try {
+    const productos = await Producto.find();
+    res.json(productos);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener los productos.' });
+  }
+}
+
 // Obtener un producto por ID --------------------------------------------------------------------------------------------------------------
 async function obtenerProductoPorId(req, res) {
   const { id } = req.params;
@@ -61,6 +70,22 @@ async function obtenerProductoPorId(req, res) {
 
 // Obtener los productos por categoría --------------------------------------------------------------------------------------------------------------
 async function obtenerProductoPorCategoria(req, res) {
+  const { categoria } = req.params;
+
+  try {
+    const productos = await Producto.find({
+      nombre_categoria_producto: categoria,
+      estado_producto: true
+    });
+
+    res.json(productos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al obtener productos por categoría' });
+  }
+}
+
+async function obtenerProductoPorCategoria_Cliente(req, res) {
   const { categoria } = req.params;
 
   try {
@@ -343,8 +368,10 @@ async function cambiarEstadoProducto(req, res) {
 //Exportar funciones ------------------------------------------------------------------------------------------------------------------------
 module.exports = {
   obtenerTodosLosProductos,
+  obtenerTodosLosProductos_Cliente,
   obtenerProductoPorId,
   obtenerProductoPorCategoria,
+  obtenerProductoPorCategoria_Cliente,
   crearProducto,
   actualizarProducto,
   cambiarEstadoProducto,

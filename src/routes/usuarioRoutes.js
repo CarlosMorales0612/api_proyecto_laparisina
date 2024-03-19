@@ -33,6 +33,15 @@ router.put('/usuarios/:id', [
     permiso_usuarios
 ], UsuarioController.updateUsuario);
 
+// Ruta para actualizar un usuario por ID
+router.put('/usuarios-cliente/:id', [
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(existeUsuarioPorId),
+    validarCampos,
+    validarJWT,
+    permiso_usuarios
+], UsuarioController.updateUsuario);
+
 // Ruta para cambiar el estado de un usuario por ID
 router.put('/usuario-estado/:id', [validarJWT, permiso_usuarios], UsuarioController.cambiarEstadoUsuario);
 
