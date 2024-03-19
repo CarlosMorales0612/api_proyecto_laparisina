@@ -84,14 +84,29 @@ const permiso_usuarios = async (req, res, next) => {
     await tienePermiso(req, res, next, 'Usuarios');
 };
 
+// Verificar el permiso 'Usuarios Cliente'
+const permiso_usuarios_cliente = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Usuarios Cliente');
+};
+
 // Verificar el permiso 'Categorías'
 const permiso_categorias = async (req, res, next) => {
     await tienePermiso(req, res, next, 'Categorias');
 };
 
+// Verificar el permiso 'Categorías Cliente'
+const permiso_categorias_cliente = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Categorias Cliente');
+};
+
 // Verificar el permiso 'Productos'
 const permiso_productos = async (req, res, next) => {
     await tienePermiso(req, res, next, 'Productos');
+};
+
+// Verificar el permiso 'Productos Cliente'
+const permiso_productos_cliente = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Productos Cliente');
 };
 
 // Verificar el permiso 'Empleados'
@@ -109,9 +124,19 @@ const permiso_pedidos = async (req, res, next) => {
     await tienePermiso(req, res, next, 'Pedidos');
 };
 
+// Verificar el permiso 'Pedidos Empleado'
+const permiso_pedidos_empleado = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Pedidos Empleado');
+};
+
 // Verificar el permiso 'Orden de producción'
 const permiso_orden_produccion = async (req, res, next) => {
     await tienePermiso(req, res, next, 'Orden de produccion');
+};
+
+// Verificar el permiso 'Orden de producción Empleado'
+const permiso_orden_produccion_empleado = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Orden de produccion Empleado');
 };
 
 // Verificar el permiso 'Ventas'
@@ -148,11 +173,16 @@ module.exports = {
     permiso_dashboard,
     permiso_roles,
     permiso_usuarios,
+    permiso_usuarios_cliente,
     permiso_categorias,
+    permiso_categorias_cliente,
     permiso_productos,
+    permiso_productos_cliente,
     permiso_empleados,
     permiso_pedidos,
+    permiso_pedidos_empleado,
     permiso_clientes,
     permiso_orden_produccion,
+    permiso_orden_produccion_empleado,
     permiso_ventas
 }
