@@ -11,6 +11,10 @@ const corsOptions = {
     origin: 'http://localhost:4200',
     optionsSuccessStatus: 200, // Algunos navegadores pueden enviar solicitudes OPTIONS antes de una solicitud POST
   };
+
+  
+
+
   
   app.use(cors(corsOptions));
 // Ruta para obtener todos los usuarios
@@ -45,6 +49,7 @@ router.get('/empleado/:correo', empledoController.domiciliario);
 router.get('/consultar-empleado/:correo_electronico', empledoController.obtenerEmpleadoPorCorreo)
 
 
-
+// Ruta para cambiar el estado de un empleado por ID
+router.put('/empleados_estado/:id', empledoController.cambiarEstadoEmpleado);
 
 module.exports = router;
