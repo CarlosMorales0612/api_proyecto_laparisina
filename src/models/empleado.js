@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const empleadoSchema = new mongoose.Schema({
-  // _id: { type: mongoose.Types.ObjectId, auto: true },
+// _id: { type: mongoose.Types.ObjectId, auto: true },
   // _id: {
   //  type: Number,
   //    required: true,
