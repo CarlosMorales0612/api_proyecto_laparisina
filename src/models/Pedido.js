@@ -53,6 +53,7 @@ const pedidoSchema = new mongoose.Schema({
     enum: ['Pendiente','Tomado','En producción', 'En preparación', 'Terminado', 'Enviado', 'Entregado', 'Anulado'],
     default: 'Pendiente'
   },
+
   precio_total_venta: {
     type: Number,
     required: [true, 'El campo precio total venta es requerido.']

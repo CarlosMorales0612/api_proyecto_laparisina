@@ -1,5 +1,6 @@
 const Pedido = require('../models/Pedido');
-const Empleado = require ('../models/empleado')
+const Empleado = require ('../models/empleado');
+const Roles = require ('../models/RolesModel')
 
 // Obtener todos los pedidos
 async function getAllPedido(req, res) {
@@ -69,6 +70,8 @@ async function createPedido(req, res) {
         }
       }
     }
+
+
     const nuevoPedido = new Pedido(pedidoData);
     await nuevoPedido.save();
 
@@ -176,6 +179,19 @@ async function getPedidosEnviados(req, res) {
   }
 }
 
+// Obtener pedidos Entregados con estado de pago "Pendiente"
+async function getPedidosEntregadosConPagoPendiente(req, res) {
+  try {
+    const pedidosEntregadosConPagoPendiente = await Pedido.find({ estado_pedido: 'Entregado', estado_pago: 'Pendiente' });
+    res.json(pedidosEntregadosConPagoPendiente);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener pedidos entregados con estado de pago pendiente.' });
+  }
+}
+
+
+
 async function asignarDomiciliarioAPedido(req, res) {
   const { id_pedido, id_empleado_domiciliario } = req.body;
 
@@ -222,6 +238,7 @@ module.exports = {
   getPedidosTerminados,
   getPedidosAnulados,
   getPedidosEnviados,
+  getPedidosEntregadosConPagoPendiente,
   getPedidoCliente,
   createPedido,
   deletePedido,

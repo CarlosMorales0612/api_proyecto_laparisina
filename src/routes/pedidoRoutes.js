@@ -29,13 +29,16 @@ router.get('/pedidosCliente/:id', PedidoController.getPedidoCliente);
 router.get('/pedidosPendientes', PedidoController.getPedidosPendientes);
 
 // Ruta para obtener todos los pedidos Terminados
-router.get('/pedidosTerminados', PedidoController.getPedidosTerminados,);
+router.get('/pedidosTerminados', PedidoController.getPedidosTerminados);
 
 // Ruta para obtener todos los pedidos Anulados
-router.get('/pedidosAnulados', PedidoController.getPedidosAnulados,);
+router.get('/pedidosAnulados', PedidoController.getPedidosAnulados);
 
-// Ruta para obtener todos los pedidos Terminados
-router.get('/pedidosEnviados', PedidoController.getPedidosEnviados,);
+// Ruta para obtener todos los pedidos Enviados
+router.get('/pedidosEnviados', PedidoController.getPedidosEnviados);
+
+// Ruta para obtener todos los pedidos Entregados
+router.get('/pedidosEntregado', PedidoController.getPedidosEntregadosConPagoPendiente);
 
 //Ruta para asignar un domiciliario a pedidos
 router.post('/pedido/asignar-domiciliario', PedidoController.asignarDomiciliarioAPedido);
