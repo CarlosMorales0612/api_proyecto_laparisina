@@ -5,6 +5,7 @@ const { validarJWT, permiso_orden_produccion, permiso_orden_produccion_empleado 
 
 // Ruta para obtener todas las ordenes de producción
 router.get('/consultar-produccion', [validarJWT, permiso_orden_produccion], OrdenDeProduccionController.obtenerTodasLasOrdenesDeProduccion);
+router.get('/consultar-produccion-empleado', [validarJWT, permiso_orden_produccion_empleado], OrdenDeProduccionController.obtenerTodasLasOrdenesDeProduccion);
 
 // Ruta para obtener una orden de producción por ID
 router.get('/consultar-produccion/:id', [validarJWT, permiso_orden_produccion], OrdenDeProduccionController.obtenerOrdenDeProduccionPorId);
