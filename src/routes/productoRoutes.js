@@ -11,7 +11,7 @@ router.get('/productos-cliente', ProductoController.obtenerTodosLosProductos_Cli
 router.get('/productos/:id', ProductoController.obtenerProductoPorId);
 
 // Ruta para obtener un productos por categoría
-router.get('/productos-categoria/:categoria', ProductoController.obtenerProductoPorCategoria);
+router.get('/productos-categoria/:categoria', [validarJWT, permiso_productos], ProductoController.obtenerProductoPorCategoria);
 router.get('/productos-categoria-cliente/:categoria', ProductoController.obtenerProductoPorCategoria_Cliente);
 
 // Ruta para crear un nuevo producto y subir las imagenes
