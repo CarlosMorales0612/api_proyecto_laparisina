@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const PedidoController = require('../controllers/PedidoController');
-const { validarJWT, permiso_pedidos_cliente, permiso_pedidos } = require('../middlewares/index');
+const { validarJWT, permiso_pedidos_cliente, permiso_pedidos, permiso_pedidos_empleado } = require('../middlewares/index');
 
  // Ruta para obtener todos los pedidos
  router.get('/pedidos', PedidoController.getAllPedido);
@@ -20,7 +20,7 @@ router.post('/pedidos-cliente',[validarJWT, permiso_pedidos_cliente], PedidoCont
 
 // Ruta para actualizar un pedido por ID
 router.put('/pedidos/:id',[validarJWT, permiso_pedidos], PedidoController.updatePedido);
-router.put('/pedidos/:id',[validarJWT, permiso_pedidos], PedidoController.updatePedido);
+router.put('/pedidos-empleado/:id',[validarJWT, permiso_pedidos_empleado], PedidoController.updatePedido);
 
 
 // Ruta para eliminar un pedido por ID
