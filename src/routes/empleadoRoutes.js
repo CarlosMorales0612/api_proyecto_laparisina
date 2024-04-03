@@ -3,6 +3,7 @@ const router = express.Router();
 const empledoController = require('../controllers/empleadoController');
 const cors = require('cors');
 const app = express();
+const { validarJWT, permiso_pedidos_empleado } = require('../middlewares/index');
 
 
 app.use(cors());
@@ -44,7 +45,9 @@ router.get('/empleados/pedidos/:id', empledoController.obtenerPedidoPorIdDomicil
 router.post('/empleados/asignar-pedido', empledoController.asignarPedidoDomiciliario);
 
 
-router.get('/empleado/:correo', empledoController.domiciliario);
+//Obtener domicilios asignados al empleado 
+router.get('/empleado/:correo',[validarJWT, permiso_pedidos_empleado], empledoController.domiciliario);
+
 
 router.get('/consultar-empleado/:correo_electronico', empledoController.obtenerEmpleadoPorCorreo)
 

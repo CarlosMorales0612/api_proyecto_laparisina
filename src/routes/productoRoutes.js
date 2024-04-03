@@ -4,7 +4,7 @@ const ProductoController = require('../controllers/ProductoController');
 const { validarJWT, permiso_productos } = require('../middlewares/index');
 
 // Ruta para obtener todos los productos
-router.get('/productos', ProductoController.obtenerTodosLosProductos);
+router.get('/productos',[validarJWT, permiso_productos], ProductoController.obtenerTodosLosProductos);
 router.get('/productos-cliente', ProductoController.obtenerTodosLosProductos_Cliente);
 
 // Ruta para obtener un producto por ID
