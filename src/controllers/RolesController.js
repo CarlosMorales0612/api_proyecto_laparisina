@@ -141,38 +141,28 @@ async function cambiarEstadoRol(req, res) {
   const { id } = req.params;
 
   try {
+    // Buscar el rol por su ID
     const verificarEstado = await Roles.findById(id);
 
     if (!verificarEstado) {
       return res.status(404).json({ error: 'Rol no encontrado.' });
     }
 
-    const idRol = verificarEstado._id;
+    // Nuevo estado del rol (invierte el estado actual)
     const nuevoEstadoRol = !verificarEstado.estado_rol;
 
-    //Buscar usuario con el mismo correo
-    const rolesRelacionado = await Usuario.find({
-        rol_usuario: idRol,
-    });
+    // Actualizar el estado del rol
+    await Roles.findByIdAndUpdate(id, { estado_rol: nuevoEstadoRol });
 
-    //Actualizar el estado del usuario encontrado
-    await Usuario.updateMany(
-      { rol_usuario: idRol},
-      { $set: { estado_usuario: nuevoEstadoRol } }
-    );
+    // Buscar usuarios asociados a este rol y actualizar su estado
+    await Usuario.updateMany({ rol_usuario: id }, { estado_usuario: nuevoEstadoRol });
 
-    //Cambiar el estado del cliente
-    const roles = await Roles.findByIdAndUpdate(
-      id,
-      { $set: { estado_usuario: nuevoEstadoRol } },
-      { new: true }
-    );
-
-    res.status(200).json({ message: 'Estado del cliente cambiado exitosamente.' });
+    res.status(200).json({ message: 'Estado del rol y usuarios asociados cambiado exitosamente.' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al cambiar el estado del cliente y su usuario.' });
+    res.status(500).json({ error: 'Error al cambiar el estado del rol y sus usuarios asociados.' });
   }
 }
+
 
 module.exports={
    obtenerTodosLosRoles,
