@@ -9,6 +9,7 @@ router.get('/ventas', [validarJWT, permiso_ventas], VentasController.getVentas);
 //Ruta para obtener venta por id
 router.get('/ventas/:id', [validarJWT, permiso_ventas], VentasController.getVentaById);
 
-router.get('/ventas_excel', [], VentasController.ventasGetExcel);
+//Ruta para generar un excel sobre las ventas
+router.get('/ventas_excel', [validarJWT, permiso_ventas], VentasController.ventasGetExcel);
 
 module.exports = router;

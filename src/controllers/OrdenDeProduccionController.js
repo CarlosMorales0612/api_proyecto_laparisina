@@ -229,6 +229,43 @@ async function actualizarOrdenDeProduccion(req, res) {
   }
 }
 
+async function actualizarOrdenDeProduccion_Empleado(req, res) {
+  const { id } = req.params;
+  const { estado_orden } = req.body;
+
+  try {
+
+    // Busca la orden de producción por ID en la base de datos
+    const ordenProduccion = await OrdenDeProduccion.findById(id);
+
+    // Verifica si la orden de producción fue encontrada
+    if (!ordenProduccion) {
+      return res.status(404).json({ error: 'Orden de producción no encontrada.' });
+    } else {
+      const idsPedidosOrden = ordenProduccion.pedidos_orden.map(pedido => pedido.toString());
+      const estadoOrden = estado_orden
+      const nombreProducto = ordenProduccion.nombre_producto
+      console.log(nombreProducto)
+      console.log(estadoOrden)
+      console.log(idsPedidosOrden)
+
+      for (const i of idsPedidosOrden){
+        console.log(i)
+      }
+      // Realiza la actualización en la base de datos
+      const ordenActualizada = await OrdenDeProduccion.findByIdAndUpdate(id, 
+        { estado_orden, fecha_actualizacion_estado: obtenerFechaActualConHoraString() }, { new: true });
+
+      actualizarEstadoDeProductos(idsPedidosOrden, nombreProducto, estadoOrden)
+    }
+
+    // Si la orden de producción se actualiza exitosamente, envía un mensaje de éxito en la respuesta
+    res.status(200).json({ message: 'Orden de producción actualizada exitosamente.'});
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar la orden de producción.' });
+  }
+}
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 //Funcion para actualizar el estado_producto de los productos con los que se genera la orden de produccion 
 async function actualizarEstadoDeProductos(idsPedidosOrden, nombreProducto, estadoProducto) {
@@ -307,7 +344,8 @@ module.exports = {
   obtenerOrdenDeProduccionPorId,
   obtenerOrdenesDeProduccionPorArea,
   crearOrdenDeProduccion,
-  actualizarOrdenDeProduccion
+  actualizarOrdenDeProduccion,
+  actualizarOrdenDeProduccion_Empleado
 };
 
 

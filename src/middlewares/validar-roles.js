@@ -129,6 +129,11 @@ const permiso_pedidos_empleado = async (req, res, next) => {
     await tienePermiso(req, res, next, 'Pedidos Empleado');
 };
 
+// Verificar el permiso 'Pedidos Empleado'
+const permiso_pedidos_cliente = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Pedidos Cliente');
+};
+
 // Verificar el permiso 'Orden de producción'
 const permiso_orden_produccion = async (req, res, next) => {
     await tienePermiso(req, res, next, 'Orden de produccion');
@@ -181,6 +186,7 @@ module.exports = {
     permiso_empleados,
     permiso_pedidos,
     permiso_pedidos_empleado,
+    permiso_pedidos_cliente,
     permiso_clientes,
     permiso_orden_produccion,
     permiso_orden_produccion_empleado,

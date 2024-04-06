@@ -1,10 +1,13 @@
 const Pedido = require('../models/Pedido'); // Asegúramos de proporcionar la ruta correcta al archivo Pedido.js
 const exceljs = require('exceljs');
 
-// Realizar una consulta para obtener los pedidos con estado "entregado"
+// Realizar una consulta para obtener los pedidos con estado "entregado" y que no hayan sido "anulados" o estén en "pendientes"
 async function getVentas(req, res) {
   try {
-    const query = { estado_pago: 'Pagado' };
+    const query = {
+      estado_pago: 'Pagado',
+      estado_pedido: { $nin: ['Anulado', 'Pendiente'] }
+    };
 
     const ventas = await Pedido.find(query);
 
@@ -36,7 +39,10 @@ async function getVentaById(req, res) {
 
 const ventasGetExcel = async (req, res = response) => {
   try {
-    const query = { estado_pago: 'Pagado' };
+    const query = {
+      estado_pago: 'Pagado',
+      estado_pedido: { $nin: ['Anulado', 'Pendiente'] },
+    };
     const ventas = await Pedido.find(query);
 
     if (!ventas || ventas.length === 0) {
@@ -60,10 +66,11 @@ const ventasGetExcel = async (req, res = response) => {
       'Precio Total Venta',
       'Subtotal Venta',
       'Método de Pago',
+      'Tipo de entrega',
       'Valor Domicilio',
       'NIT Empresa Cliente',
       'Nombre Jurídico',
-      'Aumento Empresa'
+      'Aumento Empresa',
     ];
     worksheet.addRow(columnas);
 
@@ -83,10 +90,11 @@ const ventasGetExcel = async (req, res = response) => {
         venta.precio_total_venta,
         venta.subtotal_venta,
         venta.metodo_pago,
+        venta.tipo_entrega,
         venta.valor_domicilio,
         venta.nit_empresa_cliente,
         venta.nombre_juridico,
-        venta.aumento_empresa
+        venta.aumento_empresa,
       ];
 
       worksheet.addRow(datosVenta);
