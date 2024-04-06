@@ -276,14 +276,14 @@ async function obtenerPedidoPorIdDomiciliario(req, res) {
   }
 }
 
-// Obtener todos los domiciliarios
+// Obtener todos los domiciliarios con estado igual a true
 async function obtenerTodosLosDomiciliarios(req, res) {
   try {
-    // Filtrar usuarios por rol igual a "Domiciliarios"
-    const empleados = await Empleado.find({ 'area_empleado': 'Domiciliario' });
-    res.json(empleados);
+    // Filtrar usuarios por área igual a "Domiciliario" y estado igual a true
+    const domiciliariosActivos = await Empleado.find({ 'area_empleado': 'Domiciliario', 'estado_empleado': true });
+    res.json(domiciliariosActivos);
   } catch (error) {
-    res.status(500).json({ error: "Error al obtener los empleados." });
+    res.status(500).json({ error: "Error al obtener los domiciliarios activos." });
   }
 }
 
