@@ -149,6 +149,11 @@ const permiso_ventas = async (req, res, next) => {
     await tienePermiso(req, res, next, 'Ventas');
 };
 
+// Verificar el permiso 'Ventas'
+const permiso_transportes = async (req, res, next) => {
+    await tienePermiso(req, res, next, 'Transportes');
+};
+
 
 const tieneRol = (...roles) => {
 
@@ -190,5 +195,6 @@ module.exports = {
     permiso_clientes,
     permiso_orden_produccion,
     permiso_orden_produccion_empleado,
-    permiso_ventas
+    permiso_ventas,
+    permiso_transportes
 }
