@@ -18,7 +18,7 @@ router.post('/roles', [validarJWT, permiso_roles],RolesController.crearRol);
 router.put('/roles/:id',[validarJWT, permiso_roles], RolesController.actualizarRol);
 
 // Ruta para actualizar el estado de un rol por ID
-router.put('/roles_estado/:id', RolesController.cambiarEstadoRol);
+router.put('/roles_estado/:id',[validarJWT, permiso_roles], RolesController.cambiarEstadoRol);
 
 
 module.exports = router;
